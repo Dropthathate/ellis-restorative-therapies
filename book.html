@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book a Session | Ellis Restorative Therapies</title>
+
+<link rel="stylesheet" href="styles.css">
+
+<style>
+/* GLASS / APPLE STYLE */
+.booking-wrap {
+  max-width: 1000px;
+  margin: 80px auto;
+  padding: 40px;
+}
+
+.booking-card {
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 32px;
+}
+
+.booking-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.booking-input {
+  padding: 14px;
+  border-radius: 10px;
+  border: none;
+  background: rgba(255,255,255,0.06);
+  color: white;
+}
+
+.booking-btn {
+  padding: 16px;
+  border-radius: 10px;
+  border: none;
+  background: var(--gold);
+  color: black;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.day, .slot {
+  padding: 10px;
+  text-align: center;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.05);
+  cursor: pointer;
+}
+
+.day.active, .slot.active {
+  background: var(--gold);
+  color: black;
+}
+
+.section {
+  margin-top: 30px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAV (keeps your existing layout intact) -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="logo.png" />
+  </a>
+</nav>
+
+<div class="booking-wrap">
+  <div class="booking-card">
+
+    <h1>Book Your Session</h1>
+
+    <!-- CLIENT INFO -->
+    <div class="booking-grid">
+      <input id="name" class="booking-input" placeholder="Full Name">
+      <input id="phone" class="booking-input" placeholder="Phone Number">
+      <input id="email" class="booking-input" placeholder="Email">
+
+      <!-- 🔥 CRITICAL: DURATION -->
+      <select id="duration" class="booking-input">
+        <option value="60">60 Minutes — $100</option>
+        <option value="90">90 Minutes — $150</option>
+        <option value="120">120 Minutes — $200</option>
+      </select>
+    </div>
+
+    <!-- DATE -->
+    <div class="section">
+      <h3>Select Date</h3>
+      <div id="calendar" class="calendar"></div>
+    </div>
+
+    <!-- TIME -->
+    <div class="section">
+      <h3>Select Time</h3>
+      <div id="slots" class="calendar"></div>
+    </div>
+
+    <!-- SUBMIT -->
+    <div class="section">
+      <button class="booking-btn" onclick="submitBooking()">Confirm Booking</button>
+    </div>
+
+  </div>
+</div>
+
+<script src="booking.js"></script>
+
+</body>
+</html>

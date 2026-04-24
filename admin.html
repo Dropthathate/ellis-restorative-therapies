@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>ERT Admin — Schedule Manager</title>
+<meta name="robots" content="noindex,nofollow">
+
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* CORE VARIABLES */
+:root { --bg-dark: #070b14; --bg-panel: rgba(18, 25, 40, 0.4); --glass-border: rgba(255, 255, 255, 0.08); --glass-blur: blur(16px); --accent-primary: #1a7fa5; --accent-glow: #23a0cc; --text-main: #eef5fa; --text-muted: #8a9bb3; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background-color: var(--bg-dark); background-image: radial-gradient(circle at 15% 50%, rgba(26, 127, 165, 0.08), transparent 25%), radial-gradient(circle at 85% 30%, rgba(35, 160, 204, 0.05), transparent 25%); color: var(--text-main); line-height: 1.6; overflow-x: hidden; min-height: 100vh; display: flex; flex-direction: column; }
+
+/* ANIMATIONS */
+@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.animate-up { animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+
+/* NAVIGATION */
+nav { position: fixed; top: 0; width: 100%; z-index: 1000; display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 4rem; background: rgba(7, 11, 20, 0.6); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border-bottom: 1px solid var(--glass-border); transition: all 0.4s ease; }
+.logo { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: var(--text-main); text-decoration: none; letter-spacing: 2px; }
+.logo span { color: var(--accent-primary); }
+.nav-links { display: flex; gap: 2.5rem; align-items: center; }
+.nav-links a { color: var(--text-main); text-decoration: none; font-size: 0.85rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1.5px; transition: color 0.3s; }
+.nav-links a:hover { color: var(--accent-glow); }
+
+/* MAIN LAYOUT */
+.page-header { margin-top: 120px; padding: 2rem; text-align: center; }
+.page-header h1 { font-family: 'Bebas Neue', sans-serif; font-size: 4rem; letter-spacing: 2px; margin-bottom: 0.5rem; color: var(--accent-glow); }
+
+.admin-container { max-width: 800px; margin: 0 auto 5rem; padding: 3rem; background: var(--bg-panel); border: 1px solid var(--glass-border); border-radius: 12px; backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); box-shadow: 0 15px 35px rgba(0,0,0,0.3); flex: 1; width: 100%; }
+
+/* FORM ELEMENTS */
+.form-group { margin-bottom: 1.5rem; }
+.form-group label { display: block; font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem; }
+.form-group input, .form-group select { width: 100%; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); padding: 1rem; border-radius: 6px; color: var(--text-main); font-family: 'Inter', sans-serif; font-size: 1rem; transition: all 0.3s; color-scheme: dark; }
+.form-group input:focus, .form-group select:focus { outline: none; border-color: var(--accent-primary); background: rgba(0,0,0,0.4); box-shadow: 0 0 15px rgba(26,127,165,0.2); }
+.submit-btn { width: 100%; background: var(--accent-primary); color: var(--text-main); border: none; padding: 1.2rem; border-radius: 6px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: all 0.3s; margin-top: 1rem; font-size: 1.1rem; }
+.submit-btn:hover { background: var(--accent-glow); box-shadow: 0 0 20px rgba(35,160,204,0.4); transform: translateY(-2px); }
+
+/* FOOTER */
+footer { background: rgba(7, 11, 20, 0.8); border-top: 1px solid var(--glass-border); padding: 3rem 4rem; text-align: center; backdrop-filter: var(--glass-blur); margin-top: auto; }
+.footer-text { font-size: 0.85rem; color: var(--text-muted); }
+.footer-text a { color: var(--accent-glow); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">ERT <span>Admin</span> System</div>
+  <div class="nav-links">
+    <a href="index.html">&larr; Return to Live Site</a>
+  </div>
+</nav>
+
+<div class="page-header animate-up">
+  <h1>Manual Override</h1>
+</div>
+
+<div class="admin-container animate-up">
+  <form id="admin-booking-form">
+    <div class="form-group">
+      <label for="fName">Client Name</label>
+      <input type="text" id="fName" name="name" required placeholder="Enter client full name">
+    </div>
+    
+    <div class="form-group">
+      <label for="fContact">Contact Info</label>
+      <input type="text" id="fContact" name="contact" required placeholder="Email or Phone">
+    </div>
+
+    <div class="form-group">
+      <label for="session-type">Session Duration</label>
+      <select id="session-type" name="session" required>
+        <option value="" disabled selected>Select Session Duration</option>
+        <option value="60">60 Minutes - Neuromuscular Reset</option>
+        <option value="90">90 Minutes - Deep Restorative</option>
+        <option value="120">120 Minutes - Complete Recovery</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="booking-date">Override Date</label>
+      <input type="date" id="booking-date" name="date" required>
+    </div>
+    
+    <div class="form-group">
+      <label for="booking-time">Override Time (Manual Input)</label>
+      <input type="time" id="booking-time" name="time" required>
+    </div>
+
+    <button type="submit" class="submit-btn" onclick="submitBooking(event)">Force Inject Booking</button>
+  </form>
+</div>
+
+<footer>
+  <p class="footer-text">
+    &copy; 2026 Ellis Restorative Therapies Backend.
+  </p>
+</footer>
+
+<script>
+function submitBooking(e){
+  e.preventDefault();
+  const name = document.getElementById('fName').value.trim();
+  const contact = document.getElementById('fContact').value.trim();
+  const session = document.getElementById('session-type').value;
+  const date = document.getElementById('booking-date').value;
+  const time = document.getElementById('booking-time').value;
+
+  if(!name || !contact || !session || !date || !time){
+    alert('System Error: Please fill out all fields to override schedule.');
+    return;
+  }
+  
+  alert(`Admin override successful.\n\nCalendar sync required on backend for: ${name}\nDate: ${date}\nTime: ${time}`);
+  document.getElementById('admin-booking-form').reset();
+}
+</script>
+</body>
+</html>

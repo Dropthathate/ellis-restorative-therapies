@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog & Wellness Tips | Ellis Restorative Therapies Modesto CA</title>
+  <meta name="description" content="Therapeutic insights, neuromuscular therapy education, and wellness tips from Zachary Ellis at Ellis Restorative Therapies in Modesto, CA." />
+  <meta name="keywords" content="neuromuscular therapy blog, massage therapy tips Modesto, wellness Modesto CA, therapeutic massage education" />
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content="Zachary Ellis — Ellis Restorative Therapies" />
+  <link rel="canonical" href="https://www.restorewithellis.com/blog.html" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Blog & Wellness Tips | Ellis Restorative Therapies Modesto CA" />
+  <meta property="og:description" content="Therapeutic insights, neuromuscular therapy education, and wellness tips from Zachary Ellis at Ellis Restorative Therapies in Modesto, CA." />
+  <meta property="og:url" content="https://www.restorewithellis.com/blog.html" />
+  <meta property="og:image" content="https://www.restorewithellis.com/logo.png" />
+  <meta property="og:site_name" content="Ellis Restorative Therapies" />
+  <meta property="og:locale" content="en_US" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Blog & Wellness Tips | Ellis Restorative Therapies Modesto CA" />
+  <meta name="twitter:description" content="Therapeutic insights, neuromuscular therapy education, and wellness tips from Zachary Ellis at Ellis Restorative Therapies in Modesto, CA." />
+  <meta name="twitter:image" content="https://www.restorewithellis.com/logo.png" />
+
+  <!-- Geo tags -->
+  <meta name="geo.region" content="US-CA" />
+  <meta name="geo.placename" content="Modesto" />
+  <meta name="geo.position" content="37.6391;-120.9940" />
+  <meta name="ICBM" content="37.6391, -120.9940" />
+
+  <!-- Schema.org Local Business Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "HealthAndBeautyBusiness",
+    "name": "Ellis Restorative Therapies",
+    "alternateName": "ERT",
+    "description": "CAMTC Certified neuromuscular therapy and clinical bodywork in Modesto, CA. Specializing in neuromuscular therapy, craniosacral therapy, deep tissue massage, and Reiki energy work.",
+    "url": "https://www.restorewithellis.com",
+    "telephone": "(209) 450-5296",
+    "email": "restorewithellis@gmail.com",
+    "priceRange": "$100-$200",
+    "currenciesAccepted": "USD",
+    "paymentAccepted": "Cash, Credit Card",
+    "image": "https://www.restorewithellis.com/logo.png",
+    "logo": "https://www.restorewithellis.com/logo.png",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "2209 Coffee Rd, Suite M",
+      "addressLocality": "Modesto",
+      "addressRegion": "CA",
+      "postalCode": "95355",
+      "addressCountry": "US"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 37.6391,
+      "longitude": -120.9940
+    },
+    "openingHoursSpecification": [
+      { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday"], "opens": "10:00", "closes": "19:00" }
+    ],
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Massage & Bodywork Services",
+      "itemListElement": [
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "60 Minute Neuromuscular Therapy Session" }, "price": "100", "priceCurrency": "USD" },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "90 Minute Deep Restorative Session" }, "price": "150", "priceCurrency": "USD" },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "120 Minute Complete Recovery Session" }, "price": "200", "priceCurrency": "USD" }
+      ]
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5.0",
+      "reviewCount": "7"
+    },
+    "sameAs": [
+      "https://share.google/ljgQMAEz9CWuFBhU1"
+    ]
+  }
+  </script>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .page-hero {
+      padding: 160px 48px 80px;
+      background: linear-gradient(135deg, #0a0a0a, #111418);
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 50% 80% at 80% 50%, rgba(45,212,191,0.06) 0%, transparent 60%);
+    }
+    .page-hero-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .page-hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(48px, 7vw, 80px);
+      font-weight: 300;
+      color: var(--white);
+      line-height: 1.0;
+      margin-bottom: 16px;
+    }
+    .page-hero h1 em { font-style: italic; color: var(--gold); }
+    .page-hero p { color: var(--mid); font-size: 16px; max-width: 500px; line-height: 1.7; }
+
+    /* ── BLOG LAYOUT ── */
+    .blog-layout {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 60px;
+      align-items: start;
+    }
+
+    /* Featured Post */
+    .post-featured {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 32px;
+      transition: border-color 0.3s;
+      text-decoration: none;
+      display: block;
+      color: inherit;
+    }
+
+    .post-featured:hover { border-color: var(--gold-dim); }
+
+    .post-featured-img {
+      width: 100%;
+      height: 320px;
+      object-fit: cover;
+    }
+
+    .post-featured-img.placeholder {
+      background: var(--steel);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .post-featured-img.placeholder::before {
+      content: '📷';
+      font-size: 32px;
+      filter: grayscale(1) opacity(0.3);
+    }
+
+    .post-featured-body { padding: 40px; }
+
+    .post-meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .post-category {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid var(--gold-dim);
+      padding: 4px 10px;
+      border-radius: 2px;
+    }
+
+    .post-date {
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+    }
+
+    .post-featured-body h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 32px;
+      font-weight: 300;
+      color: var(--white);
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+
+    .post-featured-body p {
+      font-size: 14px;
+      color: var(--mid);
+      line-height: 1.75;
+      margin-bottom: 24px;
+    }
+
+    .post-read-more {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Regular posts */
+    .post-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      margin-bottom: 16px;
+      transition: border-color 0.3s;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .post-card:hover { border-color: var(--gold-dim); }
+
+    .post-card-img {
+      height: 100%;
+      min-height: 140px;
+      object-fit: cover;
+    }
+
+    .post-card-img.placeholder {
+      background: var(--steel);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .post-card-body { padding: 24px; }
+
+    .post-card-body h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-weight: 300;
+      color: var(--white);
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+
+    .post-card-body p {
+      font-size: 13px;
+      color: var(--mid);
+      line-height: 1.6;
+    }
+
+    /* Sidebar */
+    .blog-sidebar { position: sticky; top: 100px; }
+
+    .sidebar-widget {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 28px;
+      margin-bottom: 24px;
+    }
+
+    .sidebar-widget h4 {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+    }
+
+    .sidebar-links { list-style: none; }
+    .sidebar-links li {
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+    .sidebar-links li:last-child { border-bottom: none; }
+    .sidebar-links a {
+      color: var(--mid);
+      text-decoration: none;
+      transition: color 0.2s;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .sidebar-links a:hover { color: var(--white); }
+    .sidebar-links a::after { content: '→'; color: var(--muted); }
+
+    .sidebar-book {
+      background: linear-gradient(135deg, #0a1412, #111418);
+      border-color: var(--gold-dim);
+      text-align: center;
+    }
+
+    .sidebar-book p {
+      font-size: 13px;
+      color: var(--mid);
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .sidebar-google {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      text-decoration: none;
+      color: inherit;
+    }
+    .sidebar-google:last-child { border-bottom: none; }
+    .sidebar-google-text h5 {
+      font-size: 13px;
+      color: var(--white);
+      margin-bottom: 2px;
+    }
+    .sidebar-google-text p { font-size: 12px; color: var(--mid); }
+    .sidebar-google-stars { color: var(--gold); font-size: 11px; }
+
+    /* ── ARTICLE MODAL (inline full articles) ── */
+    .article-full {
+      display: none;
+      background: var(--black);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 48px;
+      margin-bottom: 32px;
+    }
+
+    .article-full.open { display: block; }
+
+    .article-full h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 36px;
+      font-weight: 300;
+      color: var(--white);
+      margin-bottom: 24px;
+      line-height: 1.2;
+    }
+
+    .article-full p {
+      font-size: 15px;
+      color: var(--mid);
+      line-height: 1.85;
+      margin-bottom: 20px;
+      max-width: 680px;
+    }
+
+    .article-full h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 14px;
+      letter-spacing: 0.08em;
+      color: var(--white);
+      margin: 32px 0 12px;
+    }
+
+    .article-close {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--mid);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 10px 20px;
+      border-radius: 2px;
+      cursor: pointer;
+      margin-top: 32px;
+      transition: all 0.2s;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .article-close:hover { border-color: var(--gold); color: var(--gold); }
+
+    @media (max-width: 900px) {
+      .page-hero { padding: 120px 24px 60px; }
+      .blog-layout { grid-template-columns: 1fr; }
+      .blog-sidebar { position: static; }
+      .post-card { grid-template-columns: 1fr; }
+      .post-card-img { min-height: 180px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="logo.png" alt="Ellis Restorative Therapies" />
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="blog.html" class="active">Blog</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="book.html" class="nav-book">Book Now</a></li>
+  </ul>
+  <button class="nav-toggle" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <div class="section-label">Education &amp; Insights</div>
+    <h1>Therapeutic <em>Insights</em></h1>
+    <p>Education, recovery guidance, and wellness perspectives from Zachary Ellis.</p>
+  </div>
+</div>
+
+<!-- BLOG CONTENT -->
+<section class="section" style="background:var(--black);">
+  <div class="section-inner">
+    <div class="blog-layout">
+
+      <!-- MAIN COLUMN -->
+      <div>
+
+        <!-- ARTICLE 1 FULL (expandable) -->
+        <div class="article-full" id="article-1">
+          <div class="post-meta">
+            <span class="post-category">Clinic Education</span>
+            <span class="post-date">April 2026</span>
+          </div>
+          <h2>The Power of Neuromuscular Therapy: Why It's Not Just Massage</h2>
+          <p>Most people seeking relief from chronic pain have tried massage — and many have found it helpful, at least temporarily. But there's a meaningful distinction between general massage therapy and neuromuscular therapy (NMT), and understanding it can change the way you think about your pain.</p>
+          <h3>What Is Neuromuscular Therapy?</h3>
+          <p>Neuromuscular therapy is a specialized form of soft tissue manipulation that addresses the relationship between the nervous system and the musculoskeletal system. Rather than working on the surface of the body for general relaxation, NMT targets specific structures — trigger points, areas of nerve compression, postural distortions, and ischemic tissue — to identify and address the actual source of pain.</p>
+          <p>The core premise is simple: most chronic pain is not where it appears to be. A persistent ache between your shoulder blades may originate from a trigger point in a completely different muscle. NMT trains therapists to map these relationships and work systematically to resolve them.</p>
+          <h3>Trigger Points: The Hidden Source of Pain</h3>
+          <p>A trigger point is a hyperirritable spot in skeletal muscle — often felt as a tight "knot" — that produces referred pain when pressed. These points can develop from overuse, injury, poor posture, emotional stress, or even nutritional deficiencies. They don't always hurt on their own, but they generate predictable patterns of pain elsewhere in the body.</p>
+          <p>NMT practitioners use sustained, precise pressure on these points to interrupt the pain-spasm-pain cycle. The release is often immediate, and the referred pain pattern disappears. It's one of the most clinically verifiable and reliably effective techniques in manual therapy.</p>
+          <h3>The Nervous System Connection</h3>
+          <p>What separates NMT from general massage is the neurological lens. The nervous system governs everything — muscle tone, pain perception, healing capacity. By working with, rather than against, the nervous system's signals, NMT creates lasting change in the body's default tension patterns.</p>
+          <p>This is why NMT clients often report that results accumulate over time — each session builds on the last, retraining the nervous system toward greater ease and resilience.</p>
+          <h3>Is NMT Right for You?</h3>
+          <p>NMT is particularly effective for chronic pain conditions, postural problems, headaches and migraines, sciatica, repetitive strain injuries, and recovery from sports or occupational overuse. If you've been dealing with pain that doesn't fully resolve with general massage, NMT may offer a more targeted path forward.</p>
+          <p>Zachary Ellis is a trained NMT Specialist practicing in Modesto, CA. Each session integrates neuromuscular work with complementary modalities — craniosacral therapy, deep tissue, and Reiki — for a comprehensive approach to healing.</p>
+          <a href="book.html" class="btn btn-gold" style="margin-top:8px;">Book a Session</a>
+          <br>
+          <button class="article-close" onclick="closeArticle('article-1', 'post-1')">↑ Collapse Article</button>
+        </div>
+
+        <!-- FEATURED POST 1 -->
+        <div class="post-featured" id="post-1" onclick="openArticle('article-1', 'post-1')" style="cursor:pointer;">
+          <img src="bodywork.png" alt="Zachary Ellis performing neuromuscular therapy" class="post-featured-img" style="width:100%;height:320px;object-fit:cover;display:block;" />
+          <div class="post-featured-body">
+            <div class="post-meta">
+              <span class="post-category">Clinic Education</span>
+              <span class="post-date">April 2026</span>
+            </div>
+            <h2>The Power of Neuromuscular Therapy: Why It's Not Just Massage</h2>
+            <p>Discover how NMT goes beyond traditional massage to target the nervous system, release chronic tension, and reset your body's natural alignment — and why it works when other approaches haven't.</p>
+            <span class="post-read-more">Read Article →</span>
+          </div>
+        </div>
+
+        <!-- ARTICLE 2 FULL -->
+        <div class="article-full" id="article-2">
+          <div class="post-meta">
+            <span class="post-category">Practice Philosophy</span>
+            <span class="post-date">March 2026</span>
+          </div>
+          <h2>Why We Structure Sessions at 60, 90, and 120 Minutes</h2>
+          <p>At Ellis Restorative Therapies, we don't offer 30-minute "express" sessions. This is a deliberate choice — and one that clients often ask about. Here's the thinking behind it.</p>
+          <h3>Healing Requires Time</h3>
+          <p>The body does not operate on a timer. Genuine therapeutic change — the kind that affects how you feel for days or weeks after a session — requires a sustained window of focused work. The nervous system needs time to downregulate. Fascia needs time to soften. Trigger points need time to fully release.</p>
+          <p>Rushing that process doesn't just limit results — it can actually counteract them, leaving the body stimulated rather than restored.</p>
+          <h3>The 60-Minute Session: Targeted and Focused</h3>
+          <p>Our 60-minute session is ideal for clients who know what they need. If you have a recurring area of tension, a specific injury, or you're maintaining results from previous sessions, 60 minutes provides enough time to do meaningful clinical work without rushing.</p>
+          <p>That said, 60 minutes is not a full-body session. It's focused work — and it works best when you come in with a clear sense of your primary concerns.</p>
+          <h3>The 90-Minute Session: The Sweet Spot</h3>
+          <p>For most clients — especially new ones — 90 minutes is where the real magic happens. There's enough time for Zachary to do a proper assessment, work through multiple areas of the body, integrate different modalities, and give the nervous system time to fully settle.</p>
+          <p>The shift that happens in the final 20–30 minutes of a 90-minute session is often the most profound part of the work — when the body finally lets go of its last layers of holding.</p>
+          <h3>The 120-Minute Session: Complete Restoration</h3>
+          <p>The 120-minute session is for those who are ready for a full reset. It allows for extended craniosacral work, thorough myofascial release across the entire body, Reiki integration, and time for the body to be truly unhurried in its healing process.</p>
+          <p>Many clients find that one 120-minute session does more than several shorter ones — not because more time is always better, but because there are thresholds of relaxation the body simply cannot reach in 60 minutes.</p>
+          <h3>A Note on Investment</h3>
+          <p>We understand that longer sessions cost more. They also deliver more. We'd encourage you to think of your session not as an expense, but as an investment in your nervous system, your posture, your pain levels, and your capacity to show up fully in your life.</p>
+          <p>If you're unsure which session is right for you, reach out — Zachary is happy to discuss your situation and make a recommendation.</p>
+          <a href="contact.html" class="btn btn-outline" style="margin-top:8px;">Ask a Question</a>
+          <br>
+          <button class="article-close" onclick="closeArticle('article-2', 'post-2')">↑ Collapse Article</button>
+        </div>
+
+        <!-- POST CARD 2 -->
+        <div class="post-card" id="post-2" onclick="openArticle('article-2', 'post-2')" style="cursor:pointer;">
+          <div class="post-card-img placeholder">📝</div>
+          <div class="post-card-body">
+            <div class="post-meta" style="margin-bottom:10px;">
+              <span class="post-category">Practice Philosophy</span>
+              <span class="post-date" style="margin-left:8px;">March 2026</span>
+            </div>
+            <h3>Why We Structure Sessions at 60, 90, and 120 Minutes</h3>
+            <p>True recovery takes time. Learn why our session durations are specifically designed to allow for deep, uninterrupted healing.</p>
+            <div style="margin-top:12px;"><span class="post-read-more">Read Article →</span></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- SIDEBAR -->
+      <div class="blog-sidebar">
+
+        <div class="sidebar-widget sidebar-book">
+          <h4>Ready to Book?</h4>
+          <p>Check live availability and reserve your session today.</p>
+          <a href="book.html" class="btn btn-gold" style="width:100%;justify-content:center;">Book a Session</a>
+          <div style="margin-top:16px;font-size:12px;color:var(--muted);">
+            60 min · $100 &nbsp;|&nbsp; 90 min · $150 &nbsp;|&nbsp; 120 min · $200
+          </div>
+        </div>
+
+        <div class="sidebar-widget">
+          <h4>Topics</h4>
+          <ul class="sidebar-links">
+            <li><a href="#">Neuromuscular Therapy</a></li>
+            <li><a href="#">Craniosacral Therapy</a></li>
+            <li><a href="#">Deep Tissue</a></li>
+            <li><a href="#">Reiki &amp; Energy Work</a></li>
+            <li><a href="#">Practice Philosophy</a></li>
+            <li><a href="#">Recovery &amp; Self-Care</a></li>
+          </ul>
+        </div>
+
+        <div class="sidebar-widget">
+          <h4>Client Reviews</h4>
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+            <div style="font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:300;color:var(--gold);line-height:1;">5.0</div>
+            <div>
+              <div class="stars">★★★★★</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:2px;">7 Google Reviews</div>
+            </div>
+          </div>
+          <a href="https://share.google/ljgQMAEz9CWuFBhU1" target="_blank" rel="noopener" class="btn btn-outline" style="width:100%;justify-content:center;font-size:10px;">Read Reviews ↗</a>
+        </div>
+
+        <div class="sidebar-widget">
+          <h4>Contact</h4>
+          <p style="font-size:13px;color:var(--mid);margin-bottom:12px;">Questions about sessions or which option is right for you?</p>
+          <p style="font-size:13px;"><a href="tel:2094505296" style="color:var(--gold);text-decoration:none;">(209) 450-5296</a></p>
+          <p style="font-size:13px;margin-top:6px;"><a href="mailto:restorewithellis@gmail.com" style="color:var(--mid);text-decoration:none;">restorewithellis@gmail.com</a></p>
+          <p style="font-size:12px;color:var(--muted);margin-top:10px;">Mon – Thu · 10AM – 7PM</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <img src="logo.png" alt="Ellis Restorative Therapies" />
+      <p>Professional neuromuscular therapy and clinical bodywork in Modesto, CA. Serving all of Stanislaus County.</p>
+      <div class="footer-cert" style="margin-top:16px;gap:8px;flex-wrap:wrap;">
+        <span class="footer-cert-badge">CAMTC Certified</span>
+        <span class="footer-cert-badge">AMTA Member</span>
+      </div>
+    </div>
+    <div>
+      <h4>Navigate</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="services.html">Services & Pricing</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="book.html">Book a Session</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Services</h4>
+      <ul>
+        <li><a href="services.html">60 Min · $100</a></li>
+        <li><a href="services.html">90 Min · $150</a></li>
+        <li><a href="services.html">120 Min · $200</a></li>
+      </ul>
+    </div>
+    <div class="footer-contact">
+      <h4>Contact</h4>
+      <p><a href="tel:2094505296">(209) 450-5296</a></p>
+      <p><a href="mailto:restorewithellis@gmail.com">restorewithellis@gmail.com</a></p>
+      <p>2209 Coffee Rd, Suite M<br>Modesto, CA 95355</p>
+      <p style="margin-top:8px;">Mon – Thu · 10AM – 7PM</p>
+      <p style="margin-top:12px;"><a href="https://share.google/ljgQMAEz9CWuFBhU1" target="_blank" rel="noopener" style="color:var(--gold);">Google Business ↗</a></p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Ellis Restorative Therapies. All rights reserved. · Zachary Ellis · CAMTC #97101</span>
+    <span>Modesto, CA</span>
+  </div>
+</footer>
+
+<!-- ── EMAIL CAPTURE: FOOTER BAR ── -->
+<div class="ec-bar" id="ec-bar">
+  <div class="ec-bar-text">
+    <h4>Get Wellness Tips &amp; Offers</h4>
+    <p>Join the Ellis community — no spam, ever.</p>
+  </div>
+  <div class="ec-bar-form">
+    <input type="email" id="ec-bar-email" class="ec-input" placeholder="Your email address" />
+    <button id="ec-bar-btn" class="btn btn-gold" onclick="submitBar()">Subscribe</button>
+  </div>
+  <button class="ec-bar-close" onclick="closeBar()" aria-label="Close">×</button>
+</div>
+
+<!-- ── EMAIL CAPTURE: POPUP ── -->
+<div class="ec-overlay" id="ec-overlay">
+  <div class="ec-popup" role="dialog" aria-modal="true">
+    <button class="ec-popup-close" onclick="closePopup()" aria-label="Close">×</button>
+    <div id="ec-popup-form">
+      <div class="ec-popup-label">Exclusive Access</div>
+      <h2 class="ec-popup-title">Restore &amp; <em>Reconnect</em></h2>
+      <p class="ec-popup-body">Therapeutic insights, self-care tips, and first access to special offers — from Zachary's practice to your inbox.</p>
+      <div class="ec-input-row">
+        <input type="email" id="ec-popup-email" class="ec-input" placeholder="Your email address" />
+        <button class="btn btn-gold" onclick="submitPopup()">Subscribe</button>
+      </div>
+      <p class="ec-fine">No spam. Unsubscribe anytime.</p>
+    </div>
+    <div class="ec-success" id="ec-popup-success">
+      <div class="ec-success-icon">✅</div>
+      <h3>You're in!</h3>
+      <p>Welcome to the Ellis community. Talk soon.</p>
+    </div>
+  </div>
+</div>
+
+<script src="nav.js"></script>
+<script>
+  function openArticle(articleId, postId) {
+    const article = document.getElementById(articleId);
+    const post = document.getElementById(postId);
+    if (article.classList.contains('open')) return;
+    article.classList.add('open');
+    post.style.display = 'none';
+    article.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  function closeArticle(articleId, postId) {
+    const article = document.getElementById(articleId);
+    const post = document.getElementById(postId);
+    article.classList.remove('open');
+    post.style.display = '';
+    post.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+</script>
+<script src="email-capture.js"></script>
+</body>
+</html>
