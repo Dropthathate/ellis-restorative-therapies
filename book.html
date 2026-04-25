@@ -1,125 +1,542 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Book a Session | Ellis Restorative Therapies</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book a Session | Ellis Restorative Therapies</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy:       #1a2332;
+            --green:      #4a7c6a;
+            --green-lt:   #e8f0ed;
+            --ivory:      #f7f5f2;
+            --warm-white: #fdfcfa;
+            --border:     #e5e0d8;
+            --muted:      #6b7280;
+            --text-muted: #6b7280;
+            --pink-soft:  #f9e8ee;
+            --pink-deep:  #c4678a;
+            --pink-text:  #7a2d4e;
+        }
 
-<link rel="stylesheet" href="styles.css">
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-<style>
-/* GLASS / APPLE STYLE */
-.booking-wrap {
-  max-width: 1000px;
-  margin: 80px auto;
-  padding: 40px;
-}
+        body {
+            font-family: 'DM Sans', system-ui, sans-serif;
+            background: var(--ivory);
+            color: var(--navy);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
 
-.booking-card {
-  background: rgba(255,255,255,0.04);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 16px;
-  padding: 32px;
-}
+        /* NAV */
+        nav {
+            background: var(--navy);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 3rem;
+            height: 68px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
 
-.booking-grid {
-  display: grid;
-  gap: 16px;
-}
+        .nav-logo { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+        .nav-logo img { height: 36px; width: auto; }
+        .nav-logo-text {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 0.92rem;
+            color: #fff;
+            line-height: 1.25;
+        }
 
-.booking-input {
-  padding: 14px;
-  border-radius: 10px;
-  border: none;
-  background: rgba(255,255,255,0.06);
-  color: white;
-}
+        .nav-links { display: flex; align-items: center; gap: 0.2rem; list-style: none; }
+        .nav-links a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            font-size: 0.81rem;
+            letter-spacing: 0.04em;
+            padding: 0.4rem 0.85rem;
+            border-radius: 4px;
+            transition: color 0.15s;
+        }
+        .nav-links a:hover { color: #fff; }
+        .nav-links .active-link a {
+            background: var(--green);
+            color: #fff;
+            font-weight: 500;
+            padding: 0.45rem 1.1rem;
+            border-radius: 6px;
+        }
 
-.booking-btn {
-  padding: 16px;
-  border-radius: 10px;
-  border: none;
-  background: var(--gold);
-  color: black;
-  font-weight: 600;
-  cursor: pointer;
-}
+        /* HERO */
+        .page-hero {
+            background: var(--navy);
+            text-align: center;
+            padding: 3.5rem 2rem 3rem;
+        }
+        .eyebrow {
+            font-size: 0.67rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--green);
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .page-hero h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.75rem;
+            font-weight: 400;
+            color: #fff;
+            line-height: 1.15;
+        }
+        .page-hero h1 em { font-style: italic; color: #aac4b8; }
+        .page-hero p { color: rgba(255,255,255,0.5); font-size: 0.88rem; font-weight: 300; margin-top: 0.6rem; }
 
-.calendar {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 8px;
-  margin-top: 20px;
-}
+        /* LAYOUT */
+        .booking-wrap {
+            max-width: 1100px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 340px 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
 
-.day, .slot {
-  padding: 10px;
-  text-align: center;
-  border-radius: 8px;
-  background: rgba(255,255,255,0.05);
-  cursor: pointer;
-}
+        .panel {
+            background: var(--warm-white);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 2.25rem 2rem;
+        }
 
-.day.active, .slot.active {
-  background: var(--gold);
-  color: black;
-}
+        .panel-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.35rem;
+            font-weight: 400;
+            color: var(--navy);
+            margin-bottom: 0.4rem;
+        }
+        .panel-title em { font-style: italic; }
+        .panel-sub { color: var(--muted); font-size: 0.855rem; font-weight: 300; margin-bottom: 1.5rem; }
 
-.section {
-  margin-top: 30px;
-}
-</style>
+        .section-label {
+            font-size: 0.63rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--navy);
+            font-weight: 500;
+            margin-bottom: 0.85rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        /* INPUTS */
+        .booking-input {
+            display: block;
+            width: 100%;
+            padding: 11px 14px;
+            margin-bottom: 10px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.875rem;
+            color: var(--navy);
+            background: var(--ivory);
+            outline: none;
+            transition: border-color 0.15s;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+        .booking-input::placeholder { color: #b0a898; }
+        .booking-input:focus { border-color: var(--green); }
+
+        select.booking-input {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 36px;
+            cursor: pointer;
+        }
+
+        /* POLICIES */
+        .policy-list { list-style: none; margin-top: 1.5rem; border-top: 1px solid var(--border); padding-top: 1.25rem; }
+        .policy-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.835rem;
+            color: #374151;
+            font-weight: 300;
+            line-height: 1.55;
+        }
+        .policy-list li:last-child { border-bottom: none; }
+        .p-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex-shrink: 0; margin-top: 0.5rem; }
+
+        /* PRICING */
+        .pricing-strip { margin-top: 1.5rem; border-top: 1px solid var(--border); padding-top: 1.25rem; }
+        .price-row { display: flex; justify-content: space-between; align-items: center; padding: 0.6rem 0; border-bottom: 1px solid var(--border); font-size: 0.845rem; }
+        .price-row:last-child { border-bottom: none; }
+        .price-row .dur { color: var(--navy); font-weight: 400; }
+        .price-row .svc { color: var(--muted); font-size: 0.77rem; font-weight: 300; }
+        .price-row .amt { color: var(--green); font-weight: 500; }
+
+        /* CALENDAR PANEL */
+        .calendar-panel { min-height: 520px; }
+
+        .month-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem; }
+        .month-nav button {
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            width: 32px; height: 32px;
+            cursor: pointer;
+            color: var(--navy);
+            font-size: 1rem;
+            display: flex; align-items: center; justify-content: center;
+            transition: background 0.15s;
+        }
+        .month-nav button:hover { background: var(--green-lt); }
+
+        #cal-month-label {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.25rem;
+            font-weight: 400;
+            font-style: italic;
+            color: var(--navy);
+            text-align: center;
+        }
+
+        .weekday-row { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; margin: 1rem 0 0.5rem; }
+        .weekday-row span { font-size: 0.63rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); font-weight: 500; padding: 0.3rem 0; }
+
+        #cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
+
+        .cal-day {
+            padding: 13px 4px;
+            text-align: center;
+            background: var(--green-lt);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.84rem;
+            color: var(--navy);
+            transition: background 0.15s, color 0.15s, transform 0.1s;
+        }
+        .cal-day:hover:not(.closed):not(.full) { background: var(--green); color: #fff; transform: translateY(-1px); }
+        .cal-day.closed, .cal-day.full { background: #f0ece8; color: #b8b0a8; cursor: not-allowed; opacity: 0.55; }
+
+        /* STATES */
+        #state-slots { display: none; }
+        #state-slots h3 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.2rem; font-weight: 400; font-style: italic;
+            color: var(--navy); margin-bottom: 0.5rem;
+        }
+
+        #slots-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 1rem; }
+
+        .slot-btn {
+            padding: 9px 20px;
+            border: 1.5px solid var(--navy);
+            background: transparent;
+            color: var(--navy);
+            border-radius: 100px;
+            cursor: pointer;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.83rem;
+            transition: background 0.15s, color 0.15s, border-color 0.15s;
+        }
+        .slot-btn:hover { background: var(--green); border-color: var(--green); color: #fff; }
+
+        #state-form { display: none; }
+        #state-form h3 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.2rem; font-weight: 400; font-style: italic;
+            color: var(--navy); margin-bottom: 1rem;
+        }
+
+        .booking-btn {
+            display: block; width: 100%; padding: 13px;
+            background: var(--navy); color: #fff; border: none;
+            border-radius: 8px; cursor: pointer;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.84rem; font-weight: 500;
+            letter-spacing: 0.07em; text-transform: uppercase;
+            transition: background 0.18s, transform 0.1s;
+            margin-top: 4px;
+        }
+        .booking-btn:hover { background: var(--green); transform: translateY(-1px); }
+
+        .back-btn {
+            background: none; border: 1.5px solid var(--border);
+            color: var(--muted); border-radius: 100px;
+            padding: 8px 18px; cursor: pointer;
+            font-family: 'DM Sans', sans-serif; font-size: 0.8rem;
+            margin-top: 0.75rem; display: inline-block;
+            transition: color 0.15s, border-color 0.15s;
+        }
+        .back-btn:hover { color: var(--navy); border-color: var(--navy); }
+
+        #state-success { display: none; text-align: center; padding: 3rem 1rem; }
+        #state-success h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.9rem; font-weight: 400; font-style: italic;
+            color: var(--green); margin-bottom: 0.75rem;
+        }
+        #state-success p { color: var(--muted); font-size: 0.9rem; font-weight: 300; }
+
+        /* FOOTER */
+        footer {
+            background: var(--navy); color: rgba(255,255,255,0.4);
+            text-align: center; font-size: 0.77rem; font-weight: 300;
+            padding: 1.5rem 2rem; margin-top: 4rem;
+        }
+        footer a { color: rgba(255,255,255,0.4); text-decoration: none; }
+
+        /* MOTHER'S DAY POPUP */
+        #promo-popup {
+            display: none; position: fixed; inset: 0;
+            background: rgba(20,28,45,0.62);
+            backdrop-filter: blur(5px);
+            z-index: 9999; align-items: center; justify-content: center;
+        }
+        #promo-popup.show { display: flex; animation: mdFade 0.3s ease; }
+        @keyframes mdFade { from { opacity:0; } to { opacity:1; } }
+
+        .md-card {
+            background: #fff; border-radius: 22px;
+            max-width: 460px; width: 92%; overflow: hidden;
+            box-shadow: 0 32px 80px rgba(20,28,45,0.28);
+            animation: mdUp 0.38s cubic-bezier(0.22,1,0.36,1);
+            position: relative;
+        }
+        @keyframes mdUp {
+            from { opacity:0; transform: translateY(28px) scale(0.96); }
+            to   { opacity:1; transform: translateY(0) scale(1); }
+        }
+
+        .md-x {
+            position: absolute; top: 13px; right: 15px;
+            background: rgba(255,255,255,0.7); border: none;
+            border-radius: 50%; width: 29px; height: 29px;
+            cursor: pointer; font-size: 0.88rem; color: #9a6878;
+            display: flex; align-items: center; justify-content: center;
+            transition: background 0.15s; z-index: 2;
+        }
+        .md-x:hover { background: #fff; color: var(--pink-deep); }
+
+        .md-header {
+            background: linear-gradient(145deg, #fdeef4 0%, #f8d8e8 50%, #fce4f0 100%);
+            padding: 2.25rem 2rem 1.75rem; text-align: center;
+            position: relative; overflow: hidden;
+        }
+        .md-header::before {
+            content: ''; position: absolute;
+            width: 220px; height: 220px;
+            background: radial-gradient(circle, #e8a0b8, transparent 70%);
+            top: -90px; left: -70px; opacity: 0.22;
+        }
+        .md-header::after {
+            content: ''; position: absolute;
+            width: 180px; height: 180px;
+            background: radial-gradient(circle, #f0b8cc, transparent 70%);
+            bottom: -70px; right: -50px; opacity: 0.2;
+        }
+        .md-roses { font-size: 2rem; margin-bottom: 0.6rem; position: relative; z-index: 1; }
+        .md-tag {
+            display: inline-block; background: var(--pink-deep); color: #fff;
+            font-size: 0.58rem; letter-spacing: 0.22em; text-transform: uppercase;
+            font-weight: 500; padding: 4px 13px; border-radius: 100px;
+            margin-bottom: 0.85rem; position: relative; z-index: 1;
+        }
+        .md-header h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.85rem; font-weight: 400; font-style: italic;
+            color: var(--pink-text); line-height: 1.2;
+            position: relative; z-index: 1;
+        }
+
+        .md-body { padding: 1.75rem 2rem 2rem; text-align: center; }
+        .md-body p { color: #5a3d4a; font-size: 0.875rem; font-weight: 300; line-height: 1.65; margin-bottom: 1.4rem; }
+
+        .md-offer {
+            background: var(--pink-soft); border: 1px solid #f0c4d4;
+            border-radius: 12px; padding: 1.1rem 1.25rem; margin-bottom: 1.4rem;
+            display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
+        }
+        .md-pct { font-family: 'Playfair Display', Georgia, serif; font-size: 2.5rem; font-weight: 500; color: var(--pink-deep); line-height: 1; }
+        .md-desc { font-size: 0.83rem; color: var(--pink-text); font-weight: 400; }
+        .md-fine { font-size: 0.71rem; color: #9a7080; font-weight: 300; margin-top: 0.25rem; }
+
+        .md-cta {
+            display: block; width: 100%; padding: 13px;
+            background: linear-gradient(135deg, #c4678a, #d4849e);
+            color: #fff; border: none; border-radius: 10px;
+            font-family: 'DM Sans', sans-serif; font-size: 0.83rem;
+            font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase;
+            cursor: pointer; transition: opacity 0.18s, transform 0.12s;
+            margin-bottom: 0.75rem;
+        }
+        .md-cta:hover { opacity: 0.9; transform: translateY(-1px); }
+        .md-skip {
+            background: none; border: none; color: #b09aa8;
+            font-size: 0.77rem; cursor: pointer;
+            font-family: 'DM Sans', sans-serif; font-weight: 300;
+            text-decoration: underline; text-underline-offset: 3px;
+        }
+        .md-skip:hover { color: var(--pink-text); }
+
+        @media (max-width: 860px) {
+            nav { padding: 0 1.25rem; }
+            .nav-links { display: none; }
+            .booking-wrap { grid-template-columns: 1fr; margin: 1.5rem auto; }
+            .page-hero h1 { font-size: 2rem; }
+        }
+    </style>
 </head>
-
 <body>
 
-<!-- NAV (keeps your existing layout intact) -->
 <nav>
-  <a href="index.html" class="nav-logo">
-    <img src="logo.png" />
-  </a>
+    <a href="index.html" class="nav-logo">
+        <img src="logo.png" alt="Ellis Restorative Therapies">
+        <span class="nav-logo-text">Ellis Restorative<br>Therapies</span>
+    </a>
+    <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li class="active-link"><a href="book.html">Book Now</a></li>
+    </ul>
 </nav>
 
-<div class="booking-wrap">
-  <div class="booking-card">
-
-    <h1>Book Your Session</h1>
-
-    <!-- CLIENT INFO -->
-    <div class="booking-grid">
-      <input id="name" class="booking-input" placeholder="Full Name">
-      <input id="phone" class="booking-input" placeholder="Phone Number">
-      <input id="email" class="booking-input" placeholder="Email">
-
-      <!-- 🔥 CRITICAL: DURATION -->
-      <select id="duration" class="booking-input">
-        <option value="60">60 Minutes — $100</option>
-        <option value="90">90 Minutes — $150</option>
-        <option value="120">120 Minutes — $200</option>
-      </select>
-    </div>
-
-    <!-- DATE -->
-    <div class="section">
-      <h3>Select Date</h3>
-      <div id="calendar" class="calendar"></div>
-    </div>
-
-    <!-- TIME -->
-    <div class="section">
-      <h3>Select Time</h3>
-      <div id="slots" class="calendar"></div>
-    </div>
-
-    <!-- SUBMIT -->
-    <div class="section">
-      <button class="booking-btn" onclick="submitBooking()">Confirm Booking</button>
-    </div>
-
-  </div>
+<div class="page-hero">
+    <p class="eyebrow">Live Availability</p>
+    <h1>Book a <em>Session</em></h1>
+    <p>Neuromuscular therapy &amp; clinical bodywork · Modesto, CA</p>
 </div>
 
+<main class="booking-wrap">
+
+    <!-- LEFT: CLIENT DETAILS -->
+    <aside class="panel info-panel" style="height:fit-content;">
+        <h2 class="panel-title">Your <em>Details</em></h2>
+        <p class="panel-sub">Fill this out, then pick your date and time on the right.</p>
+
+        <p class="section-label">Session Info</p>
+
+        <!-- IDs match booking.js exactly -->
+        <input id="f-name"  class="booking-input" type="text"  placeholder="Full Name">
+        <input id="f-phone" class="booking-input" type="tel"   placeholder="Phone Number">
+        <input id="f-email" class="booking-input" type="email" placeholder="Email Address">
+
+        <p class="section-label" style="margin-top:1rem;">Session Length</p>
+        <select id="f-duration" class="booking-input">
+            <option value="60">60 Minutes — $100</option>
+            <option value="90">90 Minutes — $150</option>
+            <option value="120">120 Minutes — $200</option>
+        </select>
+
+        <div class="pricing-strip">
+            <p class="section-label">What's Included</p>
+            <div class="price-row">
+                <div><div class="dur">60 Min</div><div class="svc">Neuromuscular Reset</div></div>
+                <div class="amt">$100</div>
+            </div>
+            <div class="price-row">
+                <div><div class="dur">90 Min</div><div class="svc">Deep Restorative</div></div>
+                <div class="amt">$150</div>
+            </div>
+            <div class="price-row">
+                <div><div class="dur">120 Min</div><div class="svc">Complete Recovery</div></div>
+                <div class="amt">$200</div>
+            </div>
+        </div>
+
+        <ul class="policy-list">
+            <li><span class="p-dot"></span>Arrive 5–10 min early for intake.</li>
+            <li><span class="p-dot"></span>Hydrate before &amp; after your session.</li>
+            <li><span class="p-dot"></span>24-hr cancellation notice required.</li>
+        </ul>
+    </aside>
+
+    <!-- RIGHT: BOOKING FLOW -->
+    <section class="panel calendar-panel">
+
+        <!-- STATE 1: CALENDAR -->
+        <div id="state-prompt">
+            <div class="month-nav">
+                <button onclick="changeMonth(-1)">&#8249;</button>
+                <h3 id="cal-month-label"></h3>
+                <button onclick="changeMonth(1)">&#8250;</button>
+            </div>
+            <div class="weekday-row">
+                <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+            </div>
+            <div id="cal-grid"></div>
+        </div>
+
+        <!-- STATE 2: TIME SLOTS -->
+        <div id="state-slots">
+            <h3>Available times for <span id="slot-date-header"></span></h3>
+            <div id="slots-grid"></div>
+            <button class="back-btn" onclick="document.getElementById('state-slots').style.display='none';document.getElementById('state-prompt').style.display='block';">← Back to Calendar</button>
+        </div>
+
+        <!-- STATE 3: CONFIRM -->
+        <div id="state-form">
+            <h3>Confirm Your Booking</h3>
+            <p style="color:var(--muted);font-size:0.855rem;font-weight:300;margin-bottom:1.25rem;">Double-check your details on the left, then confirm below.</p>
+            <button class="booking-btn" id="submit-btn">Confirm Booking</button>
+            <button class="back-btn" onclick="document.getElementById('state-form').style.display='none';document.getElementById('state-slots').style.display='block';">← Change Time</button>
+        </div>
+
+        <!-- STATE 4: SUCCESS -->
+        <div id="state-success">
+            <h2>Booking Confirmed</h2>
+            <p>Thank you. We look forward to seeing you.</p>
+        </div>
+
+    </section>
+
+</main>
+
+<footer>
+    © 2026 Ellis Restorative Therapies · Zachary Ellis · CAMTC #97101 · Modesto, CA ·
+    <a href="tel:2094505296">(209) 450-5296</a>
+</footer>
+
+<!-- MOTHER'S DAY POPUP — booking.js toggles .show on #promo-popup -->
+<div id="promo-popup">
+    <div class="md-card">
+        <button class="md-x" onclick="closePromo()">✕</button>
+        <div class="md-header">
+            <div class="md-roses">🌸 🌷 🌸</div>
+            <div class="md-tag">Mother's Day Special</div>
+            <h2>Give the Gift<br>of Restoration</h2>
+        </div>
+        <div class="md-body">
+            <p>This Mother's Day, give her a session built entirely around rest and recovery. Deep relief. A moment that's fully hers.</p>
+            <div class="md-offer">
+                <div class="md-pct">15% Off</div>
+                <div class="md-desc">Any session booked as a Mother's Day gift</div>
+                <div class="md-fine">Use code <strong>MOM2026</strong> · Valid through May 11, 2026</div>
+            </div>
+            <button class="md-cta" onclick="closePromo()">Book Her Session Now →</button>
+            <button class="md-skip" onclick="closePromo()">Maybe later</button>
+        </div>
+    </div>
+</div>
+
+<!-- booking.js last so DOM is ready -->
 <script src="booking.js"></script>
 
 </body>
