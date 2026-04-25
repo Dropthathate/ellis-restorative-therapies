@@ -6,407 +6,562 @@
     <title>Book a Session | Ellis Restorative Therapies</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Cinzel:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
     <style>
+        /* ── BOOK PAGE OVERRIDES — dark theme matching index.html ── */
         :root {
-            --navy:       #1a2332;
-            --green:      #4a7c6a;
-            --green-lt:   #e8f0ed;
-            --ivory:      #f7f5f2;
-            --warm-white: #fdfcfa;
-            --border:     #e5e0d8;
-            --muted:      #6b7280;
-            --text-muted: #6b7280;
-            --pink-soft:  #f9e8ee;
-            --pink-deep:  #c4678a;
-            --pink-text:  #7a2d4e;
+            --text-muted: #6b7a8a;
         }
 
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-        body {
-            font-family: 'DM Sans', system-ui, sans-serif;
-            background: var(--ivory);
-            color: var(--navy);
-            line-height: 1.6;
-            min-height: 100vh;
-        }
-
-        /* NAV */
-        nav {
-            background: var(--navy);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 3rem;
-            height: 68px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .nav-logo { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
-        .nav-logo img { height: 36px; width: auto; }
-        .nav-logo-text {
-            font-family: 'Playfair Display', Georgia, serif;
-            font-size: 0.92rem;
-            color: #fff;
-            line-height: 1.25;
-        }
-
-        .nav-links { display: flex; align-items: center; gap: 0.2rem; list-style: none; }
-        .nav-links a {
-            color: rgba(255,255,255,0.7);
-            text-decoration: none;
-            font-size: 0.81rem;
-            letter-spacing: 0.04em;
-            padding: 0.4rem 0.85rem;
-            border-radius: 4px;
-            transition: color 0.15s;
-        }
-        .nav-links a:hover { color: #fff; }
-        .nav-links .active-link a {
-            background: var(--green);
-            color: #fff;
-            font-weight: 500;
-            padding: 0.45rem 1.1rem;
-            border-radius: 6px;
-        }
-
-        /* HERO */
-        .page-hero {
-            background: var(--navy);
+        .book-hero {
+            background: linear-gradient(135deg, #0a0a0a 0%, #111418 50%, #0d1217 100%);
+            position: relative;
+            overflow: hidden;
             text-align: center;
-            padding: 3.5rem 2rem 3rem;
-        }
-        .eyebrow {
-            font-size: 0.67rem;
-            letter-spacing: 0.22em;
-            text-transform: uppercase;
-            color: var(--green);
-            font-weight: 500;
-            margin-bottom: 0.75rem;
-        }
-        .page-hero h1 {
-            font-family: 'Playfair Display', Georgia, serif;
-            font-size: 2.75rem;
-            font-weight: 400;
-            color: #fff;
-            line-height: 1.15;
-        }
-        .page-hero h1 em { font-style: italic; color: #aac4b8; }
-        .page-hero p { color: rgba(255,255,255,0.5); font-size: 0.88rem; font-weight: 300; margin-top: 0.6rem; }
-
-        /* LAYOUT */
-        .booking-wrap {
-            max-width: 1100px;
-            margin: 3rem auto;
-            padding: 0 2rem;
-            display: grid;
-            grid-template-columns: 340px 1fr;
-            gap: 2rem;
-            align-items: start;
-        }
-
-        .panel {
-            background: var(--warm-white);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 2.25rem 2rem;
-        }
-
-        .panel-title {
-            font-family: 'Playfair Display', Georgia, serif;
-            font-size: 1.35rem;
-            font-weight: 400;
-            color: var(--navy);
-            margin-bottom: 0.4rem;
-        }
-        .panel-title em { font-style: italic; }
-        .panel-sub { color: var(--muted); font-size: 0.855rem; font-weight: 300; margin-bottom: 1.5rem; }
-
-        .section-label {
-            font-size: 0.63rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: var(--navy);
-            font-weight: 500;
-            margin-bottom: 0.85rem;
-            padding-bottom: 0.5rem;
+            padding: 80px 48px 64px;
             border-bottom: 1px solid var(--border);
         }
 
-        /* INPUTS */
+        .book-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 60% 80% at 50% 50%, rgba(45,212,191,0.06) 0%, transparent 70%);
+        }
+
+        .book-hero-inner { position: relative; z-index: 2; }
+
+        .book-hero .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 20px;
+        }
+
+        .book-hero .section-label::before {
+            content: '';
+            display: block;
+            width: 32px;
+            height: 1px;
+            background: var(--gold);
+        }
+
+        .book-hero h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(40px, 6vw, 68px);
+            font-weight: 300;
+            color: var(--white);
+            line-height: 1.05;
+            margin-bottom: 16px;
+        }
+
+        .book-hero h1 em { font-style: italic; color: var(--gold); }
+
+        .book-hero p {
+            color: var(--mid);
+            font-size: 15px;
+            font-weight: 300;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        /* ── LAYOUT ── */
+        .book-wrap {
+            max-width: 1100px;
+            margin: 56px auto;
+            padding: 0 48px;
+            display: grid;
+            grid-template-columns: 340px 1fr;
+            gap: 28px;
+            align-items: start;
+        }
+
+        /* ── PANEL BASE ── */
+        .book-panel {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 36px 32px;
+        }
+
+        .book-panel-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem;
+            font-weight: 300;
+            color: var(--white);
+            margin-bottom: 6px;
+            line-height: 1.2;
+        }
+
+        .book-panel-title em { font-style: italic; color: var(--gold); }
+
+        .book-panel-sub {
+            color: var(--mid);
+            font-size: 13px;
+            font-weight: 300;
+            margin-bottom: 28px;
+            line-height: 1.6;
+        }
+
+        .book-section-label {
+            font-family: 'Cinzel', serif;
+            font-size: 9px;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--gold);
+            font-weight: 400;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border);
+            display: block;
+        }
+
+        /* ── INPUTS ── */
         .booking-input {
             display: block;
             width: 100%;
-            padding: 11px 14px;
+            padding: 12px 14px;
             margin-bottom: 10px;
             border: 1px solid var(--border);
-            border-radius: 8px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.875rem;
-            color: var(--navy);
-            background: var(--ivory);
+            border-radius: 3px;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            color: var(--white);
+            background: rgba(255,255,255,0.04);
             outline: none;
-            transition: border-color 0.15s;
+            transition: border-color 0.2s;
             appearance: none;
             -webkit-appearance: none;
         }
-        .booking-input::placeholder { color: #b0a898; }
-        .booking-input:focus { border-color: var(--green); }
+
+        .booking-input::placeholder { color: var(--muted); }
+        .booking-input:focus { border-color: var(--teal); }
 
         select.booking-input {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7a8a' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
             background-position: right 14px center;
+            background-color: rgba(255,255,255,0.04);
             padding-right: 36px;
             cursor: pointer;
         }
 
-        /* POLICIES */
-        .policy-list { list-style: none; margin-top: 1.5rem; border-top: 1px solid var(--border); padding-top: 1.25rem; }
+        select.booking-input option { background: #111418; color: var(--white); }
+
+        /* ── PRICING ROWS ── */
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+        }
+
+        .price-row:last-child { border-bottom: none; }
+        .price-row .dur { color: var(--white); font-weight: 400; font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 0.06em; }
+        .price-row .svc { color: var(--mid); font-size: 11px; font-weight: 300; margin-top: 2px; }
+        .price-row .amt { color: var(--gold); font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 300; }
+
+        /* ── POLICIES ── */
+        .policy-list { list-style: none; margin-top: 4px; }
+
         .policy-list li {
             display: flex;
             align-items: flex-start;
-            gap: 0.8rem;
-            padding: 0.75rem 0;
+            gap: 12px;
+            padding: 10px 0;
             border-bottom: 1px solid var(--border);
-            font-size: 0.835rem;
-            color: #374151;
+            font-size: 12px;
+            color: var(--mid);
             font-weight: 300;
-            line-height: 1.55;
+            line-height: 1.6;
         }
+
         .policy-list li:last-child { border-bottom: none; }
-        .p-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex-shrink: 0; margin-top: 0.5rem; }
 
-        /* PRICING */
-        .pricing-strip { margin-top: 1.5rem; border-top: 1px solid var(--border); padding-top: 1.25rem; }
-        .price-row { display: flex; justify-content: space-between; align-items: center; padding: 0.6rem 0; border-bottom: 1px solid var(--border); font-size: 0.845rem; }
-        .price-row:last-child { border-bottom: none; }
-        .price-row .dur { color: var(--navy); font-weight: 400; }
-        .price-row .svc { color: var(--muted); font-size: 0.77rem; font-weight: 300; }
-        .price-row .amt { color: var(--green); font-weight: 500; }
-
-        /* CALENDAR PANEL */
-        .calendar-panel { min-height: 520px; }
-
-        .month-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem; }
-        .month-nav button {
-            background: none;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            width: 32px; height: 32px;
-            cursor: pointer;
-            color: var(--navy);
-            font-size: 1rem;
-            display: flex; align-items: center; justify-content: center;
-            transition: background 0.15s;
+        .p-dot {
+            width: 5px; height: 5px;
+            border-radius: 50%;
+            background: var(--teal);
+            flex-shrink: 0;
+            margin-top: 5px;
         }
-        .month-nav button:hover { background: var(--green-lt); }
 
+        /* ── CALENDAR PANEL ── */
+        .book-cal-panel { min-height: 500px; }
+
+        .month-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .month-nav button {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border);
+            border-radius: 3px;
+            width: 34px; height: 34px;
+            cursor: pointer;
+            color: var(--mid);
+            font-size: 1.1rem;
+            display: flex; align-items: center; justify-content: center;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .month-nav button:hover { background: rgba(45,212,191,0.08); color: var(--teal); border-color: var(--teal); }
+
+        /* ID: cal-month-label */
         #cal-month-label {
-            font-family: 'Playfair Display', Georgia, serif;
-            font-size: 1.25rem;
-            font-weight: 400;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            font-weight: 300;
             font-style: italic;
-            color: var(--navy);
+            color: var(--white);
             text-align: center;
         }
 
-        .weekday-row { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; margin: 1rem 0 0.5rem; }
-        .weekday-row span { font-size: 0.63rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); font-weight: 500; padding: 0.3rem 0; }
+        .weekday-row {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            margin: 16px 0 8px;
+        }
 
-        #cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
+        .weekday-row span {
+            font-family: 'Cinzel', serif;
+            font-size: 9px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--muted);
+            padding: 4px 0;
+        }
 
+        /* ID: cal-grid */
+        #cal-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+
+        /* booking.js sets className: cal-day {status} */
         .cal-day {
             padding: 13px 4px;
             text-align: center;
-            background: var(--green-lt);
-            border-radius: 8px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border);
+            border-radius: 3px;
             cursor: pointer;
-            font-size: 0.84rem;
-            color: var(--navy);
-            transition: background 0.15s, color 0.15s, transform 0.1s;
+            font-size: 13px;
+            color: var(--light);
+            transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.1s;
         }
-        .cal-day:hover:not(.closed):not(.full) { background: var(--green); color: #fff; transform: translateY(-1px); }
-        .cal-day.closed, .cal-day.full { background: #f0ece8; color: #b8b0a8; cursor: not-allowed; opacity: 0.55; }
 
-        /* STATES */
+        .cal-day:hover:not(.closed):not(.full) {
+            background: rgba(45,212,191,0.12);
+            border-color: var(--teal);
+            color: var(--teal);
+            transform: translateY(-1px);
+        }
+
+        .cal-day.closed,
+        .cal-day.full {
+            background: transparent;
+            border-color: rgba(255,255,255,0.04);
+            color: #3a3a3a;
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        /* ── STATE SECTIONS ── */
         #state-slots { display: none; }
-        #state-slots h3 {
-            font-family: 'Playfair Display', Georgia, serif;
-            font-size: 1.2rem; font-weight: 400; font-style: italic;
-            color: var(--navy); margin-bottom: 0.5rem;
+
+        #state-slots h3,
+        #state-form h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 300;
+            font-style: italic;
+            color: var(--white);
+            margin-bottom: 6px;
         }
 
-        #slots-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 1rem; }
+        /* ID: slots-grid */
+        #slots-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 16px;
+        }
 
+        /* booking.js sets className: slot-btn */
         .slot-btn {
             padding: 9px 20px;
-            border: 1.5px solid var(--navy);
-            background: transparent;
-            color: var(--navy);
-            border-radius: 100px;
+            border: 1px solid var(--border);
+            background: rgba(255,255,255,0.04);
+            color: var(--light);
+            border-radius: 2px;
             cursor: pointer;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.83rem;
-            transition: background 0.15s, color 0.15s, border-color 0.15s;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 400;
+            transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.1s;
         }
-        .slot-btn:hover { background: var(--green); border-color: var(--green); color: #fff; }
 
+        .slot-btn:hover {
+            background: rgba(45,212,191,0.12);
+            border-color: var(--teal);
+            color: var(--teal);
+            transform: translateY(-1px);
+        }
+
+        /* ID: state-form */
         #state-form { display: none; }
-        #state-form h3 {
-            font-family: 'Playfair Display', Georgia, serif;
-            font-size: 1.2rem; font-weight: 400; font-style: italic;
-            color: var(--navy); margin-bottom: 1rem;
-        }
 
-        .booking-btn {
-            display: block; width: 100%; padding: 13px;
-            background: var(--navy); color: #fff; border: none;
-            border-radius: 8px; cursor: pointer;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.84rem; font-weight: 500;
-            letter-spacing: 0.07em; text-transform: uppercase;
-            transition: background 0.18s, transform 0.1s;
+        /* ID: submit-btn — booking.js attaches click listener here */
+        #submit-btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: var(--gold);
+            color: #000;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-family: 'Cinzel', serif;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            transition: opacity 0.2s, transform 0.1s;
             margin-top: 4px;
         }
-        .booking-btn:hover { background: var(--green); transform: translateY(-1px); }
+
+        #submit-btn:hover { opacity: 0.88; transform: translateY(-1px); }
 
         .back-btn {
-            background: none; border: 1.5px solid var(--border);
-            color: var(--muted); border-radius: 100px;
-            padding: 8px 18px; cursor: pointer;
-            font-family: 'DM Sans', sans-serif; font-size: 0.8rem;
-            margin-top: 0.75rem; display: inline-block;
-            transition: color 0.15s, border-color 0.15s;
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--muted);
+            border-radius: 2px;
+            padding: 8px 18px;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            margin-top: 12px;
+            display: inline-block;
+            transition: color 0.2s, border-color 0.2s;
         }
-        .back-btn:hover { color: var(--navy); border-color: var(--navy); }
 
-        #state-success { display: none; text-align: center; padding: 3rem 1rem; }
+        .back-btn:hover { color: var(--light); border-color: var(--steel); }
+
+        /* ID: state-success */
+        #state-success { display: none; text-align: center; padding: 48px 16px; }
+
         #state-success h2 {
-            font-family: 'Playfair Display', Georgia, serif;
-            font-size: 1.9rem; font-weight: 400; font-style: italic;
-            color: var(--green); margin-bottom: 0.75rem;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.2rem;
+            font-weight: 300;
+            font-style: italic;
+            color: var(--teal);
+            margin-bottom: 12px;
         }
-        #state-success p { color: var(--muted); font-size: 0.9rem; font-weight: 300; }
 
-        /* FOOTER */
-        footer {
-            background: var(--navy); color: rgba(255,255,255,0.4);
-            text-align: center; font-size: 0.77rem; font-weight: 300;
-            padding: 1.5rem 2rem; margin-top: 4rem;
-        }
-        footer a { color: rgba(255,255,255,0.4); text-decoration: none; }
+        #state-success p { color: var(--mid); font-size: 14px; font-weight: 300; }
 
-        /* MOTHER'S DAY POPUP */
+        /* ══════════════════════════════════════
+           MOTHER'S DAY POPUP
+           ID: promo-popup — booking.js adds/removes .show
+        ══════════════════════════════════════ */
         #promo-popup {
-            display: none; position: fixed; inset: 0;
-            background: rgba(20,28,45,0.62);
-            backdrop-filter: blur(5px);
-            z-index: 9999; align-items: center; justify-content: center;
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(5,8,12,0.75);
+            backdrop-filter: blur(6px);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
         }
+
         #promo-popup.show { display: flex; animation: mdFade 0.3s ease; }
-        @keyframes mdFade { from { opacity:0; } to { opacity:1; } }
+        @keyframes mdFade { from { opacity: 0; } to { opacity: 1; } }
 
         .md-card {
-            background: #fff; border-radius: 22px;
-            max-width: 460px; width: 92%; overflow: hidden;
-            box-shadow: 0 32px 80px rgba(20,28,45,0.28);
+            background: #12181f;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 6px;
+            max-width: 460px;
+            width: 92%;
+            overflow: hidden;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.6);
             animation: mdUp 0.38s cubic-bezier(0.22,1,0.36,1);
             position: relative;
         }
+
         @keyframes mdUp {
-            from { opacity:0; transform: translateY(28px) scale(0.96); }
-            to   { opacity:1; transform: translateY(0) scale(1); }
+            from { opacity: 0; transform: translateY(28px) scale(0.96); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         .md-x {
-            position: absolute; top: 13px; right: 15px;
-            background: rgba(255,255,255,0.7); border: none;
-            border-radius: 50%; width: 29px; height: 29px;
-            cursor: pointer; font-size: 0.88rem; color: #9a6878;
+            position: absolute;
+            top: 14px; right: 16px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 30px; height: 30px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: var(--muted);
             display: flex; align-items: center; justify-content: center;
-            transition: background 0.15s; z-index: 2;
+            transition: background 0.2s, color 0.2s;
+            z-index: 2;
         }
-        .md-x:hover { background: #fff; color: var(--pink-deep); }
+
+        .md-x:hover { background: rgba(255,255,255,0.1); color: var(--white); }
 
         .md-header {
-            background: linear-gradient(145deg, #fdeef4 0%, #f8d8e8 50%, #fce4f0 100%);
-            padding: 2.25rem 2rem 1.75rem; text-align: center;
-            position: relative; overflow: hidden;
+            background: linear-gradient(145deg, #1a0f18 0%, #220d1a 50%, #1a1020 100%);
+            padding: 2.25rem 2rem 1.75rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
         }
+
         .md-header::before {
-            content: ''; position: absolute;
-            width: 220px; height: 220px;
-            background: radial-gradient(circle, #e8a0b8, transparent 70%);
-            top: -90px; left: -70px; opacity: 0.22;
+            content: '';
+            position: absolute;
+            width: 280px; height: 280px;
+            background: radial-gradient(circle, rgba(196,103,138,0.2), transparent 70%);
+            top: -100px; left: -80px;
         }
+
         .md-header::after {
-            content: ''; position: absolute;
-            width: 180px; height: 180px;
-            background: radial-gradient(circle, #f0b8cc, transparent 70%);
-            bottom: -70px; right: -50px; opacity: 0.2;
+            content: '';
+            position: absolute;
+            width: 220px; height: 220px;
+            background: radial-gradient(circle, rgba(184,150,90,0.12), transparent 70%);
+            bottom: -80px; right: -60px;
         }
-        .md-roses { font-size: 2rem; margin-bottom: 0.6rem; position: relative; z-index: 1; }
+
+        .md-roses { font-size: 1.8rem; margin-bottom: 0.6rem; position: relative; z-index: 1; }
+
         .md-tag {
-            display: inline-block; background: var(--pink-deep); color: #fff;
-            font-size: 0.58rem; letter-spacing: 0.22em; text-transform: uppercase;
-            font-weight: 500; padding: 4px 13px; border-radius: 100px;
-            margin-bottom: 0.85rem; position: relative; z-index: 1;
+            display: inline-block;
+            border: 1px solid rgba(196,103,138,0.5);
+            color: #e8a0b8;
+            font-family: 'Cinzel', serif;
+            font-size: 0.55rem;
+            letter-spacing: 0.24em;
+            text-transform: uppercase;
+            padding: 4px 14px;
+            border-radius: 2px;
+            margin-bottom: 1rem;
+            position: relative; z-index: 1;
         }
+
         .md-header h2 {
-            font-family: 'Playfair Display', Georgia, serif;
-            font-size: 1.85rem; font-weight: 400; font-style: italic;
-            color: var(--pink-text); line-height: 1.2;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.9rem;
+            font-weight: 300;
+            font-style: italic;
+            color: #f5d0e0;
+            line-height: 1.2;
             position: relative; z-index: 1;
         }
 
         .md-body { padding: 1.75rem 2rem 2rem; text-align: center; }
-        .md-body p { color: #5a3d4a; font-size: 0.875rem; font-weight: 300; line-height: 1.65; margin-bottom: 1.4rem; }
+
+        .md-body p {
+            color: var(--mid);
+            font-size: 13px;
+            font-weight: 300;
+            line-height: 1.7;
+            margin-bottom: 1.4rem;
+        }
 
         .md-offer {
-            background: var(--pink-soft); border: 1px solid #f0c4d4;
-            border-radius: 12px; padding: 1.1rem 1.25rem; margin-bottom: 1.4rem;
-            display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
+            background: rgba(196,103,138,0.08);
+            border: 1px solid rgba(196,103,138,0.2);
+            border-radius: 4px;
+            padding: 1.1rem 1.25rem;
+            margin-bottom: 1.4rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.2rem;
         }
-        .md-pct { font-family: 'Playfair Display', Georgia, serif; font-size: 2.5rem; font-weight: 500; color: var(--pink-deep); line-height: 1; }
-        .md-desc { font-size: 0.83rem; color: var(--pink-text); font-weight: 400; }
-        .md-fine { font-size: 0.71rem; color: #9a7080; font-weight: 300; margin-top: 0.25rem; }
+
+        .md-pct {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.8rem;
+            font-weight: 300;
+            color: #e8a0b8;
+            line-height: 1;
+        }
+
+        .md-desc { font-size: 13px; color: #c4b0b8; font-weight: 300; }
+
+        .md-fine { font-size: 11px; color: var(--muted); font-weight: 300; margin-top: 4px; }
 
         .md-cta {
-            display: block; width: 100%; padding: 13px;
-            background: linear-gradient(135deg, #c4678a, #d4849e);
-            color: #fff; border: none; border-radius: 10px;
-            font-family: 'DM Sans', sans-serif; font-size: 0.83rem;
-            font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase;
-            cursor: pointer; transition: opacity 0.18s, transform 0.12s;
+            display: block;
+            width: 100%;
+            padding: 13px;
+            background: var(--gold);
+            color: #000;
+            border: none;
+            border-radius: 3px;
+            font-family: 'Cinzel', serif;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.12s;
             margin-bottom: 0.75rem;
         }
-        .md-cta:hover { opacity: 0.9; transform: translateY(-1px); }
-        .md-skip {
-            background: none; border: none; color: #b09aa8;
-            font-size: 0.77rem; cursor: pointer;
-            font-family: 'DM Sans', sans-serif; font-weight: 300;
-            text-decoration: underline; text-underline-offset: 3px;
-        }
-        .md-skip:hover { color: var(--pink-text); }
 
+        .md-cta:hover { opacity: 0.88; transform: translateY(-1px); }
+
+        .md-skip {
+            background: none;
+            border: none;
+            color: var(--muted);
+            font-size: 11px;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            transition: color 0.2s;
+        }
+
+        .md-skip:hover { color: var(--light); }
+
+        /* ── RESPONSIVE ── */
         @media (max-width: 860px) {
-            nav { padding: 0 1.25rem; }
-            .nav-links { display: none; }
-            .booking-wrap { grid-template-columns: 1fr; margin: 1.5rem auto; }
-            .page-hero h1 { font-size: 2rem; }
+            .book-wrap { grid-template-columns: 1fr; padding: 0 24px; margin: 32px auto; }
+            .book-hero { padding: 60px 24px 48px; }
+            .book-hero h1 { font-size: 2.4rem; }
         }
     </style>
 </head>
 <body>
 
+<!-- NAV — matches index.html exactly -->
 <nav>
     <a href="index.html" class="nav-logo">
         <img src="logo.png" alt="Ellis Restorative Therapies">
-        <span class="nav-logo-text">Ellis Restorative<br>Therapies</span>
     </a>
     <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
@@ -414,39 +569,48 @@
         <li><a href="services.html">Services</a></li>
         <li><a href="blog.html">Blog</a></li>
         <li><a href="contact.html">Contact</a></li>
-        <li class="active-link"><a href="book.html">Book Now</a></li>
+        <li><a href="book.html" class="nav-book">Book Now</a></li>
     </ul>
+    <button class="nav-toggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+    </button>
 </nav>
 
-<div class="page-hero">
-    <p class="eyebrow">Live Availability</p>
-    <h1>Book a <em>Session</em></h1>
-    <p>Neuromuscular therapy &amp; clinical bodywork · Modesto, CA</p>
+<!-- HERO -->
+<div class="book-hero">
+    <div class="book-hero-inner">
+        <div class="section-label">Live Availability</div>
+        <h1>Book a <em>Session</em></h1>
+        <p>Neuromuscular therapy &amp; clinical bodywork · Modesto, CA</p>
+    </div>
 </div>
 
-<main class="booking-wrap">
+<!-- MAIN -->
+<main class="book-wrap">
 
     <!-- LEFT: CLIENT DETAILS -->
-    <aside class="panel info-panel" style="height:fit-content;">
-        <h2 class="panel-title">Your <em>Details</em></h2>
-        <p class="panel-sub">Fill this out, then pick your date and time on the right.</p>
+    <aside class="book-panel" style="height:fit-content;">
+        <h2 class="book-panel-title">Your <em>Details</em></h2>
+        <p class="book-panel-sub">Fill this out, then pick your date and time on the right.</p>
 
-        <p class="section-label">Session Info</p>
+        <span class="book-section-label">Contact Info</span>
 
-        <!-- IDs match booking.js exactly -->
+        <!-- IDs must match booking.js exactly -->
         <input id="f-name"  class="booking-input" type="text"  placeholder="Full Name">
         <input id="f-phone" class="booking-input" type="tel"   placeholder="Phone Number">
         <input id="f-email" class="booking-input" type="email" placeholder="Email Address">
 
-        <p class="section-label" style="margin-top:1rem;">Session Length</p>
+        <span class="book-section-label" style="margin-top:20px;">Session Length</span>
+
+        <!-- ID: f-duration — booking.js submitBooking() reads this -->
         <select id="f-duration" class="booking-input">
             <option value="60">60 Minutes — $100</option>
             <option value="90">90 Minutes — $150</option>
             <option value="120">120 Minutes — $200</option>
         </select>
 
-        <div class="pricing-strip">
-            <p class="section-label">What's Included</p>
+        <div style="margin-top:24px;">
+            <span class="book-section-label">Pricing</span>
             <div class="price-row">
                 <div><div class="dur">60 Min</div><div class="svc">Neuromuscular Reset</div></div>
                 <div class="amt">$100</div>
@@ -461,17 +625,20 @@
             </div>
         </div>
 
-        <ul class="policy-list">
-            <li><span class="p-dot"></span>Arrive 5–10 min early for intake.</li>
-            <li><span class="p-dot"></span>Hydrate before &amp; after your session.</li>
-            <li><span class="p-dot"></span>24-hr cancellation notice required.</li>
-        </ul>
+        <div style="margin-top:24px;">
+            <span class="book-section-label">Policies</span>
+            <ul class="policy-list">
+                <li><span class="p-dot"></span>Arrive 5–10 min early for intake updating.</li>
+                <li><span class="p-dot"></span>Hydrate before &amp; after your session.</li>
+                <li><span class="p-dot"></span>24-hr cancellation notice required.</li>
+            </ul>
+        </div>
     </aside>
 
     <!-- RIGHT: BOOKING FLOW -->
-    <section class="panel calendar-panel">
+    <section class="book-panel book-cal-panel">
 
-        <!-- STATE 1: CALENDAR -->
+        <!-- STATE 1: CALENDAR — IDs: state-prompt, cal-month-label, cal-grid -->
         <div id="state-prompt">
             <div class="month-nav">
                 <button onclick="changeMonth(-1)">&#8249;</button>
@@ -484,22 +651,25 @@
             <div id="cal-grid"></div>
         </div>
 
-        <!-- STATE 2: TIME SLOTS -->
+        <!-- STATE 2: TIME SLOTS — IDs: state-slots, slot-date-header, slots-grid -->
         <div id="state-slots">
             <h3>Available times for <span id="slot-date-header"></span></h3>
             <div id="slots-grid"></div>
             <button class="back-btn" onclick="document.getElementById('state-slots').style.display='none';document.getElementById('state-prompt').style.display='block';">← Back to Calendar</button>
         </div>
 
-        <!-- STATE 3: CONFIRM -->
+        <!-- STATE 3: CONFIRM — ID: state-form -->
         <div id="state-form">
             <h3>Confirm Your Booking</h3>
-            <p style="color:var(--muted);font-size:0.855rem;font-weight:300;margin-bottom:1.25rem;">Double-check your details on the left, then confirm below.</p>
-            <button class="booking-btn" id="submit-btn">Confirm Booking</button>
+            <p style="color:var(--mid);font-size:13px;font-weight:300;margin-bottom:20px;line-height:1.6;">
+                Review your details on the left, then confirm your appointment below.
+            </p>
+            <!-- ID: submit-btn — booking.js attaches click listener here -->
+            <button id="submit-btn">Confirm Booking</button>
             <button class="back-btn" onclick="document.getElementById('state-form').style.display='none';document.getElementById('state-slots').style.display='block';">← Change Time</button>
         </div>
 
-        <!-- STATE 4: SUCCESS -->
+        <!-- STATE 4: SUCCESS — ID: state-success -->
         <div id="state-success">
             <h2>Booking Confirmed</h2>
             <p>Thank you. We look forward to seeing you.</p>
@@ -509,12 +679,54 @@
 
 </main>
 
+<!-- FOOTER — matches index.html -->
 <footer>
-    © 2026 Ellis Restorative Therapies · Zachary Ellis · CAMTC #97101 · Modesto, CA ·
-    <a href="tel:2094505296">(209) 450-5296</a>
+    <div class="footer-grid">
+        <div class="footer-brand">
+            <img src="logo.png" alt="Ellis Restorative Therapies">
+            <p>Professional neuromuscular therapy and clinical bodywork in Modesto, CA.</p>
+            <div class="footer-cert" style="margin-top:16px;">
+                <span class="footer-cert-badge">CAMTC Certified</span>
+                <span class="footer-cert-badge">AMTA Member</span>
+            </div>
+        </div>
+        <div>
+            <h4>Navigate</h4>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="services.html">Services & Pricing</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="book.html">Book a Session</a></li>
+            </ul>
+        </div>
+        <div>
+            <h4>Services</h4>
+            <ul>
+                <li><a href="services.html">60 Min · $100</a></li>
+                <li><a href="services.html">90 Min · $150</a></li>
+                <li><a href="services.html">120 Min · $200</a></li>
+                <li><a href="services.html">Neuromuscular Therapy</a></li>
+                <li><a href="services.html">Craniosacral</a></li>
+                <li><a href="services.html">Deep Tissue</a></li>
+            </ul>
+        </div>
+        <div class="footer-contact">
+            <h4>Contact</h4>
+            <p><a href="tel:2094505296">(209) 450-5296</a></p>
+            <p><a href="mailto:restorewithellis@gmail.com">restorewithellis@gmail.com</a></p>
+            <p>2209 Coffee Rd, Suite M<br>Modesto, CA 95355</p>
+            <p style="margin-top:8px;">Mon – Thu · 10AM – 7PM</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <span>© 2026 Ellis Restorative Therapies. All rights reserved. · Zachary Ellis · CAMTC #97101</span>
+        <span>Modesto, CA</span>
+    </div>
 </footer>
 
-<!-- MOTHER'S DAY POPUP — booking.js toggles .show on #promo-popup -->
+<!-- MOTHER'S DAY POPUP — ID: promo-popup, booking.js adds/removes .show -->
 <div id="promo-popup">
     <div class="md-card">
         <button class="md-x" onclick="closePromo()">✕</button>
@@ -528,15 +740,15 @@
             <div class="md-offer">
                 <div class="md-pct">15% Off</div>
                 <div class="md-desc">Any session booked as a Mother's Day gift</div>
-                <div class="md-fine">Use code <strong>MOM2026</strong> · Valid through May 11, 2026</div>
+                <div class="md-fine">Use code <strong style="color:#e8a0b8;">MOM2026</strong> · Valid through May 11, 2026</div>
             </div>
-            <button class="md-cta" onclick="closePromo()">Book Her Session Now →</button>
+            <button class="md-cta" onclick="closePromo()">Book Her Session Now</button>
             <button class="md-skip" onclick="closePromo()">Maybe later</button>
         </div>
     </div>
 </div>
 
-<!-- booking.js last so DOM is ready -->
+<script src="nav.js"></script>
 <script src="booking.js"></script>
 
 </body>
