@@ -1,3 +1,4 @@
+/* ===== RESET ===== */
 * {
   box-sizing: border-box;
 }
@@ -5,12 +6,13 @@
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  color: white;
+  color: #fff;
   background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
-/* glow background */
+/* ===== AMBIENT LIGHT ===== */
 body::before,
 body::after {
   content: "";
@@ -33,12 +35,22 @@ body::after {
   right: -100px;
 }
 
-/* NAV */
-.glass-nav {
-  position: sticky;
-  top: 10px;
-  margin: 15px;
-  padding: 14px 20px;
+/* ===== GLASS BASE ===== */
+.glass {
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+}
+
+/* ===== HEADER ===== */
+header {
+  position: relative;
+  z-index: 2;
+  margin: 20px;
+  padding: 15px 25px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -49,56 +61,63 @@ body::after {
   border: 1px solid rgba(255,255,255,0.1);
 }
 
-.glass-nav a {
+header nav a {
   margin-left: 15px;
   text-decoration: none;
-  color: white;
-  opacity: 0.7;
+  color: #fff;
+  opacity: 0.8;
+  transition: 0.2s;
 }
 
-.glass-nav a:hover {
+header nav a:hover {
   opacity: 1;
 }
 
-/* layout */
+/* ===== LAYOUT ===== */
 .booking-container {
   position: relative;
   z-index: 2;
   display: grid;
   grid-template-columns: 1fr 1.5fr;
-  gap: 20px;
+  gap: 25px;
   padding: 20px;
 }
 
-/* panels */
-.glass {
-  background: rgba(255,255,255,0.06);
-  backdrop-filter: blur(18px);
-  border-radius: 18px;
-  border: 1px solid rgba(255,255,255,0.12);
-  padding: 20px;
+/* ===== PANELS ===== */
+.info-panel,
+.calendar-panel {
+  padding: 25px;
 }
 
-/* inputs */
+/* ===== INPUTS ===== */
 input, select {
   width: 100%;
   padding: 12px;
-  margin: 8px 0 14px;
+  margin-top: 8px;
+  margin-bottom: 16px;
   border-radius: 10px;
   border: 1px solid rgba(255,255,255,0.2);
   background: rgba(255,255,255,0.05);
   color: white;
+  outline: none;
+  transition: 0.2s;
 }
 
-/* buttons */
+input:focus, select:focus {
+  border-color: rgba(0,150,255,0.6);
+  box-shadow: 0 0 10px rgba(0,150,255,0.3);
+}
+
+/* ===== BUTTONS ===== */
 button {
-  padding: 12px 16px;
+  padding: 12px 18px;
   border-radius: 10px;
   border: none;
+  cursor: pointer;
   background: rgba(255,255,255,0.12);
   color: white;
-  cursor: pointer;
-  transition: 0.2s;
+  backdrop-filter: blur(10px);
+  transition: all 0.25s ease;
 }
 
 button:hover {
@@ -106,45 +125,93 @@ button:hover {
   background: rgba(255,255,255,0.25);
 }
 
-/* calendar */
+/* ===== CALENDAR ===== */
+.month-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.weekday-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-top: 10px;
+  opacity: 0.7;
+}
+
 #cal-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
+  margin-top: 10px;
 }
 
 #cal-grid div {
-  text-align: center;
-  padding: 12px;
+  padding: 14px;
   margin: 4px;
+  text-align: center;
   border-radius: 10px;
   background: rgba(255,255,255,0.05);
   cursor: pointer;
+  transition: 0.2s;
 }
 
 #cal-grid div:hover {
-  background: rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.25);
+  transform: scale(1.05);
 }
 
 .selected-day {
   background: rgba(0,150,255,0.5) !important;
 }
 
-/* slots */
+/* ===== SLOTS ===== */
 #slots-grid button {
   margin: 6px;
 }
 
-/* floating home button */
-.back-home-btn {
-  position: fixed;
-  bottom: 20px;
-  left: 20px;
-  padding: 12px 16px;
-  border-radius: 12px;
-  text-decoration: none;
-  color: white;
+.selected-slot {
+  background: rgba(0,255,150,0.4) !important;
+}
 
-  background: rgba(255,255,255,0.08);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255,255,255,0.15);
+/* ===== STATES ===== */
+#state-slots,
+#state-form,
+#state-success {
+  display: none;
+}
+
+/* ===== SUCCESS ===== */
+#state-success {
+  text-align: center;
+  padding: 40px;
+  background: rgba(0,255,150,0.08);
+  border: 1px solid rgba(0,255,150,0.4);
+  border-radius: 16px;
+}
+
+/* ===== POPUP ===== */
+#promo-popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.md-card {
+  padding: 25px;
+  border-radius: 20px;
+  max-width: 420px;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+  .booking-container {
+    grid-template-columns: 1fr;
+  }
 }
