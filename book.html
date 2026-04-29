@@ -1,403 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Book a Session | Ellis Restorative Therapies</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book a Session | Ellis Restorative Therapies</title>
 
-  <link rel="stylesheet" href="style.css">
-</head>
+<link rel="stylesheet" href="styles.css">
+
 <style>
-
-/* ===== GLOBAL ===== */
-* {
-  box-sizing: border-box;
+/* GLASS / APPLE STYLE */
+.booking-wrap {
+  max-width: 1000px;
+  margin: 80px auto;
+  padding: 40px;
 }
 
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  color: #fff;
-  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-  min-height: 100vh;
-  overflow-x: hidden;
+.booking-card {
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 32px;
 }
 
-/* ambient glow */
-body::before {
-  content: "";
-  position: fixed;
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, rgba(0,150,255,0.25), transparent 70%);
-  top: -150px;
-  left: -150px;
-  filter: blur(120px);
-  z-index: 0;
-}
-
-body::after {
-  content: "";
-  position: fixed;
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, rgba(255,0,150,0.2), transparent 70%);
-  bottom: -150px;
-  right: -150px;
-  filter: blur(120px);
-  z-index: 0;
-}
-
-/* ===== HEADER ===== */
-header {
-  position: relative;
-  z-index: 2;
-  margin: 20px;
-  padding: 15px 25px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  background: rgba(255,255,255,0.06);
-  backdrop-filter: blur(14px);
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,0.1);
-}
-
-header nav a {
-  margin-left: 15px;
-  text-decoration: none;
-  color: #fff;
-  opacity: 0.8;
-  transition: 0.2s;
-}
-
-header nav a:hover {
-  opacity: 1;
-}
-
-/* ===== LAYOUT ===== */
-.booking-container {
-  position: relative;
-  z-index: 2;
+.booking-grid {
   display: grid;
-  grid-template-columns: 1fr 1.5fr;
-  gap: 25px;
-  padding: 20px;
+  gap: 16px;
 }
 
-/* ===== GLASS PANEL ===== */
-.glass {
-  background: rgba(255,255,255,0.06);
-  backdrop-filter: blur(18px);
-  border-radius: 18px;
-  border: 1px solid rgba(255,255,255,0.12);
-  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-}
-
-/* ===== LEFT PANEL ===== */
-.info-panel {
-  padding: 25px;
-}
-
-.info-panel h1 {
-  margin-top: 0;
-}
-
-/* ===== INPUTS ===== */
-input, select {
-  width: 100%;
-  padding: 12px;
-  margin-top: 8px;
-  margin-bottom: 16px;
-  border-radius: 10px;
-  border: 1px solid rgba(255,255,255,0.2);
-  background: rgba(255,255,255,0.05);
-  color: white;
-  outline: none;
-  transition: 0.2s;
-}
-
-input:focus, select:focus {
-  border-color: rgba(0,150,255,0.6);
-  box-shadow: 0 0 10px rgba(0,150,255,0.3);
-}
-
-/* ===== BUTTON ===== */
-button {
-  padding: 12px 18px;
+.booking-input {
+  padding: 14px;
   border-radius: 10px;
   border: none;
-  cursor: pointer;
-  background: rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.06);
   color: white;
-  backdrop-filter: blur(10px);
-  transition: all 0.25s ease;
 }
 
-button:hover {
-  transform: translateY(-2px);
-  background: rgba(255,255,255,0.25);
-}
-
-/* ===== CALENDAR ===== */
-.calendar-panel {
-  padding: 25px;
-}
-
-.month-nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.weekday-row {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  margin-top: 10px;
-  opacity: 0.7;
-}
-
-#cal-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  margin-top: 10px;
-}
-
-#cal-grid div {
-  padding: 14px;
-  margin: 4px;
-  text-align: center;
+.booking-btn {
+  padding: 16px;
   border-radius: 10px;
+  border: none;
+  background: var(--gold);
+  color: black;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.day, .slot {
+  padding: 10px;
+  text-align: center;
+  border-radius: 8px;
   background: rgba(255,255,255,0.05);
   cursor: pointer;
-  transition: 0.2s;
 }
 
-#cal-grid div:hover {
-  background: rgba(255,255,255,0.25);
-  transform: scale(1.05);
+.day.active, .slot.active {
+  background: var(--gold);
+  color: black;
 }
 
-/* selected day */
-.selected-day {
-  background: rgba(0,150,255,0.5) !important;
+.section {
+  margin-top: 30px;
 }
-
-/* ===== SLOTS ===== */
-#slots-grid button {
-  margin: 6px;
-}
-
-.selected-slot {
-  background: rgba(0,255,150,0.4) !important;
-}
-
-/* ===== STATES ===== */
-#state-slots, #state-form, #state-success {
-  display: none;
-}
-
-/* ===== SUCCESS ===== */
-#state-success {
-  text-align: center;
-  padding: 40px;
-  background: rgba(0,255,150,0.08);
-  border: 1px solid rgba(0,255,150,0.4);
-  border-radius: 16px;
-}
-
-/* ===== POPUP ===== */
-#promo-popup {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-}
-
-.md-card {
-  padding: 25px;
-  border-radius: 20px;
-  max-width: 420px;
-  background: rgba(255,255,255,0.1);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255,255,255,0.2);
-}
-
-.md-x {
-  float: right;
-  background: none;
-  font-size: 18px;
-}
-
 </style>
 </head>
 
 <body>
 
-<header>
-  <h2>Ellis Restorative Therapies</h2>
-  <nav>
-    <a href="/">Home</a>
-    <a href="/index.html">Homepage</a>
-  </nav>
-</header>
+<!-- NAV (keeps your existing layout intact) -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="logo.png" />
+  </a>
+</nav>
 
-<main class="booking-container">
+<div class="booking-wrap">
+  <div class="booking-card">
 
-<!-- LEFT -->
-<aside class="info-panel glass">
-  <h1>Book Your Session</h1>
+    <h1>Book Your Session</h1>
 
-  <label>Session Length</label>
-  <select id="f-duration">
-    <option value="60">60 Minutes — $100</option>
-    <option value="90">90 Minutes — $150</option>
-    <option value="120">120 Minutes — $200</option>
-  </select>
+    <!-- CLIENT INFO -->
+    <div class="booking-grid">
+      <input id="name" class="booking-input" placeholder="Full Name">
+      <input id="phone" class="booking-input" placeholder="Phone Number">
+      <input id="email" class="booking-input" placeholder="Email">
 
-  <label>Your Info</label>
-  <input id="f-name" placeholder="Full Name">
-  <input id="f-phone" placeholder="Phone">
-  <input id="f-email" placeholder="Email">
+      <!-- 🔥 CRITICAL: DURATION -->
+      <select id="duration" class="booking-input">
+        <option value="60">60 Minutes — $100</option>
+        <option value="90">90 Minutes — $150</option>
+        <option value="120">120 Minutes — $200</option>
+      </select>
+    </div>
 
-</aside>
+    <!-- DATE -->
+    <div class="section">
+      <h3>Select Date</h3>
+      <div id="calendar" class="calendar"></div>
+    </div>
 
-<!-- RIGHT -->
-<section class="calendar-panel glass">
+    <!-- TIME -->
+    <div class="section">
+      <h3>Select Time</h3>
+      <div id="slots" class="calendar"></div>
+    </div>
 
-<div id="state-prompt">
-  <div class="month-nav">
-    <button onclick="changeMonth(-1)">‹</button>
-    <h3 id="cal-month-label"></h3>
-    <button onclick="changeMonth(1)">›</button>
-  </div>
+    <!-- SUBMIT -->
+    <div class="section">
+      <button class="booking-btn" onclick="submitBooking()">Confirm Booking</button>
+    </div>
 
-  <div class="weekday-row">
-    <span>Sun</span><span>Mon</span><span>Tue</span>
-    <span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
-  </div>
-
-  <div id="cal-grid"></div>
-</div>
-
-<div id="state-slots">
-  <h3 id="slot-date-header"></h3>
-  <div id="slots-grid"></div>
-  <button onclick="goBack()">← Back</button>
-</div>
-
-<div id="state-form">
-  <button onclick="confirmBooking()">Confirm Booking</button>
-</div>
-
-<div id="state-success">
-  <h2>Booking Confirmed</h2>
-</div>
-
-</section>
-</main>
-
-<!-- POPUP -->
-<div id="promo-popup">
-  <div class="md-card">
-    <button class="md-x" onclick="closePromo()">✕</button>
-    <h2>Mother’s Day Special</h2>
-    <p>15% Off — Use code MOM2026</p>
-    <button onclick="closePromo()">Book Now</button>
   </div>
 </div>
 
-<script>
-
-/* ===== BASIC CALENDAR LOGIC ===== */
-const grid = document.getElementById("cal-grid");
-const label = document.getElementById("cal-month-label");
-
-let current = new Date();
-let selectedDate = null;
-let selectedSlot = null;
-
-function renderCalendar() {
-  grid.innerHTML = "";
-  const year = current.getFullYear();
-  const month = current.getMonth();
-
-  label.textContent = current.toLocaleString("default", { month: "long", year: "numeric" });
-
-  const firstDay = new Date(year, month, 1).getDay();
-  const days = new Date(year, month + 1, 0).getDate();
-
-  for (let i = 0; i < firstDay; i++) {
-    grid.innerHTML += "<div></div>";
-  }
-
-  for (let d = 1; d <= days; d++) {
-    const el = document.createElement("div");
-    el.textContent = d;
-
-    el.onclick = () => {
-      document.querySelectorAll("#cal-grid div").forEach(e => e.classList.remove("selected-day"));
-      el.classList.add("selected-day");
-
-      selectedDate = `${month+1}/${d}/${year}`;
-      showSlots();
-    };
-
-    grid.appendChild(el);
-  }
-}
-
-function changeMonth(dir) {
-  current.setMonth(current.getMonth() + dir);
-  renderCalendar();
-}
-
-/* ===== SLOTS ===== */
-function showSlots() {
-  document.getElementById("state-prompt").style.display = "none";
-  document.getElementById("state-slots").style.display = "block";
-
-  const grid = document.getElementById("slots-grid");
-  grid.innerHTML = "";
-
-  ["9:00 AM","11:00 AM","1:00 PM","3:00 PM"].forEach(time => {
-    const btn = document.createElement("button");
-    btn.textContent = time;
-
-    btn.onclick = () => {
-      document.querySelectorAll("#slots-grid button").forEach(b => b.classList.remove("selected-slot"));
-      btn.classList.add("selected-slot");
-      selectedSlot = time;
-
-      document.getElementById("state-form").style.display = "block";
-    };
-
-    grid.appendChild(btn);
-  });
-}
-
-function goBack() {
-  document.getElementById("state-slots").style.display = "none";
-  document.getElementById("state-prompt").style.display = "block";
-}
-
-function confirmBooking() {
-  document.getElementById("state-form").style.display = "none";
-  document.getElementById("state-success").style.display = "block";
-}
-
-/* ===== POPUP ===== */
-function closePromo() {
-  document.getElementById("promo-popup").style.display = "none";
-}
-
-renderCalendar();
-
-</script>
+<script src="booking.js"></script>
 
 </body>
 </html>
