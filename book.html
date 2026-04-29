@@ -1,114 +1,180 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book a Session | Ellis Restorative Therapies</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Book a Session | Ellis Restorative Therapies</title>
+
+  <!-- YOUR CSS (ONLY ONE FILE) -->
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<header>
-    <h2>Ellis Restorative Therapies</h2>
+<!-- ===== NAVIGATION (EXIT POINTS) ===== -->
+<header class="glass-nav">
+  <h2>Ellis Restorative Therapies</h2>
+
+  <nav>
+    <a href="/">Home</a>
+    <a href="/index.html">Main Site</a>
+    <a href="mailto:info@yourbusiness.com">Contact</a>
+  </nav>
 </header>
 
+<!-- ===== MAIN ===== -->
 <main class="booking-container">
 
-    <!-- LEFT: CLIENT DETAILS + DURATION -->
-    <aside class="info-panel">
-        <h1>Book Your Session</h1>
-        <p>Fill out your details below, then select a date and time on the right.</p>
+  <!-- LEFT PANEL -->
+  <aside class="info-panel glass">
+    <h1>Book Your Session</h1>
 
-        <!-- DURATION — big, labeled, impossible to miss -->
-        <div class="duration-block">
-            <label for="f-duration">Session Length <span>— select before booking</span></label>
-            <select id="f-duration">
-                <option value="60">60 Minutes — $100 · Neuromuscular Reset</option>
-                <option value="90">90 Minutes — $150 · Deep Restorative</option>
-                <option value="120">120 Minutes — $200 · Complete Recovery</option>
-            </select>
-        </div>
+    <label>Session Length</label>
+    <select id="f-duration">
+      <option value="60">60 Minutes — $100</option>
+      <option value="90">90 Minutes — $150</option>
+      <option value="120">120 Minutes — $200</option>
+    </select>
 
-        <!-- CONTACT INFO -->
-        <div class="contact-block">
-            <label>Your Contact Info</label>
-            <input id="f-name"  type="text"  placeholder="Full Name">
-            <input id="f-phone" type="tel"   placeholder="Phone Number">
-            <input id="f-email" type="email" placeholder="Email Address">
-        </div>
+    <label>Client Info</label>
+    <input id="f-name" type="text" placeholder="Full Name">
+    <input id="f-phone" type="tel" placeholder="Phone Number">
+    <input id="f-email" type="email" placeholder="Email Address">
 
-        <h3 style="color:var(--primary-color);margin-bottom:0.5rem;">Policies</h3>
-        <ul class="policy-list">
-            <li>Arrive 5–10 minutes early to allow for intake updating.</li>
-            <li>Hydrate well before and after your session.</li>
-            <li>24-hour notice required for cancellations.</li>
-        </ul>
-    </aside>
+    <p style="opacity:0.7;font-size:12px;">
+      You can cancel anytime up to 24 hours before your appointment.
+    </p>
+  </aside>
 
-    <!-- RIGHT: CALENDAR FLOW -->
-    <section class="calendar-panel">
+  <!-- RIGHT PANEL -->
+  <section class="calendar-panel glass">
 
-        <!-- STATE 1: CALENDAR -->
-        <div id="state-prompt">
-            <div class="month-nav">
-                <button onclick="changeMonth(-1)">&#8249;</button>
-                <h3 id="cal-month-label"></h3>
-                <button onclick="changeMonth(1)">&#8250;</button>
-            </div>
-            <div class="weekday-row">
-                <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
-            </div>
-            <div id="cal-grid"></div>
-        </div>
+    <!-- CALENDAR -->
+    <div id="state-prompt">
+      <div class="month-nav">
+        <button onclick="changeMonth(-1)">‹</button>
+        <h3 id="cal-month-label"></h3>
+        <button onclick="changeMonth(1)">›</button>
+      </div>
 
-        <!-- STATE 2: TIME SLOTS -->
-        <div id="state-slots" style="display:none;">
-            <h3>Available times for <span id="slot-date-header"></span></h3>
-            <div id="slots-grid"></div>
-            <button class="back-btn" onclick="document.getElementById('state-slots').style.display='none';document.getElementById('state-prompt').style.display='block';">← Back to Calendar</button>
-        </div>
+      <div class="weekday-row">
+        <span>Sun</span><span>Mon</span><span>Tue</span>
+        <span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+      </div>
 
-        <!-- STATE 3: CONFIRM -->
-        <div id="state-form">
-            <h3>Confirm Your Booking</h3>
-            <p>Review your details on the left, then confirm below.</p>
-            <button id="submit-btn">Confirm Booking</button>
-            <button class="back-btn" onclick="document.getElementById('state-form').style.display='none';document.getElementById('state-slots').style.display='block';">← Change Time</button>
-        </div>
+      <div id="cal-grid"></div>
+    </div>
 
-        <!-- STATE 4: SUCCESS -->
-        <div id="state-success">
-            <h2>Booking Confirmed!</h2>
-            <p>Thank you. We look forward to seeing you.</p>
-        </div>
+    <!-- TIME SLOTS -->
+    <div id="state-slots" style="display:none;">
+      <h3 id="slot-date-header"></h3>
+      <div id="slots-grid"></div>
+      <button onclick="goBack()">← Back to Calendar</button>
+    </div>
 
-    </section>
+    <!-- CONFIRM -->
+    <div id="state-form" style="display:none;">
+      <h3>Confirm Booking</h3>
+      <button onclick="confirmBooking()">Confirm Appointment</button>
+    </div>
 
+    <!-- SUCCESS -->
+    <div id="state-success" style="display:none;">
+      <h2>Booking Confirmed ✔</h2>
+      <p>Redirecting you home...</p>
+    </div>
+
+  </section>
 </main>
 
-<!-- MOTHER'S DAY POPUP -->
-<div id="promo-popup">
-    <div class="md-card">
-        <button class="md-x" onclick="closePromo()">✕</button>
-        <div class="md-header">
-            <div class="md-roses">🌸 🌷 🌸</div>
-            <div class="md-tag">Mother's Day Special</div>
-            <h2>Give the Gift<br>of Restoration</h2>
-        </div>
-        <div class="md-body">
-            <p>This Mother's Day, treat the woman who gives everything to a session built entirely around her. Deep rest. Real relief. A moment that's fully hers.</p>
-            <div class="md-offer">
-                <div class="md-pct">15% Off</div>
-                <div class="md-desc">Any session booked as a Mother's Day gift</div>
-                <div class="md-fine">Use code <strong>MOM2026</strong> · Valid through May 11, 2026</div>
-            </div>
-            <button class="md-cta" onclick="closePromo()">Book Her Session Now →</button>
-            <button class="md-skip" onclick="closePromo()">Maybe later</button>
-        </div>
-    </div>
-</div>
+<!-- FLOATING EXIT BUTTON -->
+<a href="/" class="back-home-btn">← Home</a>
 
-<script src="booking.js"></script>
+<!-- ===== SCRIPT ===== -->
+<script>
+const grid = document.getElementById("cal-grid");
+const label = document.getElementById("cal-month-label");
+
+let current = new Date();
+let selectedDate = null;
+
+function renderCalendar() {
+  grid.innerHTML = "";
+
+  const year = current.getFullYear();
+  const month = current.getMonth();
+
+  label.textContent = current.toLocaleString("default", {
+    month: "long",
+    year: "numeric"
+  });
+
+  const firstDay = new Date(year, month, 1).getDay();
+  const days = new Date(year, month + 1, 0).getDate();
+
+  for (let i = 0; i < firstDay; i++) {
+    grid.innerHTML += "<div></div>";
+  }
+
+  for (let d = 1; d <= days; d++) {
+    const el = document.createElement("div");
+    el.textContent = d;
+
+    el.onclick = () => {
+      document.querySelectorAll("#cal-grid div")
+        .forEach(e => e.classList.remove("selected-day"));
+
+      el.classList.add("selected-day");
+
+      selectedDate = `${month+1}/${d}/${year}`;
+      showSlots();
+    };
+
+    grid.appendChild(el);
+  }
+}
+
+function changeMonth(dir) {
+  current.setMonth(current.getMonth() + dir);
+  renderCalendar();
+}
+
+function showSlots() {
+  document.getElementById("state-prompt").style.display = "none";
+  document.getElementById("state-slots").style.display = "block";
+
+  const grid = document.getElementById("slots-grid");
+  grid.innerHTML = "";
+
+  ["9:00 AM","11:00 AM","1:00 PM","3:00 PM"].forEach(time => {
+    const btn = document.createElement("button");
+    btn.textContent = time;
+
+    btn.onclick = () => {
+      document.getElementById("state-form").style.display = "block";
+    };
+
+    grid.appendChild(btn);
+  });
+}
+
+function goBack() {
+  document.getElementById("state-slots").style.display = "none";
+  document.getElementById("state-prompt").style.display = "block";
+}
+
+function confirmBooking() {
+  document.getElementById("state-form").style.display = "none";
+  document.getElementById("state-success").style.display = "block";
+
+  setTimeout(() => {
+    window.location.href = "/";
+  }, 3000);
+}
+
+renderCalendar();
+</script>
 
 </body>
 </html>
