@@ -97,9 +97,9 @@ async function selectDate(key, d) {
 }
 
 async function submitBooking() {
-    const name = document.getElementById('f-name').value;
-    const phone = document.getElementById('f-phone').value;
-    const email = document.getElementById('f-email').value;
+    const name     = document.getElementById('f-name').value;
+    const phone    = document.getElementById('f-phone').value;
+    const email    = document.getElementById('f-email').value;
     const duration = document.getElementById('f-duration').value;
 
     if(!name || !phone || !email || !selDate || !selSlot) {
@@ -109,25 +109,8 @@ async function submitBooking() {
 
     document.getElementById('state-form').innerHTML = '<h3>Processing your request...</h3>';
 
-    const payload = {
-        type: 'booking',
-        name,
-        phone,
-        email,
-        date: selDate,
-        time: selSlot,
-
-        // 🔥 THIS IS THE FIX
-        duration: duration
-    };
-
-    await fetch(BOOKING_URL, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
-    });
+    const params = new URLSearchParams({ action:'book', name, phone, email, date:selDate, time:selSlot, duration });
+    const result = await jsonp(`${BOOKING_URL}?${params}`);
 
     document.getElementById('state-form').style.display = 'none';
     document.getElementById('state-success').style.display = 'block';
