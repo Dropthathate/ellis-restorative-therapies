@@ -4,123 +4,580 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Book a Session | Ellis Restorative Therapies</title>
-
 <link rel="stylesheet" href="styles.css">
-
 <style>
-/* GLASS / APPLE STYLE */
-.booking-wrap {
-  max-width: 1000px;
-  margin: 80px auto;
-  padding: 40px;
+
+.booking-page {
+  padding: 120px 24px 80px;
+  max-width: 820px;
+  margin: 0 auto;
 }
 
+.booking-header { margin-bottom: 40px; }
+
+.booking-header h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(36px, 5vw, 54px);
+  font-weight: 300;
+  color: var(--white);
+  line-height: 1.1;
+  margin-bottom: 12px;
+}
+
+.booking-header h1 em { font-style: italic; color: var(--teal); }
+
+.booking-header p { color: var(--mid); font-size: 14px; line-height: 1.7; }
+
+/* ── CARD ── */
 .booking-card {
-  background: rgba(255,255,255,0.04);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 16px;
-  padding: 32px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 40px;
+  margin-bottom: 24px;
 }
 
-.booking-grid {
-  display: grid;
-  gap: 16px;
+.booking-card h2 {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 24px;
 }
 
-.booking-input {
-  padding: 14px;
-  border-radius: 10px;
-  border: none;
-  background: rgba(255,255,255,0.06);
-  color: white;
-}
+/* ── FIELDS ── */
+.field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.field-grid .full { grid-column: 1 / -1; }
 
-.booking-btn {
-  padding: 16px;
-  border-radius: 10px;
-  border: none;
-  background: var(--gold);
-  color: black;
+.field-label {
+  display: block;
+  font-size: 11px;
   font-weight: 600;
-  cursor: pointer;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--light);
+  margin-bottom: 6px;
 }
 
-.calendar {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 8px;
-  margin-top: 20px;
+.field-input {
+  width: 100%;
+  padding: 13px 16px;
+  background: var(--deep);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--white);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
 }
 
-.day, .slot {
-  padding: 10px;
-  text-align: center;
-  border-radius: 8px;
-  background: rgba(255,255,255,0.05);
-  cursor: pointer;
+.field-input:focus { border-color: var(--teal); }
+.field-input::placeholder { color: var(--muted); }
+select.field-input option { background: var(--deep); color: var(--white); }
+
+/* ── CALENDAR ── */
+.cal-nav {
+  display: flex; align-items: center;
+  justify-content: space-between; margin-bottom: 16px;
 }
 
-.day.active, .slot.active {
-  background: var(--gold);
-  color: black;
+.cal-nav-btn {
+  background: var(--deep); border: 1px solid var(--border);
+  color: var(--white); font-size: 18px; width: 36px; height: 36px;
+  border-radius: 4px; cursor: pointer; display: flex;
+  align-items: center; justify-content: center; transition: all 0.2s;
+}
+.cal-nav-btn:hover { border-color: var(--teal); color: var(--teal); }
+
+.cal-month {
+  font-family: 'Cinzel', serif;
+  font-size: 14px; letter-spacing: 0.1em; color: var(--white);
 }
 
-.section {
-  margin-top: 30px;
+.cal-weekdays {
+  display: grid; grid-template-columns: repeat(7, 1fr);
+  gap: 6px; margin-bottom: 8px;
+}
+
+.cal-weekday {
+  text-align: center; font-size: 10px; font-weight: 700;
+  letter-spacing: 0.1em; color: var(--mid);
+  text-transform: uppercase; padding: 4px 0;
+}
+
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+
+.cal-day {
+  aspect-ratio: 1; display: flex; align-items: center;
+  justify-content: center; border-radius: 4px;
+  font-size: 13px; font-weight: 500;
+  color: var(--white); background: var(--deep);
+  border: 1px solid var(--border); cursor: pointer; transition: all 0.15s;
+}
+
+.cal-day:hover:not(.closed):not(.past) { border-color: var(--teal); color: var(--teal); }
+.cal-day.selected { background: var(--teal); border-color: var(--teal); color: var(--black); font-weight: 700; }
+.cal-day.closed, .cal-day.past { color: var(--muted); background: transparent; border-color: transparent; cursor: default; opacity: 0.3; }
+.cal-day.empty { background: transparent; border-color: transparent; cursor: default; }
+
+/* ── SLOTS ── */
+.slots-wrap { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+
+.slot-btn {
+  padding: 10px 18px; border-radius: 4px;
+  background: var(--deep); border: 1px solid var(--border);
+  color: var(--white); font-family: 'Montserrat', sans-serif;
+  font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s;
+}
+.slot-btn:hover { border-color: var(--teal); color: var(--teal); }
+.slot-btn.selected { background: var(--teal); border-color: var(--teal); color: var(--black); font-weight: 700; }
+
+.slots-empty { color: var(--mid); font-size: 13px; padding: 12px 0; }
+
+/* ── POLICY ── */
+.policy-box {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 6px; padding: 32px; margin-bottom: 24px;
+}
+
+.policy-box h3 {
+  font-family: 'Cinzel', serif; font-size: 11px;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--teal); margin-bottom: 20px;
+}
+
+.policy-item {
+  display: flex; gap: 14px; padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px; color: var(--mid); line-height: 1.65;
+}
+.policy-item:last-child { border-bottom: none; padding-bottom: 0; }
+
+.policy-icon { color: var(--teal); font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+
+.policy-item strong {
+  display: block; color: var(--white);
+  font-size: 12px; font-weight: 600;
+  letter-spacing: 0.04em; margin-bottom: 4px;
+}
+
+/* ── CONSENT ── */
+.consent-wrap {
+  display: flex; gap: 14px; align-items: flex-start;
+  padding: 20px 24px; background: var(--card);
+  border: 1px solid var(--border); border-radius: 6px;
+  margin-bottom: 28px; cursor: pointer; transition: border-color 0.2s;
+}
+.consent-wrap:hover { border-color: var(--teal); }
+
+.consent-wrap input[type="checkbox"] {
+  width: 18px; height: 18px; margin-top: 2px;
+  flex-shrink: 0; accent-color: var(--teal); cursor: pointer;
+}
+
+.consent-wrap label {
+  font-size: 13px; color: var(--mid); line-height: 1.65; cursor: pointer;
+}
+.consent-wrap label strong { color: var(--white); }
+
+/* ── SUBMIT ── */
+.booking-submit-row { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+.booking-submit-note { font-size: 12px; color: var(--muted); line-height: 1.6; }
+.btn-loading { opacity: 0.6 !important; pointer-events: none !important; }
+
+/* ── CONFIRM SCREEN ── */
+.confirm-screen {
+  display: none; text-align: center; padding: 60px 40px;
+}
+.confirm-icon { font-size: 52px; margin-bottom: 20px; }
+
+.confirm-screen h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 42px; font-weight: 300; color: var(--white); margin-bottom: 12px;
+}
+.confirm-screen h2 em { font-style: italic; color: var(--teal); }
+.confirm-screen p { color: var(--mid); font-size: 14px; line-height: 1.7; max-width: 460px; margin: 0 auto 10px; }
+
+.confirm-detail {
+  display: inline-block; margin-top: 24px; padding: 18px 28px;
+  background: var(--deep); border: 1px solid var(--teal);
+  border-radius: 4px; font-size: 13px; color: var(--white);
+  line-height: 1.9; text-align: left;
+}
+.cd-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--teal); margin-bottom: 10px; display: block;
+}
+
+.confirm-actions {
+  margin-top: 32px; display: flex; gap: 14px;
+  justify-content: center; flex-wrap: wrap;
+}
+
+@media (max-width: 600px) {
+  .booking-card { padding: 24px; }
+  .field-grid { grid-template-columns: 1fr; }
+  .field-grid .full { grid-column: 1; }
 }
 </style>
 </head>
-
 <body>
 
-<!-- NAV (keeps your existing layout intact) -->
+<!-- NAV -->
 <nav>
   <a href="index.html" class="nav-logo">
-    <img src="logo.png" />
+    <img src="logo.png" alt="Ellis Restorative Therapies" />
   </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="blog.html">Blog</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="book.html" class="nav-book active">Book Now</a></li>
+  </ul>
+  <button class="nav-toggle" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
 
-<div class="booking-wrap">
-  <div class="booking-card">
+<div class="booking-page">
 
-    <h1>Book Your Session</h1>
+  <!-- HEADER -->
+  <div class="booking-header">
+    <div class="section-label">Online Booking</div>
+    <h1>Book Your <em>Session</em></h1>
+    <p>Select your session length, pick a date and time, and confirm — no phone call needed. You'll receive a confirmation email, and a brief intake form will follow before your first visit.</p>
+  </div>
 
-    <!-- CLIENT INFO -->
-    <div class="booking-grid">
-      <input id="name" class="booking-input" placeholder="Full Name">
-      <input id="phone" class="booking-input" placeholder="Phone Number">
-      <input id="email" class="booking-input" placeholder="Email">
+  <!-- FORM CARD -->
+  <div class="booking-card" id="booking-form-card">
 
-      <!-- 🔥 CRITICAL: DURATION -->
-      <select id="duration" class="booking-input">
-        <option value="60">60 Minutes — $100</option>
-        <option value="90">90 Minutes — $150</option>
-        <option value="120">120 Minutes — $200</option>
-      </select>
+    <h2>Your Information</h2>
+    <div class="field-grid">
+      <div>
+        <label class="field-label" for="name">Full Name</label>
+        <input id="name" class="field-input" type="text" placeholder="Jane Smith" />
+      </div>
+      <div>
+        <label class="field-label" for="phone">Phone</label>
+        <input id="phone" class="field-input" type="tel" placeholder="(209) 555-0000" />
+      </div>
+      <div class="full">
+        <label class="field-label" for="email">Email Address</label>
+        <input id="email" class="field-input" type="email" placeholder="you@example.com" />
+      </div>
+      <div class="full">
+        <label class="field-label" for="duration">Session Length</label>
+        <select id="duration" class="field-input">
+          <option value="60">60 Minutes — $100 &nbsp;·&nbsp; Neuromuscular Reset</option>
+          <option value="90">90 Minutes — $150 &nbsp;·&nbsp; Deep Restorative</option>
+          <option value="120">120 Minutes — $200 &nbsp;·&nbsp; Complete Recovery</option>
+        </select>
+      </div>
     </div>
 
-    <!-- DATE -->
-    <div class="section">
-      <h3>Select Date</h3>
-      <div id="calendar" class="calendar"></div>
+    <div style="margin-top: 36px;">
+      <h2>Select a Date</h2>
+      <div class="cal-nav">
+        <button class="cal-nav-btn" onclick="prevMonth()">&#8592;</button>
+        <span class="cal-month" id="cal-month-label"></span>
+        <button class="cal-nav-btn" onclick="nextMonth()">&#8594;</button>
+      </div>
+      <div class="cal-weekdays">
+        <div class="cal-weekday">Su</div>
+        <div class="cal-weekday">Mo</div>
+        <div class="cal-weekday">Tu</div>
+        <div class="cal-weekday">We</div>
+        <div class="cal-weekday">Th</div>
+        <div class="cal-weekday">Fr</div>
+        <div class="cal-weekday">Sa</div>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
     </div>
 
-    <!-- TIME -->
-    <div class="section">
-      <h3>Select Time</h3>
-      <div id="slots" class="calendar"></div>
-    </div>
-
-    <!-- SUBMIT -->
-    <div class="section">
-      <button class="booking-btn" onclick="submitBooking()">Confirm Booking</button>
+    <div style="margin-top: 36px;">
+      <h2>Select a Time</h2>
+      <div class="slots-wrap" id="slots-wrap">
+        <span class="slots-empty">Select a date above to see available times.</span>
+      </div>
     </div>
 
   </div>
+
+  <!-- CANCELLATION & PRACTICE POLICY -->
+  <div class="policy-box">
+    <h3>Cancellation &amp; Practice Policy</h3>
+    <div class="policy-item">
+      <span class="policy-icon">⏱</span>
+      <div>
+        <strong>24-Hour Cancellation Notice Required</strong>
+        Cancellations made with less than 24 hours notice may be charged a 50% session fee. We appreciate your respect for our schedule and other clients waiting for appointments.
+      </div>
+    </div>
+    <div class="policy-item">
+      <span class="policy-icon">🚫</span>
+      <div>
+        <strong>No-Show Policy</strong>
+        No-shows without notice are charged the full session fee. If something comes up unexpectedly, please reach out as early as possible — we're always willing to work with you.
+      </div>
+    </div>
+    <div class="policy-item">
+      <span class="policy-icon">🤒</span>
+      <div>
+        <strong>Illness — Please Reschedule</strong>
+        If you are feeling ill, please reschedule. Cancellation fees are always waived for illness with reasonable notice. Your wellbeing — and that of other clients — comes first.
+      </div>
+    </div>
+    <div class="policy-item">
+      <span class="policy-icon">💳</span>
+      <div>
+        <strong>Payment Due at Time of Service</strong>
+        We accept cash and all major credit cards. 60 min $100 · 90 min $150 · 120 min $200. Prices are per session, no hidden fees.
+      </div>
+    </div>
+    <div class="policy-item">
+      <span class="policy-icon">🔒</span>
+      <div>
+        <strong>Privacy &amp; Confidentiality</strong>
+        All client information is kept strictly confidential and never shared with third parties. Your health history and intake information are fully protected.
+      </div>
+    </div>
+    <div class="policy-item">
+      <span class="policy-icon">📋</span>
+      <div>
+        <strong>Intake Form</strong>
+        First-time clients will receive a health history and intake form via email prior to their session. This helps Zachary tailor your session safely and effectively.
+      </div>
+    </div>
+  </div>
+
+  <!-- CONSENT & ACKNOWLEDGEMENT -->
+  <div class="consent-wrap" onclick="toggleConsent()">
+    <input type="checkbox" id="consent-check" onclick="event.stopPropagation(); document.getElementById('consent-check').checked = !document.getElementById('consent-check').checked;" />
+    <label for="consent-check" onclick="event.preventDefault();">
+      <strong>Consent, Rights &amp; Liability Acknowledgement</strong><br><br>
+      By checking this box, I confirm that I have read and agree to the cancellation and practice policies above. I consent to receive neuromuscular therapy, bodywork, and related services provided by Zachary Ellis (CAMTC #97101) at Ellis Restorative Therapies.<br><br>
+      I understand that massage therapy is not a substitute for medical diagnosis, advice, or treatment. I acknowledge my right to stop or modify the session at any time and to have my questions answered before, during, or after my appointment. I take responsibility for disclosing any health conditions, medications, injuries, or concerns that may affect my session. I release Ellis Restorative Therapies and Zachary Ellis from liability arising from any undisclosed conditions.
+    </label>
+  </div>
+
+  <!-- SUBMIT -->
+  <div class="booking-submit-row">
+    <button class="btn btn-gold" id="submit-btn" onclick="submitBooking()">Confirm Booking</button>
+    <span class="booking-submit-note">
+      A confirmation email will be sent shortly.<br>
+      First-time clients will receive an intake form before their session.
+    </span>
+  </div>
+
+  <!-- CONFIRMATION SCREEN -->
+  <div class="booking-card confirm-screen" id="confirm-screen">
+    <div class="confirm-icon">✅</div>
+    <h2>You're <em>Booked</em></h2>
+    <p>Your session has been confirmed. Zachary will see you soon.</p>
+    <p>Check your email for a confirmation. First-time clients will receive a brief health intake form — please complete it before your visit.</p>
+    <div class="confirm-detail" id="confirm-detail"></div>
+    <div class="confirm-actions">
+      <a href="index.html" class="btn btn-outline">← Back to Home</a>
+      <a href="services.html" class="btn btn-outline">View Services</a>
+    </div>
+  </div>
+
 </div>
 
-<script src="booking.js"></script>
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <img src="logo.png" alt="Ellis Restorative Therapies" />
+      <p>Professional neuromuscular therapy and clinical bodywork in Modesto, CA. Serving all of Stanislaus County.</p>
+      <div class="footer-cert" style="margin-top:16px;gap:8px;flex-wrap:wrap;">
+        <span class="footer-cert-badge">CAMTC Certified</span>
+        <span class="footer-cert-badge">AMTA Member</span>
+      </div>
+    </div>
+    <div>
+      <h4>Navigate</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="services.html">Services &amp; Pricing</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="book.html">Book a Session</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Services</h4>
+      <ul>
+        <li><a href="services.html">60 Min · $100</a></li>
+        <li><a href="services.html">90 Min · $150</a></li>
+        <li><a href="services.html">120 Min · $200</a></li>
+        <li><a href="services.html">Neuromuscular Therapy</a></li>
+        <li><a href="services.html">Craniosacral</a></li>
+        <li><a href="services.html">Deep Tissue</a></li>
+      </ul>
+    </div>
+    <div class="footer-contact">
+      <h4>Contact</h4>
+      <p><a href="tel:2094505296">(209) 450-5296</a></p>
+      <p><a href="mailto:restorewithellis@gmail.com">restorewithellis@gmail.com</a></p>
+      <p>2209 Coffee Rd, Suite M<br>Modesto, CA 95355</p>
+      <p style="margin-top:8px;">Mon – Thu · 10AM – 7PM</p>
+      <p style="margin-top:12px;"><a href="https://share.google/ljgQMAEz9CWuFBhU1" target="_blank" rel="noopener" style="color:var(--teal);">Google Business ↗</a></p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Ellis Restorative Therapies. All rights reserved. · Zachary Ellis · CAMTC #97101</span>
+    <span>Modesto, CA</span>
+  </div>
+</footer>
 
+<script src="nav.js"></script>
+<script>
+const BOOKING_URL = "https://script.google.com/macros/s/AKfycbwLS377dvlP5TRgZviL5Pmaj_RBFbeXUTszmU7KbcEdyAyLA8rURceBGq5GWro_cAR9/exec";
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+let viewYear, viewMonth, selectedDate = null, selectedTime = null;
+
+function initCal() {
+  const t = new Date();
+  viewYear = t.getFullYear();
+  viewMonth = t.getMonth();
+  renderCal();
+}
+
+function prevMonth() {
+  if (--viewMonth < 0) { viewMonth = 11; viewYear--; }
+  renderCal();
+}
+
+function nextMonth() {
+  if (++viewMonth > 11) { viewMonth = 0; viewYear++; }
+  renderCal();
+}
+
+function renderCal() {
+  document.getElementById('cal-month-label').textContent = `${MONTHS[viewMonth]} ${viewYear}`;
+  const grid = document.getElementById('cal-grid');
+  grid.innerHTML = '';
+  const today = new Date(); today.setHours(0,0,0,0);
+  const firstDay = new Date(viewYear, viewMonth, 1).getDay();
+  const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+
+  for (let i = 0; i < firstDay; i++) {
+    const e = document.createElement('div');
+    e.className = 'cal-day empty';
+    grid.appendChild(e);
+  }
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const date = new Date(viewYear, viewMonth, d);
+    const dow = date.getDay();
+    const dateStr = date.toISOString().split('T')[0];
+    const closed = dow === 0 || dow === 5 || dow === 6;
+    const past = date < today;
+
+    const cell = document.createElement('div');
+    cell.className = 'cal-day';
+    cell.textContent = d;
+
+    if (past) { cell.classList.add('past'); }
+    else if (closed) { cell.classList.add('closed'); }
+    else {
+      if (dateStr === selectedDate) cell.classList.add('selected');
+      cell.onclick = () => pickDate(dateStr, cell);
+    }
+    grid.appendChild(cell);
+  }
+}
+
+function pickDate(dateStr, cell) {
+  selectedDate = dateStr;
+  selectedTime = null;
+  document.querySelectorAll('.cal-day').forEach(c => c.classList.remove('selected'));
+  cell.classList.add('selected');
+  loadSlots(dateStr);
+}
+
+async function loadSlots(date) {
+  const wrap = document.getElementById('slots-wrap');
+  wrap.innerHTML = '<span class="slots-empty">Loading…</span>';
+  try {
+    const res = await fetch(`${BOOKING_URL}?action=slots&date=${date}`);
+    const data = await res.json();
+    renderSlots(data.slots || []);
+  } catch(e) {
+    // Fallback to schedule-based slots if CORS not yet fixed
+    const month = new Date(date).getMonth();
+    const isSummer = month >= 4 && month <= 6;
+    renderSlots(isSummer
+      ? ["12:30 PM","1:30 PM","2:30 PM","3:30 PM","4:30 PM","5:30 PM","6:30 PM"]
+      : ["10:00 AM","11:00 AM","12:00 PM","1:00 PM","2:00 PM","3:00 PM","4:00 PM","5:00 PM"]
+    );
+  }
+}
+
+function renderSlots(slots) {
+  const wrap = document.getElementById('slots-wrap');
+  wrap.innerHTML = '';
+  if (!slots.length) { wrap.innerHTML = '<span class="slots-empty">No availability for this date.</span>'; return; }
+  slots.forEach(t => {
+    const btn = document.createElement('button');
+    btn.className = 'slot-btn' + (t === selectedTime ? ' selected' : '');
+    btn.textContent = t;
+    btn.onclick = () => {
+      document.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      selectedTime = t;
+    };
+    wrap.appendChild(btn);
+  });
+}
+
+function toggleConsent() {
+  const cb = document.getElementById('consent-check');
+  cb.checked = !cb.checked;
+}
+
+async function submitBooking() {
+  const name = document.getElementById('name').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const duration = document.getElementById('duration').value;
+  const consent = document.getElementById('consent-check').checked;
+
+  if (!name || !phone || !email) { alert('Please complete all contact fields.'); return; }
+  if (!selectedDate || !selectedTime) { alert('Please select a date and a time.'); return; }
+  if (!consent) { alert('Please read and accept the consent and policy statement to continue.'); return; }
+
+  const btn = document.getElementById('submit-btn');
+  btn.textContent = 'Submitting…';
+  btn.classList.add('btn-loading');
+
+  try {
+    await fetch(BOOKING_URL, { method: 'POST', body: JSON.stringify({ name, phone, email, duration: Number(duration), date: selectedDate, time: selectedTime }), mode: 'no-cors' });
+  } catch(e) {}
+
+  const labels = { 60: '60 Min · $100 — Neuromuscular Reset', 90: '90 Min · $150 — Deep Restorative', 120: '120 Min · $200 — Complete Recovery' };
+  document.getElementById('confirm-detail').innerHTML =
+    `<span class="cd-label">Booking Summary</span>
+     <strong>${name}</strong><br>
+     <span style="color:var(--mid)">${email} &nbsp;·&nbsp; ${phone}</span><br><br>
+     <span style="color:var(--teal);font-weight:600;">${selectedDate} &nbsp;at&nbsp; ${selectedTime}</span><br>
+     <span style="color:var(--mid)">${labels[duration]}</span>`;
+
+  document.getElementById('booking-form-card').style.display = 'none';
+  document.getElementById('confirm-screen').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+initCal();
+</script>
 </body>
 </html>
