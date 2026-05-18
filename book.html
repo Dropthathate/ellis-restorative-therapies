@@ -546,14 +546,14 @@ function toggleConsent() {
 }
 
 async function submitBooking() {
-  const name = document.getElementById('name').value.trim();
-  const phone = document.getElementById('phone').value.trim();
-  const email = document.getElementById('email').value.trim();
+  const name     = document.getElementById('name').value.trim();
+  const phone    = document.getElementById('phone').value.trim();
+  const email    = document.getElementById('email').value.trim();
   const duration = document.getElementById('duration').value;
-  const consent = document.getElementById('consent-check').checked;
+  const consent  = document.getElementById('consent-check').checked;
 
   if (!name || !phone || !email) { alert('Please complete all contact fields.'); return; }
-  if (!selectedDate || !selectedTime) { alert('Please select a date and a time.'); return; }
+  if (!selectedDate || !selectedTime) { alert('Please select a date and time.'); return; }
   if (!consent) { alert('Please read and accept the consent and policy statement to continue.'); return; }
 
   const btn = document.getElementById('submit-btn');
@@ -561,8 +561,28 @@ async function submitBooking() {
   btn.classList.add('btn-loading');
 
   try {
-    await fetch(BOOKING_URL, { method: 'POST', body: JSON.stringify({ name, phone, email, duration: Number(duration), date: selectedDate, time: selectedTime }), mode: 'no-cors' });
-  } catch(e) {}
+    const data = await fetch(
+      `/proxy.php?action=book` +
+      `&name=${encodeURIComponent(name)}` +
+      `&phone=${encodeURIComponent(phone)}` +
+      `&email=${encodeURIComponent(email)}` +
+      `&date=${encodeURIComponent(selectedDate)}` +
+      `&time=${encodeURIComponent(selectedTime)}` +
+      `&duration=${encodeURIComponent(duration)}`
+    ).then(r => r.json());
+
+    if (!data.success) {
+      alert(data.error === 'Taken' ? 'That time was just taken. Please pick another slot.' : 'Booking failed. Please call (209) 450-5296.');
+      btn.textContent = 'Confirm Booking';
+      btn.classList.remove('btn-loading');
+      return;
+    }
+  } catch(e) {
+    alert('Connection error. Please call (209) 450-5296.');
+    btn.textContent = 'Confirm Booking';
+    btn.classList.remove('btn-loading');
+    return;
+  }
 
   const labels = { 60: '60 Min · $100 — Neuromuscular Reset', 90: '90 Min · $150 — Deep Restorative', 120: '120 Min · $200 — Complete Recovery' };
   document.getElementById('confirm-detail').innerHTML =
