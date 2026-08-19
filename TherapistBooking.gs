@@ -1,7 +1,7 @@
 // Therapist-specific booking API. This file keeps the existing E.R.T SITE
 // engagement automations intact while routing appointments to the selected therapist.
 
-const HUNTER_EMAIL = 'hunterellissss@gmail.com';
+const HUNTER_EMAIL = 'ellisrestorative@gmail.com';
 const HUNTER_CAMTC = 'CAMTC #103413';
 const HUNTER_SLOT_TIMES = ['12:51 PM', '3:21 PM', '5:51 PM'];
 const HUNTER_OPEN_DAYS = [1, 2, 3, 4, 5];

@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
   exit;
 }
 
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwLS377dvlP5TRgZviL5Pmaj_RBFbeXUTszmU7KbcEdyAyLA8rURceBGq5GWro_cAR9/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzvdC1HrHxC9hfYOIXY3uscbqsNdbnthgYfmNMK-IwA76m5uU7zp4mDdTieEveLFYeN/exec';
 
 function sendResponse(string $body, int $status = 200): void {
   http_response_code($status);
