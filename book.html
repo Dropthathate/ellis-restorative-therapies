@@ -484,6 +484,10 @@ function initCal() {
   const today = new Date();
   viewYear = today.getFullYear();
   viewMonth = today.getMonth();
+  document.getElementById('duration').addEventListener('change', () => {
+    selectedTime = null;
+    if (selectedDate) loadSlots(selectedDate);
+  });
   updateTherapistUI();
   renderCal();
 }
@@ -559,7 +563,7 @@ function paintCalendar() {
     cell.textContent = String(day);
 
     if (date < today) cell.classList.add('past');
-    else if (!status || status === 'full') cell.classList.add('closed');
+    else if (!status || status === 'full' || status === 'closed') cell.classList.add('closed');
     else {
       if (dateStr === selectedDate) cell.classList.add('selected');
       cell.title = status === 'partial' ? 'Limited availability' : 'Available';
@@ -588,7 +592,8 @@ async function loadSlots(date) {
   const wrap = document.getElementById('slots-wrap');
   wrap.innerHTML = '<span class="slots-empty">Loading times…</span>';
   try {
-    const response = await fetch(`${BOOKING_URL}?action=slots&date=${date}&therapist=${selectedTherapist}`);
+    const duration = document.getElementById('duration').value;
+    const response = await fetch(`${BOOKING_URL}?action=slots&date=${date}&duration=${duration}&therapist=${selectedTherapist}`);
     const data = await response.json();
     if (!data.success) throw new Error(data.error || 'Unable to load available times.');
     renderSlots(data.slots || []);
