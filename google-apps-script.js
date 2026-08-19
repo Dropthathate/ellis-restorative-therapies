@@ -1,488 +1,247 @@
 // ── Ellis Restorative Therapies · Google Apps Script ──
-// Handles: calendar availability, booking requests, email signups
-//
-// SETUP INSTRUCTIONS:
-//
-// 1. Go to https://sheets.google.com — create a new spreadsheet
-//    Name it: "ERT — Site Data"
-//    Create TWO tabs:
-//      Tab 1: "Email List"   → headers: Timestamp | Email | Source
-//      Tab 2: "Bookings"     → headers: Timestamp | Name | Phone | Email | Date | Time | Duration | Price | Notes
-//
-// 2. Click Extensions → Apps Script
-//    Delete all existing code, paste THIS entire file, click Save
-//    Name the project: "ERT Site"
-//
-// 3. Click Deploy → New Deployment
-//    Type: Web app
-//    Execute as: Me (restorewithellis@gmail.com)
-//    Who has access: Anyone
-//    Click Deploy → copy the Web App URL
-//
-// 4. Paste that URL into book.html → const BOOKING_URL = 'YOUR URL'
-//    And into email-capture.js   → const SHEET_URL   = 'YOUR URL'
-//    (same URL for both)
-//
-// HOW ZACHARY MANAGES BOOKINGS:
-//   - Open Google Calendar
-//   - Create an event at the booked time (e.g. 2:00 PM – 3:30 PM)
-//   - Put [ERT] anywhere in the event title (e.g. "[ERT] Sarah Johnson")
-//   - That slot will automatically show as booked on the website
-//   - No other website changes needed — ever.
-// ─────────────────────────────────────────────────────────────────────
+// Handles therapist-specific calendar availability, booking requests, and email signups.
+// Deploy this file as a Web App after pasting it into the connected Apps Script project.
 
-// ── CONFIGURATION ──
-const CALENDAR_ID   = 'restorewithellis@gmail.com'; // His Google Calendar
-const ERT_TAG       = '[ERT]';                       // Tag to identify ERT bookings
-const BOOKING_EMAIL = 'restorewithellis@gmail.com';
+const TIME_ZONE = 'America/Los_Angeles';
+const ERT_TAG = '[ERT]';
+const ADMIN_EMAIL = 'restorewithellis@gmail.com';
+const SCHEDULE_START = '2026-08-18';
 
-// Working hours by date range
-// Format: { start: 'YYYY-MM-DD', end: 'YYYY-MM-DD', slots: ['H:MM AM', ...] }
-const SCHEDULE_RULES = [
-  {
-    start: '2026-04-21',
-    end:   '2026-04-30',
-    slots: ['10:00 AM','11:30 AM','1:00 PM','2:30 PM','4:00 PM','5:30 PM']
+// Hunter must share his Google Calendar with the account that owns this Apps Script
+// (currently restorewithellis@gmail.com), with permission to view event details.
+const THERAPISTS = {
+  zachary: {
+    key: 'zachary',
+    name: 'Zachary Ellis',
+    email: ADMIN_EMAIL,
+    calendarId: ADMIN_EMAIL,
+    camtc: 'CAMTC #97101',
+    openDays: [1, 2, 3, 4], // Monday–Thursday
+    slots: ['10:00 AM', '11:30 AM', '1:00 PM', '2:30 PM', '4:00 PM', '5:30 PM'],
   },
-  {
-    start: '2026-05-01',
-    end:   '2026-07-31',
-    slots: ['12:30 PM','2:00 PM','3:30 PM','5:00 PM','6:30 PM']
-  }
-];
-
-const CLOSED_DAYS = [0, 5, 6]; // Sun, Fri, Sat
-
-// ─────────────────────────────────────────────────────────────────────
+  hunter: {
+    key: 'hunter',
+    name: 'Hunter Ellis',
+    email: 'hunterellissss@gmail.com',
+    calendarId: 'hunterellissss@gmail.com',
+    camtc: 'CAMTC #103413',
+    openDays: [1, 2, 3, 4, 5], // Monday–Friday
+    // These start times keep a two-hour session inside Hunter's 12:51 PM–8:00 PM weekday window.
+    slots: ['12:51 PM', '3:21 PM', '5:51 PM'],
+  },
+};
 
 function doGet(e) {
-  const action = e.parameter.action;
+  try {
+    const action = String(e.parameter.action || '');
+    const therapistKey = String(e.parameter.therapist || 'zachary');
 
-  if (action === 'availability') {
-    return getAvailability(e.parameter.month, e.parameter.year);
+    if (action === 'availability') {
+      return getAvailability(e.parameter.month, e.parameter.year, therapistKey);
+    }
+    if (action === 'slots') {
+      return getSlots(String(e.parameter.date || ''), therapistKey);
+    }
+    return respond({ success: true, status: 'ERT booking script is running' });
+  } catch (error) {
+    return respond({ success: false, error: error.message });
   }
-
-  if (action === 'slots') {
-    return getSlots(e.parameter.date);
-  }
-
-  return respond({ status: 'ERT Site Script running ✓' });
 }
 
 function doPost(e) {
   try {
-    const data = JSON.parse(e.postData.contents);
-    if (data.type === 'booking')     return handleBooking(data);
-    if (data.type === 'emailSignup') return handleEmailSignup(data);
-    return respond({ success: false, error: 'Unknown type' });
-  } catch (err) {
-    return respond({ success: false, error: err.message });
+    const data = JSON.parse(e.postData.contents || '{}');
+    if (data.action === 'booking') return handleBooking(data);
+    if (data.action === 'emailSignup') return handleEmailSignup(data);
+    return respond({ success: false, error: 'Unknown request type.' });
+  } catch (error) {
+    return respond({ success: false, error: error.message });
   }
 }
 
-// ── GET MONTH AVAILABILITY ──
-// Returns status for every day in the requested month
-function getAvailability(monthStr, yearStr) {
-  const month = parseInt(monthStr); // 0-indexed
-  const year  = parseInt(yearStr);
+function getAvailability(monthValue, yearValue, therapistKey) {
+  const therapist = getTherapist(therapistKey);
+  const month = Number(monthValue);
+  const year = Number(yearValue);
+  if (!Number.isInteger(month) || !Number.isInteger(year)) throw new Error('A valid month and year are required.');
 
-  const startOfMonth = new Date(year, month, 1);
-  const endOfMonth   = new Date(year, month + 1, 0, 23, 59, 59);
-
-  // Get all [ERT] events this month
-  const bookedSlots = getERTEvents(startOfMonth, endOfMonth);
-
+  const startOfMonth = new Date(year, month, 1, 0, 0, 0);
+  const endOfMonth = new Date(year, month + 1, 0, 23, 59, 59);
+  const bookedSlots = getERTEvents(therapist, startOfMonth, endOfMonth);
   const result = {};
-  const daysInMonth = endOfMonth.getDate();
   const today = new Date();
-  today.setHours(0,0,0,0);
+  today.setHours(0, 0, 0, 0);
 
-  for (let d = 1; d <= daysInMonth; d++) {
-    const date    = new Date(year, month, d);
+  for (let day = 1; day <= endOfMonth.getDate(); day += 1) {
+    const date = new Date(year, month, day, 12, 0, 0);
     const dateKey = formatKey(date);
-    const dow     = date.getDay();
+    if (date < today || dateKey < SCHEDULE_START || !therapist.openDays.includes(date.getDay())) continue;
 
-    if (date < today || CLOSED_DAYS.includes(dow)) continue;
-
-    const rule = getRuleForDate(dateKey);
-    if (!rule) continue; // not in any schedule range
-
-    const allSlots    = rule.slots;
-    const bookedToday = bookedSlots[dateKey] || [];
-    const openCount   = allSlots.filter(s => !bookedToday.includes(s)).length;
-
-    if (openCount === 0) {
-      result[dateKey] = 'full';
-    } else if (openCount < allSlots.length) {
-      result[dateKey] = 'partial';
-    } else {
-      result[dateKey] = 'open';
-    }
+    const booked = bookedSlots[dateKey] || [];
+    const openCount = therapist.slots.filter((slot) => !booked.includes(slot)).length;
+    if (openCount === 0) result[dateKey] = 'full';
+    else if (openCount < therapist.slots.length) result[dateKey] = 'partial';
+    else result[dateKey] = 'open';
   }
 
-  return respond({ success: true, availability: result });
+  return respond({ success: true, therapist: therapist.key, availability: result });
 }
 
-// ── GET SLOTS FOR A SPECIFIC DATE ──
-function getSlots(dateStr) {
-  const rule = getRuleForDate(dateStr);
-  if (!rule) return respond({ success: true, slots: [], booked: [] });
+function getSlots(dateKey, therapistKey) {
+  const therapist = getTherapist(therapistKey);
+  if (!isBookableDate(dateKey, therapist)) return respond({ success: true, slots: [] });
 
-  const date  = new Date(dateStr + 'T12:00:00');
-  const start = new Date(dateStr + 'T00:00:00');
-  const end   = new Date(dateStr + 'T23:59:59');
+  const start = new Date(`${dateKey}T00:00:00`);
+  const end = new Date(`${dateKey}T23:59:59`);
+  const bookedMap = getERTEvents(therapist, start, end);
+  const booked = bookedMap[dateKey] || [];
+  const slots = therapist.slots.filter((slot) => !booked.includes(slot));
 
-  const bookedMap  = getERTEvents(start, end);
-  const bookedList = bookedMap[dateStr] || [];
-  const openSlots  = rule.slots.filter(s => !bookedList.includes(s));
-
-  return respond({ success: true, slots: openSlots, booked: bookedList });
+  return respond({ success: true, therapist: therapist.key, slots: slots });
 }
 
-// ── READ GOOGLE CALENDAR ──
-function getERTEvents(startDate, endDate) {
-  const calendar = CalendarApp.getCalendarById(CALENDAR_ID);
-  const events   = calendar.getEvents(startDate, endDate);
-  const booked   = {};
+function handleBooking(data) {
+  const therapist = getTherapist(String(data.therapist || ''));
+  const name = cleanText(data.name, 120);
+  const phone = cleanText(data.phone, 40);
+  const email = cleanText(data.email, 320).toLowerCase();
+  const date = cleanText(data.date, 10);
+  const time = cleanText(data.time, 20);
+  const duration = cleanText(data.duration, 10);
+  const price = cleanText(data.price, 20);
+  const notes = cleanText(data.notes, 1000);
 
-  events.forEach(ev => {
-    if (!ev.getTitle().includes(ERT_TAG)) return;
+  if (!name || !phone || !isValidEmail(email) || !date || !time || !duration) {
+    return respond({ success: false, error: 'Please complete the required booking details.' });
+  }
+  if (!isBookableDate(date, therapist) || !therapist.slots.includes(time)) {
+    return respond({ success: false, error: 'That appointment time is no longer available.' });
+  }
 
-    const evStart   = ev.getStartTime();
-    const dateKey   = formatKey(evStart);
-    const timeLabel = formatTime(evStart);
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Bookings');
+  if (!sheet) throw new Error('The Bookings sheet is missing.');
+  sheet.appendRow([
+    timestamp(), therapist.name, name, phone, email, date, time, duration, price, notes,
+  ]);
 
-    if (!booked[dateKey]) booked[dateKey] = [];
-    booked[dateKey].push(timeLabel);
+  const recipientOptions = {
+    to: therapist.email,
+    subject: `New ${therapist.name} Booking Request — ${date} at ${time}`,
+    body:
+      `New booking request\n\n` +
+      `Therapist: ${therapist.name} (${therapist.camtc})\n` +
+      `Client:    ${name}\n` +
+      `Phone:     ${phone}\n` +
+      `Email:     ${email}\n` +
+      `Date:      ${date}\n` +
+      `Time:      ${time}\n` +
+      `Session:   ${duration} minutes (${price})\n` +
+      `Notes:     ${notes || 'None'}\n\n` +
+      `To hold the time, add "${ERT_TAG} ${therapist.name} — ${name}" to the appropriate Google Calendar.`,
+  };
+  // Zachary remains informed of Hunter's incoming booking requests.
+  if (therapist.email !== ADMIN_EMAIL) recipientOptions.cc = ADMIN_EMAIL;
+  MailApp.sendEmail(recipientOptions);
+
+  MailApp.sendEmail({
+    to: email,
+    subject: `Booking Request Received — ${therapist.name} | Ellis Restorative Therapies`,
+    body:
+      `Hi ${name},\n\n` +
+      `Thanks for requesting a session with ${therapist.name}.\n\n` +
+      `Therapist: ${therapist.name}\n` +
+      `Date:      ${date}\n` +
+      `Time:      ${time}\n` +
+      `Session:   ${duration} minutes (${price})\n\n` +
+      `${therapist.name} will review and confirm your request shortly. ` +
+      `Questions? Call or text (209) 450-5296.\n\n` +
+      `Ellis Restorative Therapies\nrestorewithellis.com`,
   });
 
+  return respond({ success: true });
+}
+
+function handleEmailSignup(data) {
+  const email = cleanText(data.email, 320).toLowerCase();
+  const source = cleanText(data.source || 'website', 120);
+  if (!isValidEmail(email)) return respond({ success: false, error: 'Please enter a valid email address.' });
+
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Email List');
+  if (!sheet) throw new Error('The Email List sheet is missing.');
+  const rows = sheet.getDataRange().getValues();
+  for (let row = 1; row < rows.length; row += 1) {
+    if (String(rows[row][1] || '').toLowerCase() === email) return respond({ success: true, duplicate: true });
+  }
+
+  sheet.appendRow([timestamp(), email, source]);
+  MailApp.sendEmail({
+    to: ADMIN_EMAIL,
+    subject: 'New ERT Subscriber',
+    body: `New subscriber\n\nEmail: ${email}\nSource: ${source}\nTime: ${timestamp()}`,
+  });
+  return respond({ success: true });
+}
+
+function getTherapist(key) {
+  const therapist = THERAPISTS[key];
+  if (!therapist) throw new Error('Please select a valid therapist.');
+  return therapist;
+}
+
+function getERTEvents(therapist, startDate, endDate) {
+  const calendar = CalendarApp.getCalendarById(therapist.calendarId);
+  if (!calendar) {
+    throw new Error(`${therapist.name}'s calendar is not available. Confirm calendar sharing and try again.`);
+  }
+
+  const booked = {};
+  calendar.getEvents(startDate, endDate).forEach((event) => {
+    if (!event.getTitle().includes(ERT_TAG)) return;
+    const eventStart = event.getStartTime();
+    const key = formatKey(eventStart);
+    if (!booked[key]) booked[key] = [];
+    booked[key].push(formatTime(eventStart));
+  });
   return booked;
 }
 
-// ── HANDLE BOOKING REQUEST ──
-function handleBooking(data) {
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Bookings');
-  sheet.appendRow([
-    timestamp(), data.name||'', data.phone||'', data.email||'',
-    data.date||'', data.time||'', data.duration||'', data.price||'', data.notes||''
-  ]);
-
-  // Notify Zachary
-  MailApp.sendEmail({
-    to: BOOKING_EMAIL,
-    subject: `📅 New Booking Request — ${data.date} at ${data.time}`,
-    body:
-      `New booking request!\n\n` +
-      `Name:     ${data.name}\n` +
-      `Phone:    ${data.phone}\n` +
-      `Email:    ${data.email}\n` +
-      `Date:     ${data.date}\n` +
-      `Time:     ${data.time}\n` +
-      `Duration: ${data.duration} (${data.price})\n` +
-      `Notes:    ${data.notes || 'None'}\n\n` +
-      `To confirm: reply to client or add "[ERT] ${data.name}" to Google Calendar at ${data.time} on ${data.date}.`
-  });
-
-  // Confirm to client
-  if (data.email && isValidEmail(data.email)) {
-    MailApp.sendEmail({
-      to: data.email,
-      subject: 'Booking Request Received — Ellis Restorative Therapies',
-      body:
-        `Hi ${data.name},\n\n` +
-        `Thanks for requesting an appointment. Here's what we have:\n\n` +
-        `Date:     ${data.date}\n` +
-        `Time:     ${data.time}\n` +
-        `Session:  ${data.duration} (${data.price})\n\n` +
-        `Zachary will confirm within a few hours. ` +
-        `Questions? Call or text (209) 450-5296.\n\n` +
-        `See you soon,\nEllis Restorative Therapies\nrestorewithellis.com`
-    });
-  }
-
-  return respond({ success: true });
+function isBookableDate(dateKey, therapist) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(dateKey) || dateKey < SCHEDULE_START) return false;
+  const date = new Date(`${dateKey}T12:00:00`);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return date >= today && therapist.openDays.includes(date.getDay());
 }
 
-// ── HANDLE EMAIL SIGNUP ──
-function handleEmailSignup(data) {
-  const email  = (data.email  || '').trim();
-  const source = (data.source || 'unknown').trim();
-  if (!isValidEmail(email)) return respond({ success: false, error: 'Invalid email' });
-
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Email List');
-  const rows  = sheet.getDataRange().getValues();
-  for (let i = 1; i < rows.length; i++) {
-    if ((rows[i][1]||'').toString().toLowerCase() === email.toLowerCase()) {
-      return respond({ success: true, duplicate: true });
-    }
-  }
-
-  sheet.appendRow([timestamp(), email, source]);
-  MailApp.sendEmail({
-    to: BOOKING_EMAIL,
-    subject: '✅ New ERT Subscriber',
-    body: `New email subscriber:\n\nEmail: ${email}\nSource: ${source}\nTime: ${timestamp()}`
-  });
-
-  return respond({ success: true });
-}
-
-// ── HELPERS ──
-function getRuleForDate(dateStr) {
-  return SCHEDULE_RULES.find(r => dateStr >= r.start && dateStr <= r.end) || null;
+function cleanText(value, maxLength) {
+  return String(value || '').trim().slice(0, maxLength);
 }
 
 function formatKey(date) {
-  const y = date.getFullYear();
-  const m = String(date.getMonth() + 1).padStart(2, '0');
-  const d = String(date.getDate()).padStart(2, '0');
-  return `${y}-${m}-${d}`;
+  return Utilities.formatDate(date, TIME_ZONE, 'yyyy-MM-dd');
 }
 
 function formatTime(date) {
-  let h = date.getHours();
-  const m = String(date.getMinutes()).padStart(2, '0');
-  const ampm = h >= 12 ? 'PM' : 'AM';
-  h = h % 12 || 12;
-  return `${h}:${m} ${ampm}`;
+  return Utilities.formatDate(date, TIME_ZONE, 'h:mm a');
 }
 
 function timestamp() {
-  return new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
-}
-
-function isValidEmail(e) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
-}
-
-function respond(obj) {
-  return ContentService
-    .createTextOutput(JSON.stringify(obj))
-    .setMimeType(ContentService.MimeType.JSON);
-}
-
-// SETUP INSTRUCTIONS (do this once):
-//
-// 1. Go to https://sheets.google.com — create a new spreadsheet
-//    Name it: "ERT — Site Data"
-//    Create TWO tabs (sheets) at the bottom:
-//      Tab 1: rename to "Email List"
-//        Row 1 headers: Timestamp | Email | Source
-//      Tab 2: rename to "Bookings"
-//        Row 1 headers: Timestamp | Name | Phone | Email | Date | Time | Duration | Price | Notes
-//
-// 2. Click Extensions → Apps Script
-//    Delete all existing code and paste THIS entire file
-//    Click Save, name the project "ERT Site"
-//
-// 3. Click Deploy → New Deployment
-//    Type: Web app
-//    Execute as: Me (restorewithellis@gmail.com)
-//    Who has access: Anyone
-//    Click Deploy → copy the Web App URL
-//
-// 4. Paste that URL into BOTH:
-//    - email-capture.js  →  const SHEET_URL = '...'
-//    - book.html         →  const BOOKING_URL = '...'
-//    (it's the same URL for both)
-// ──────────────────────────────────────────────────────
-
-function doPost(e) {
-  try {
-    const data = JSON.parse(e.postData.contents);
-
-    if (data.type === 'booking') {
-      return handleBooking(data);
-    } else {
-      return handleEmailSignup(data);
-    }
-  } catch (err) {
-    return respond({ success: false, error: err.message });
-  }
-}
-
-function doGet(e) {
-  return respond({ status: 'ERT Site Script is running ✓' });
-}
-
-// ── EMAIL SIGNUP ──
-function handleEmailSignup(data) {
-  const email  = (data.email  || '').toString().trim();
-  const source = (data.source || 'unknown').toString().trim();
-
-  if (!isValidEmail(email)) return respond({ success: false, error: 'Invalid email' });
-
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Email List');
-  const rows  = sheet.getDataRange().getValues();
-
-  // Duplicate check
-  for (let i = 1; i < rows.length; i++) {
-    if (rows[i][1] && rows[i][1].toString().toLowerCase() === email.toLowerCase()) {
-      return respond({ success: true, duplicate: true });
-    }
-  }
-
-  sheet.appendRow([timestamp(), email, source]);
-
-  MailApp.sendEmail({
-    to: 'restorewithellis@gmail.com',
-    subject: '✅ New ERT Email Subscriber',
-    body: `New subscriber!\n\nEmail: ${email}\nSource: ${source}\nTime: ${timestamp()}`
-  });
-
-  return respond({ success: true });
-}
-
-// ── BOOKING REQUEST ──
-function handleBooking(data) {
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Bookings');
-
-  sheet.appendRow([
-    timestamp(),
-    data.name     || '',
-    data.phone    || '',
-    data.email    || '',
-    data.date     || '',
-    data.time     || '',
-    data.duration || '',
-    data.price    || '',
-    data.notes    || ''
-  ]);
-
-  // Notify Zachary
-  MailApp.sendEmail({
-    to: 'restorewithellis@gmail.com',
-    subject: `📅 New Booking Request — ${data.date} at ${data.time}`,
-    body: `New booking request from the website!\n\n` +
-          `Name:     ${data.name}\n` +
-          `Phone:    ${data.phone}\n` +
-          `Email:    ${data.email}\n` +
-          `Date:     ${data.date}\n` +
-          `Time:     ${data.time}\n` +
-          `Duration: ${data.duration} (${data.price})\n` +
-          `Notes:    ${data.notes || 'None'}\n\n` +
-          `Reply to confirm or reschedule.`
-  });
-
-  // Confirmation to client
-  if (data.email && isValidEmail(data.email)) {
-    MailApp.sendEmail({
-      to: data.email,
-      subject: 'Your Booking Request — Ellis Restorative Therapies',
-      body: `Hi ${data.name},\n\n` +
-            `Thanks for requesting an appointment! Here's what we have on file:\n\n` +
-            `Date:     ${data.date}\n` +
-            `Time:     ${data.time}\n` +
-            `Duration: ${data.duration} (${data.price})\n\n` +
-            `Zachary will confirm your appointment within a few hours. ` +
-            `If you need to reach him sooner, call or text (209) 450-5296.\n\n` +
-            `See you soon,\nEllis Restorative Therapies\n` +
-            `restorewithellis.com`
-    });
-  }
-
-  return respond({ success: true });
-}
-
-// ── Helpers ──
-function respond(obj) {
-  return ContentService
-    .createTextOutput(JSON.stringify(obj))
-    .setMimeType(ContentService.MimeType.JSON);
-}
-
-function isValidEmail(e) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
-}
-
-function timestamp() {
-  return new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
-}
-//
-// 1. Go to https://sheets.google.com and create a new spreadsheet
-//    Name it: "ERT Email List"
-//    In Row 1, add these headers: Timestamp | Email | Source
-//
-// 2. In the spreadsheet, click Extensions → Apps Script
-//
-// 3. Delete all existing code and paste THIS entire file
-//
-// 4. Click Save (floppy disk icon), name the project "ERT Email Capture"
-//
-// 5. Click Deploy → New Deployment
-//    - Type: Web app
-//    - Description: ERT Email Capture
-//    - Execute as: Me (restorewithellis@gmail.com)
-//    - Who has access: Anyone
-//    Click Deploy
-//
-// 6. Copy the Web App URL it gives you — looks like:
-//    https://script.google.com/macros/s/AKfycb.../exec
-//
-// 7. Open email-capture.js and paste that URL into SHEET_URL at the top
-//
-// 8. Done! Every new subscriber will appear in the spreadsheet instantly.
-// ─────────────────────────────────────────────────────────────────────
-
-const SHEET_NAME = 'Sheet1'; // Change if you renamed the tab
-
-function doPost(e) {
-  try {
-    const data = JSON.parse(e.postData.contents);
-    const email  = (data.email  || '').toString().trim();
-    const source = (data.source || 'unknown').toString().trim();
-
-    if (!email || !isValidEmail(email)) {
-      return respond({ success: false, error: 'Invalid email' });
-    }
-
-    const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
-
-    // Check for duplicate
-    const existing = sheet.getDataRange().getValues();
-    for (let i = 1; i < existing.length; i++) {
-      if (existing[i][1] && existing[i][1].toString().toLowerCase() === email.toLowerCase()) {
-        return respond({ success: true, duplicate: true });
-      }
-    }
-
-    // Append new row
-    sheet.appendRow([
-      new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }),
-      email,
-      source
-    ]);
-
-    // Optional: send Zachary a notification email
-    sendNotification(email, source);
-
-    return respond({ success: true });
-
-  } catch (err) {
-    return respond({ success: false, error: err.message });
-  }
-}
-
-function doGet(e) {
-  // Health check — visiting the URL in browser should return OK
-  return respond({ status: 'ERT Email Capture is running' });
-}
-
-function respond(obj) {
-  return ContentService
-    .createTextOutput(JSON.stringify(obj))
-    .setMimeType(ContentService.MimeType.JSON);
+  return Utilities.formatDate(new Date(), TIME_ZONE, 'M/d/yyyy, h:mm a');
 }
 
 function isValidEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
-function sendNotification(email, source) {
-  // Optional — comment this out if you don't want notification emails
-  MailApp.sendEmail({
-    to: 'restorewithellis@gmail.com',
-    subject: '✅ New ERT Subscriber',
-    body: `New email subscriber:\n\nEmail: ${email}\nSource: ${source}\nTime: ${new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' })}\n\nView your list: https://sheets.google.com`
-  });
+function respond(payload) {
+  return ContentService
+    .createTextOutput(JSON.stringify(payload))
+    .setMimeType(ContentService.MimeType.JSON);
 }
+
+// Setup checklist:
+// 1. In the connected spreadsheet, create an "Email List" tab with: Timestamp | Email | Source.
+// 2. Create a "Bookings" tab with: Timestamp | Therapist | Name | Phone | Email | Date | Time | Duration | Price | Notes.
+// 3. Share Hunter's Google Calendar with restorewithellis@gmail.com (view event details).
+// 4. Paste this file into the Apps Script project, save, and Deploy → Manage deployments → Edit → New version.
+// 5. Keep the web-app deployment set to execute as restorewithellis@gmail.com and allow public access for the booking relay.

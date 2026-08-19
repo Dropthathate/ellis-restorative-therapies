@@ -79,6 +79,19 @@
 .field-input::placeholder { color: var(--muted); }
 select.field-input option { background: var(--deep); color: var(--white); }
 
+/* ── THERAPIST PICKER ── */
+.therapist-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.therapist-choice {
+  appearance: none; width: 100%; padding: 16px; text-align: left; cursor: pointer;
+  background: var(--deep); border: 1px solid var(--border); border-radius: 5px;
+  color: var(--white); font-family: 'Montserrat', sans-serif; transition: all 0.18s;
+}
+.therapist-choice:hover { border-color: var(--teal); transform: translateY(-1px); }
+.therapist-choice.selected { border-color: var(--teal); background: rgba(83, 214, 190, 0.08); box-shadow: inset 0 0 0 1px rgba(83, 214, 190, 0.18); }
+.therapist-choice-name { display: block; font-family: 'Cormorant Garamond', serif; font-size: 25px; line-height: 1; margin-bottom: 6px; }
+.therapist-choice-meta { display: block; color: var(--mid); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; line-height: 1.6; }
+.therapist-context { margin-top: 11px; color: var(--mid); font-size: 12px; line-height: 1.6; }
+
 /* ── CALENDAR ── */
 .cal-nav {
   display: flex; align-items: center;
@@ -222,6 +235,7 @@ select.field-input option { background: var(--deep); color: var(--white); }
   .booking-card { padding: 24px; }
   .field-grid { grid-template-columns: 1fr; }
   .field-grid .full { grid-column: 1; }
+  .therapist-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -252,7 +266,7 @@ select.field-input option { background: var(--deep); color: var(--white); }
   <div class="booking-header">
     <div class="section-label">Online Booking</div>
     <h1>Book Your <em>Session</em></h1>
-    <p>Select your session length, pick a date and time, and confirm — no phone call needed. You'll receive a confirmation email, and a brief intake form will follow before your first visit.</p>
+    <p>Choose your therapist, session length, and preferred time. We will send a therapist-specific confirmation after the request is reviewed.</p>
   </div>
 
   <!-- FORM CARD -->
@@ -271,6 +285,20 @@ select.field-input option { background: var(--deep); color: var(--white); }
       <div class="full">
         <label class="field-label" for="email">Email Address</label>
         <input id="email" class="field-input" type="email" placeholder="you@example.com" />
+      </div>
+      <div class="full">
+        <span class="field-label">Choose Your Therapist</span>
+        <div class="therapist-grid" role="group" aria-label="Choose your therapist">
+          <button type="button" class="therapist-choice selected" data-therapist="zachary" onclick="selectTherapist('zachary')">
+            <span class="therapist-choice-name">Zachary Ellis</span>
+            <span class="therapist-choice-meta">CAMTC #97101 · Monday–Thursday</span>
+          </button>
+          <button type="button" class="therapist-choice" data-therapist="hunter" onclick="selectTherapist('hunter')">
+            <span class="therapist-choice-name">Hunter Ellis</span>
+            <span class="therapist-choice-meta">CAMTC #103413 · Monday–Friday · 12:51 PM–8 PM</span>
+          </button>
+        </div>
+        <p class="therapist-context" id="therapist-context">Choose Zachary to view his current appointment availability.</p>
       </div>
       <div class="full">
         <label class="field-label" for="duration">Session Length</label>
@@ -352,7 +380,7 @@ select.field-input option { background: var(--deep); color: var(--white); }
       <span class="policy-icon">📋</span>
       <div>
         <strong>Intake Form</strong>
-        First-time clients will receive a health history and intake form via email prior to their session. This helps Zachary tailor your session safely and effectively.
+        First-time clients will receive a health history and intake form via email prior to their session. This helps your selected therapist tailor the session safely and effectively.
       </div>
     </div>
   </div>
@@ -362,7 +390,7 @@ select.field-input option { background: var(--deep); color: var(--white); }
     <input type="checkbox" id="consent-check" onclick="event.stopPropagation(); document.getElementById('consent-check').checked = !document.getElementById('consent-check').checked;" />
     <label for="consent-check" onclick="event.preventDefault();">
       <strong>Consent, Rights &amp; Liability Acknowledgement</strong><br><br>
-      By checking this box, I confirm that I have read and agree to the cancellation and practice policies above. I consent to receive neuromuscular therapy, bodywork, and related services provided by Zachary Ellis (CAMTC #97101) at Ellis Restorative Therapies.<br><br>
+      By checking this box, I confirm that I have read and agree to the cancellation and practice policies above. I consent to receive neuromuscular therapy, bodywork, and related services provided by my selected certified therapist at Ellis Restorative Therapies.<br><br>
       I understand that massage therapy is not a substitute for medical diagnosis, advice, or treatment. I acknowledge my right to stop or modify the session at any time and to have my questions answered before, during, or after my appointment. I take responsibility for disclosing any health conditions, medications, injuries, or concerns that may affect my session. I release Ellis Restorative Therapies and Zachary Ellis from liability arising from any undisclosed conditions.
     </label>
   </div>
@@ -379,9 +407,9 @@ select.field-input option { background: var(--deep); color: var(--white); }
   <!-- CONFIRMATION SCREEN -->
   <div class="booking-card confirm-screen" id="confirm-screen">
     <div class="confirm-icon">✅</div>
-    <h2>You're <em>Booked</em></h2>
-    <p>Your session has been confirmed. Zachary will see you soon.</p>
-    <p>Check your email for a confirmation. First-time clients will receive a brief health intake form — please complete it before your visit.</p>
+    <h2>Request <em>Received</em></h2>
+    <p id="confirm-message">Your selected therapist will review and confirm your requested appointment shortly.</p>
+    <p>Check your email for the therapist-specific confirmation. First-time clients will receive a brief health intake form before the visit.</p>
     <div class="confirm-detail" id="confirm-detail"></div>
     <div class="confirm-actions">
       <a href="index.html" class="btn btn-outline">← Back to Home</a>
@@ -430,7 +458,7 @@ select.field-input option { background: var(--deep); color: var(--white); }
       <p><a href="tel:2094505296">(209) 450-5296</a></p>
       <p><a href="mailto:restorewithellis@gmail.com">restorewithellis@gmail.com</a></p>
       <p>2209 Coffee Rd, Suite M<br>Modesto, CA 95355</p>
-      <p style="margin-top:8px;">Mon – Thu · 10AM – 7PM</p>
+      <p style="margin-top:8px;">Zachary: Mon – Thu · Hunter: Mon – Fri, 12:51PM – 8PM</p>
       <p style="margin-top:12px;"><a href="https://share.google/ljgQMAEz9CWuFBhU1" target="_blank" rel="noopener" style="color:var(--teal);">Google Business ↗</a></p>
     </div>
   </div>
@@ -444,153 +472,198 @@ select.field-input option { background: var(--deep); color: var(--white); }
 <script>
 const BOOKING_URL = '/proxy.php';
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const THERAPISTS = {
+  zachary: { name: 'Zachary Ellis', camtc: 'CAMTC #97101', schedule: 'Monday–Thursday availability' },
+  hunter: { name: 'Hunter Ellis', camtc: 'CAMTC #103413', schedule: 'Monday–Friday · 12:51 PM–8:00 PM' },
+};
+const PRICES = { 60: '$100', 90: '$150', 120: '$200' };
 
-let viewYear, viewMonth, selectedDate = null, selectedTime = null;
+let viewYear, viewMonth, selectedDate = null, selectedTime = null, selectedTherapist = 'zachary', availability = {};
 
 function initCal() {
-  const t = new Date();
-  viewYear = t.getFullYear();
-  viewMonth = t.getMonth();
+  const today = new Date();
+  viewYear = today.getFullYear();
+  viewMonth = today.getMonth();
+  updateTherapistUI();
   renderCal();
+}
+
+function selectTherapist(key) {
+  selectedTherapist = key;
+  selectedDate = null;
+  selectedTime = null;
+  availability = {};
+  document.getElementById('slots-wrap').innerHTML = '<span class="slots-empty">Select a date above to see available times.</span>';
+  updateTherapistUI();
+  renderCal();
+}
+
+function updateTherapistUI() {
+  const therapist = THERAPISTS[selectedTherapist];
+  document.querySelectorAll('.therapist-choice').forEach((button) => {
+    button.classList.toggle('selected', button.dataset.therapist === selectedTherapist);
+  });
+  document.getElementById('therapist-context').textContent =
+    `${therapist.name} · ${therapist.camtc} · ${therapist.schedule}.`;
 }
 
 function prevMonth() {
   if (--viewMonth < 0) { viewMonth = 11; viewYear--; }
+  selectedDate = null;
+  selectedTime = null;
   renderCal();
 }
 
 function nextMonth() {
   if (++viewMonth > 11) { viewMonth = 0; viewYear++; }
+  selectedDate = null;
+  selectedTime = null;
   renderCal();
 }
 
-function renderCal() {
+async function renderCal() {
   document.getElementById('cal-month-label').textContent = `${MONTHS[viewMonth]} ${viewYear}`;
+  availability = {};
+  paintCalendar();
+  try {
+    const response = await fetch(`${BOOKING_URL}?action=availability&month=${viewMonth}&year=${viewYear}&therapist=${selectedTherapist}`);
+    const data = await response.json();
+    if (!data.success) throw new Error(data.error || 'Availability is temporarily unavailable.');
+    availability = data.availability || {};
+  } catch (error) {
+    document.getElementById('slots-wrap').innerHTML = '<span class="slots-empty">Availability is temporarily unavailable. Please call (209) 450-5296.</span>';
+  }
+  paintCalendar();
+}
+
+function paintCalendar() {
   const grid = document.getElementById('cal-grid');
   grid.innerHTML = '';
-  const today = new Date(); today.setHours(0,0,0,0);
+  const today = new Date(); today.setHours(0, 0, 0, 0);
   const firstDay = new Date(viewYear, viewMonth, 1).getDay();
   const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
 
-  for (let i = 0; i < firstDay; i++) {
-    const e = document.createElement('div');
-    e.className = 'cal-day empty';
-    grid.appendChild(e);
+  for (let i = 0; i < firstDay; i += 1) {
+    const empty = document.createElement('div');
+    empty.className = 'cal-day empty';
+    grid.appendChild(empty);
   }
 
-  for (let d = 1; d <= daysInMonth; d++) {
-    const date = new Date(viewYear, viewMonth, d);
-    const dow = date.getDay();
-    const dateStr = date.toISOString().split('T')[0];
-    const closed = dow === 0 || dow === 5 || dow === 6;
-    const past = date < today;
-
-    const cell = document.createElement('div');
+  for (let day = 1; day <= daysInMonth; day += 1) {
+    const date = new Date(viewYear, viewMonth, day, 12, 0, 0);
+    const dateStr = localDateKey(date);
+    const status = availability[dateStr];
+    const cell = document.createElement('button');
+    cell.type = 'button';
     cell.className = 'cal-day';
-    cell.textContent = d;
+    cell.textContent = String(day);
 
-    if (past) { cell.classList.add('past'); }
-    else if (closed) { cell.classList.add('closed'); }
+    if (date < today) cell.classList.add('past');
+    else if (!status || status === 'full') cell.classList.add('closed');
     else {
       if (dateStr === selectedDate) cell.classList.add('selected');
+      cell.title = status === 'partial' ? 'Limited availability' : 'Available';
       cell.onclick = () => pickDate(dateStr, cell);
     }
     grid.appendChild(cell);
   }
 }
 
+function localDateKey(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
 function pickDate(dateStr, cell) {
   selectedDate = dateStr;
   selectedTime = null;
-  document.querySelectorAll('.cal-day').forEach(c => c.classList.remove('selected'));
+  document.querySelectorAll('.cal-day').forEach((day) => day.classList.remove('selected'));
   cell.classList.add('selected');
   loadSlots(dateStr);
 }
 
 async function loadSlots(date) {
   const wrap = document.getElementById('slots-wrap');
-  wrap.innerHTML = '<span class="slots-empty">Loading…</span>';
+  wrap.innerHTML = '<span class="slots-empty">Loading times…</span>';
   try {
-    const res = await fetch(`${BOOKING_URL}?action=slots&date=${date}`);
-    const data = await res.json();
+    const response = await fetch(`${BOOKING_URL}?action=slots&date=${date}&therapist=${selectedTherapist}`);
+    const data = await response.json();
+    if (!data.success) throw new Error(data.error || 'Unable to load available times.');
     renderSlots(data.slots || []);
-  } catch(e) {
-    // Fallback to schedule-based slots if CORS not yet fixed
-    const month = new Date(date).getMonth();
-    const isSummer = month >= 4 && month <= 6;
-    renderSlots(isSummer
-      ? ["12:30 PM","1:30 PM","2:30 PM","3:30 PM","4:30 PM","5:30 PM","6:30 PM"]
-      : ["10:00 AM","11:00 AM","12:00 PM","1:00 PM","2:00 PM","3:00 PM","4:00 PM","5:00 PM"]
-    );
+  } catch (error) {
+    wrap.innerHTML = '<span class="slots-empty">Times are temporarily unavailable. Please call (209) 450-5296.</span>';
   }
 }
 
 function renderSlots(slots) {
   const wrap = document.getElementById('slots-wrap');
   wrap.innerHTML = '';
-  if (!slots.length) { wrap.innerHTML = '<span class="slots-empty">No availability for this date.</span>'; return; }
-  slots.forEach(t => {
-    const btn = document.createElement('button');
-    btn.className = 'slot-btn' + (t === selectedTime ? ' selected' : '');
-    btn.textContent = t;
-    btn.onclick = () => {
-      document.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('selected'));
-      btn.classList.add('selected');
-      selectedTime = t;
+  if (!slots.length) {
+    wrap.innerHTML = '<span class="slots-empty">No available times remain for this therapist on this date.</span>';
+    return;
+  }
+  slots.forEach((time) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'slot-btn' + (time === selectedTime ? ' selected' : '');
+    button.textContent = time;
+    button.onclick = () => {
+      document.querySelectorAll('.slot-btn').forEach((slot) => slot.classList.remove('selected'));
+      button.classList.add('selected');
+      selectedTime = time;
     };
-    wrap.appendChild(btn);
+    wrap.appendChild(button);
   });
 }
 
 function toggleConsent() {
-  const cb = document.getElementById('consent-check');
-  cb.checked = !cb.checked;
+  const checkbox = document.getElementById('consent-check');
+  checkbox.checked = !checkbox.checked;
 }
 
 async function submitBooking() {
-  const name     = document.getElementById('name').value.trim();
-  const phone    = document.getElementById('phone').value.trim();
-  const email    = document.getElementById('email').value.trim();
+  const name = document.getElementById('name').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const email = document.getElementById('email').value.trim();
   const duration = document.getElementById('duration').value;
-  const consent  = document.getElementById('consent-check').checked;
+  const consent = document.getElementById('consent-check').checked;
+  const therapist = THERAPISTS[selectedTherapist];
 
   if (!name || !phone || !email) { alert('Please complete all contact fields.'); return; }
   if (!selectedDate || !selectedTime) { alert('Please select a date and time.'); return; }
   if (!consent) { alert('Please read and accept the consent and policy statement to continue.'); return; }
 
-  const btn = document.getElementById('submit-btn');
-  btn.textContent = 'Submitting…';
-  btn.classList.add('btn-loading');
+  const button = document.getElementById('submit-btn');
+  button.textContent = 'Sending request…';
+  button.classList.add('btn-loading');
 
   try {
-    const data = await fetch(
-      `/proxy.php?action=book` +
-      `&name=${encodeURIComponent(name)}` +
-      `&phone=${encodeURIComponent(phone)}` +
-      `&email=${encodeURIComponent(email)}` +
-      `&date=${encodeURIComponent(selectedDate)}` +
-      `&time=${encodeURIComponent(selectedTime)}` +
-      `&duration=${encodeURIComponent(duration)}`
-    ).then(r => r.json());
-
-    if (!data.success) {
-      alert(data.error === 'Taken' ? 'That time was just taken. Please pick another slot.' : 'Booking failed. Please call (209) 450-5296.');
-      btn.textContent = 'Confirm Booking';
-      btn.classList.remove('btn-loading');
-      return;
-    }
-  } catch(e) {
-    alert('Connection error. Please call (209) 450-5296.');
-    btn.textContent = 'Confirm Booking';
-    btn.classList.remove('btn-loading');
+    const response = await fetch(BOOKING_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'booking', therapist: selectedTherapist, name, phone, email,
+        date: selectedDate, time: selectedTime, duration, price: PRICES[duration], notes: '',
+      }),
+    });
+    const data = await response.json();
+    if (!data.success) throw new Error(data.error || 'Booking request failed.');
+  } catch (error) {
+    alert(`${error.message || 'Booking request failed.'} Please call (209) 450-5296.`);
+    button.textContent = 'Confirm Booking';
+    button.classList.remove('btn-loading');
     return;
   }
 
   const labels = { 60: '60 Min · $100 — Neuromuscular Reset', 90: '90 Min · $150 — Deep Restorative', 120: '120 Min · $200 — Complete Recovery' };
+  document.getElementById('confirm-message').textContent = `${therapist.name} will review and confirm your requested appointment shortly.`;
   document.getElementById('confirm-detail').innerHTML =
-    `<span class="cd-label">Booking Summary</span>
+    `<span class="cd-label">Booking Request</span>
      <strong>${name}</strong><br>
      <span style="color:var(--mid)">${email} &nbsp;·&nbsp; ${phone}</span><br><br>
+     <span style="color:var(--white);font-weight:600;">${therapist.name}</span><br>
      <span style="color:var(--teal);font-weight:600;">${selectedDate} &nbsp;at&nbsp; ${selectedTime}</span><br>
      <span style="color:var(--mid)">${labels[duration]}</span>`;
 

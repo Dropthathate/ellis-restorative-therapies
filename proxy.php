@@ -1,47 +1,87 @@
 ﻿<?php
-$allowed = ['availability', 'slots', 'book'];
-$action = $_GET['action'] ?? '';
+declare(strict_types=1);
 
-if (!in_array($action, $allowed)) {
-  http_response_code(400);
-  exit('Bad request');
+// Server-side relay for the ERT Google Apps Script. Booking data is submitted by POST
+// so client contact information is not placed in the browser URL.
+header('Content-Type: application/json; charset=utf-8');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type');
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+  http_response_code(204);
+  exit;
 }
 
-$base = 'https://script.google.com/macros/s/AKfycbwLS377dvlP5TRgZviL5Pmaj_RBFbeXUTszmU7KbcEdyAyLA8rURceBGq5GWro_cAR9/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwLS377dvlP5TRgZviL5Pmaj_RBFbeXUTszmU7KbcEdyAyLA8rURceBGq5GWro_cAR9/exec';
 
-$params = $_GET;
-unset($params['callback']); // strip callback — we handle CORS directly
-
-$url = $base . '?' . http_build_query($params);
-
-<?php
-$allowed = ['availability', 'slots', 'book'];
-$action = $_GET['action'] ?? '';
-
-if (!in_array($action, $allowed)) {
-  http_response_code(400);
-  exit('Bad request');
+function sendResponse(string $body, int $status = 200): void {
+  http_response_code($status);
+  echo $body;
+  exit;
 }
 
-$base = 'https://script.google.com/macros/s/AKfycbwLS377dvlP5TRgZviL5Pmaj_RBFbeXUTszmU7KbcEdyAyLA8rURceBGq5GWro_cAR9/exec';
+function callAppsScript(string $url, string $method, ?string $body = null): string {
+  $request = curl_init($url);
+  curl_setopt_array($request, [
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_FOLLOWLOCATION => true,
+    CURLOPT_TIMEOUT => 20,
+    CURLOPT_SSL_VERIFYPEER => true,
+  ]);
 
-$params = $_GET;
-unset($params['callback']); // strip callback — we handle CORS directly
+  if ($method === 'POST') {
+    curl_setopt($request, CURLOPT_POST, true);
+    curl_setopt($request, CURLOPT_POSTFIELDS, $body);
+    curl_setopt($request, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+    if (defined('CURLOPT_POSTREDIR') && defined('CURL_REDIR_POST_ALL')) {
+      curl_setopt($request, CURLOPT_POSTREDIR, CURL_REDIR_POST_ALL);
+    }
+  }
 
-$url = $base . '?' . http_build_query($params);
+  $response = curl_exec($request);
+  $error = curl_error($request);
+  $status = (int) curl_getinfo($request, CURLINFO_HTTP_CODE);
+  curl_close($request);
 
-$ch = curl_init();
-curl_setopt($ch, CURLOPT_URL, $url);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-$response = curl_exec($ch);
-curl_close($ch);
+  if ($response === false || $status >= 400) {
+    sendResponse(json_encode(['success' => false, 'error' => 'The booking service is temporarily unavailable.']), 502);
+  }
+  if ($error) {
+    sendResponse(json_encode(['success' => false, 'error' => 'The booking service is temporarily unavailable.']), 502);
+  }
 
-header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
-echo $response;
+  return (string) $response;
+}
 
-header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
-echo $response;
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  $payload = json_decode((string) file_get_contents('php://input'), true);
+  if (!is_array($payload) || ($payload['action'] ?? '') !== 'booking') {
+    sendResponse(json_encode(['success' => false, 'error' => 'Invalid booking request.']), 400);
+  }
+
+  $allowed = ['action', 'therapist', 'name', 'phone', 'email', 'date', 'time', 'duration', 'price', 'notes'];
+  $clean = [];
+  foreach ($allowed as $key) {
+    if (isset($payload[$key])) $clean[$key] = substr(trim((string) $payload[$key]), 0, 1000);
+  }
+  sendResponse(callAppsScript(APPS_SCRIPT_URL, 'POST', json_encode($clean)));
+}
+
+$action = (string) ($_GET['action'] ?? '');
+if (!in_array($action, ['availability', 'slots'], true)) {
+  sendResponse(json_encode(['success' => false, 'error' => 'Unsupported request.']), 400);
+}
+
+$params = [
+  'action' => $action,
+  'therapist' => substr(trim((string) ($_GET['therapist'] ?? 'zachary')), 0, 32),
+];
+if ($action === 'availability') {
+  $params['month'] = (string) ((int) ($_GET['month'] ?? -1));
+  $params['year'] = (string) ((int) ($_GET['year'] ?? 0));
+} else {
+  $params['date'] = substr(trim((string) ($_GET['date'] ?? '')), 0, 10);
+}
+
+sendResponse(callAppsScript(APPS_SCRIPT_URL . '?' . http_build_query($params), 'GET'));
