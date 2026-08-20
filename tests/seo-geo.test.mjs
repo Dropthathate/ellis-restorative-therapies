@@ -8,6 +8,7 @@ const booking = read('book.html');
 const robots = read('robots.txt');
 const sitemap = read('sitemap.xml');
 const llms = read('llms.txt');
+const informationalPages = ['about.html', 'services.html', 'contact.html', 'blog.html'].map((name) => ({ name, html: read(name) }));
 
 const schemaMatch = index.match(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/);
 assert.ok(schemaMatch, 'Homepage must contain JSON-LD');
@@ -31,5 +32,15 @@ assert.match(sitemap, /https:\/\/www\.restorewithellis\.com\/services\.html/);
 assert.match(sitemap, /https:\/\/www\.restorewithellis\.com\/book\.html/);
 assert.match(llms, /Ellis Restorative Therapies/);
 assert.match(llms, /client\.restorewithellis\.com/);
+
+for (const { name, html } of informationalPages) {
+  assert.doesNotMatch(html, /aggregateRating|reviewCount|ratingValue/);
+  assert.match(html, /Ellis Restorative Therapies/);
+  assert.match(html, /2209 Coffee Rd, Suite M/);
+  assert.match(html, /instagram\.com\/ellisrestorativetherapies/);
+  assert.match(html, /facebook\.com\/p\/Ellis-Restorative-Therapies/);
+  assert.doesNotMatch(html, /HSA\/FSA/);
+  console.log(`${name} local entity assertions passed.`);
+}
 
 console.log('SEO and GEO entity assertions passed.');
