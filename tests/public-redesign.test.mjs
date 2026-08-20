@@ -9,6 +9,8 @@ assert.equal(existsSync(new URL('../favicon.ico', import.meta.url)), true);
 
 assert.match(index, /Zachary Ellis/);
 assert.match(index, /Hunter Ellis/);
+assert.match(index, /class="hero-crest"><img src="logo\.png"/);
+assert.match(index, /brand-mark brand-mark-logo/);
 assert.match(index, /CAMTC #97101/);
 assert.match(index, /CAMTC #103413/);
 assert.match(index, /book\.html\?therapist=zachary/);
@@ -17,9 +19,9 @@ assert.match(index, /https:\/\/client\.restorewithellis\.com/);
 assert.doesNotMatch(index, /Google Reviewer|aggregateRating|HSA\/FSA/i);
 assert.match(css, /\.therapist-grid/);
 assert.match(css, /\.therapist-card/);
-assert.match(css, /--ink:#f4f6f4/);
-assert.match(css, /--teal:#267d86/);
-assert.match(css, /--gold:#9b3d48/);
+assert.match(css, /--ink:#cad5d3/);
+assert.match(css, /--teal:#16717c/);
+assert.match(css, /--gold:#963641/);
 assert.match(booking, /new URLSearchParams\(window\.location\.search\)\.get\('therapist'\)/);
 assert.match(booking, /THERAPISTS\[requestedTherapist\]/);
 
