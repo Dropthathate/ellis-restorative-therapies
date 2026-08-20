@@ -26,6 +26,8 @@ Use the exact same business name, address, telephone number, website, and bookin
 
 Use **Ellis Restorative Therapies** as the business name exactly. Confirm that the address, phone, website, booking link, operating hours, and category accurately match the real practice. Choose **Massage therapist** as the primary category only if it accurately describes the business; do not add loosely related categories simply to capture searches.
 
+**Verified August 20, 2026:** The owner’s Google Business Profile Manager contains a **verified** listing named **Ellis Restorative Therapies** at **2209 Coffee Rd, Suite M, Modesto, CA 95355**. The next work is profile completeness and content alignment, not creating a duplicate listing.
+
 Use this business description:
 
 > Ellis Restorative Therapies is a private Modesto practice offering therapeutic massage, neuromuscular massage, and restorative bodywork. Zachary Ellis and Hunter Ellis provide focused 60, 90, and 120-minute sessions at 2209 Coffee Rd, Suite M in Modesto, CA. Choose your therapist and view live appointment availability online.

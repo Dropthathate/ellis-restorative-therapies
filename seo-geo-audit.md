@@ -14,6 +14,13 @@
 | Primary public services | Therapeutic massage, neuromuscular therapy, clinical bodywork |
 | Instagram | `https://www.instagram.com/ellisrestorativetherapies/` |
 | Facebook | `https://www.facebook.com/p/Ellis-Restorative-Therapies-61580974690488/` |
+| Google Business Profile | Verified existing listing for Ellis Restorative Therapies at the same Coffee Road address |
+
+## Google Business Profile verification
+
+On August 20, 2026, the owner’s Google Business Profile Manager showed a verified **Ellis Restorative Therapies** listing at **2209 Coffee Rd, Suite M, Modesto, CA 95355**. The managed search view reported a 5.0 rating from 29 Google reviews, five new reviews, and 307 profile search-result views in the prior month. Google also presented profile-completion prompts for business details, photos, booking, directions, and updates.
+
+The owner approved factual profile optimization, but the browser session changed and Google presented a CAPTCHA before the edits could be submitted. No profile fields, posts, photos, or reviews were changed in that blocked session. The approved description, service set, booking URL, logo, and therapist-photo plan remain in `local-profile-optimization-playbook.md` for the next authenticated, CAPTCHA-free Google Business session.
 
 ## Current strengths
 
