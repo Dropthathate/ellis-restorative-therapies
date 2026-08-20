@@ -2,7 +2,7 @@
 
 ## Implemented behavior
 
-The booking page now requires clients to select **Zachary Ellis** or **Hunter Ellis** before selecting an appointment date and time. Hunter is shown with **CAMTC #103413**, Monday–Friday availability from **12:51 PM to 8:00 PM**, first- and third-weekend morning availability from **9:00 AM to 1:00 PM**, and the same 60-, 90-, and 120-minute prices as Zachary.
+The booking page now requires clients to select **Zachary Ellis** or **Hunter Ellis** before selecting an appointment date and time. Hunter is shown with **CAMTC #103413**, Monday–Friday availability from **9:00 AM to 1:00 PM**, first- and third-weekend morning availability from **9:00 AM to 1:00 PM**, and the same 60-, 90-, and 120-minute prices as Zachary.
 
 Booking requests include the selected therapist. Hunter requests route to `ellisrestorative@gmail.com` and Zachary is copied on those notices. Zachary requests route to `restorewithellis@gmail.com`. Client confirmations identify the selected therapist.
 
@@ -16,4 +16,4 @@ Booking requests include the selected therapist. Hunter requests route to `ellis
 
 ## Validation notes
 
-The booking page JavaScript passed a local syntax check. The therapist toggle was visually verified: choosing Hunter changes the displayed therapist context to Hunter Ellis, CAMTC #103413, the Monday–Friday 12:51 PM–8:00 PM schedule, and the first- and third-weekend 9:00 AM–1:00 PM schedule. Live availability and notification delivery require the Apps Script deployment and calendar-sharing steps above; they cannot run from a local file preview.
+The booking page JavaScript passed a local syntax check. The therapist toggle was visually verified: choosing Hunter changes the displayed therapist context to Hunter Ellis, CAMTC #103413, the Monday–Friday 9:00 AM–1:00 PM schedule, and the first- and third-weekend 9:00 AM–1:00 PM schedule. Live availability and notification delivery require the Apps Script deployment and calendar-sharing steps above; they cannot run from a local file preview.

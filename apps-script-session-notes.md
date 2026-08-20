@@ -50,10 +50,12 @@ The public relay update was committed and pushed to the `Dropthathate/ellis-rest
 
 ## Confirmed Hunter weekend schedule — August 20, 2026
 
-Hunter Ellis is available on the **first and third Saturdays and Sundays of each calendar month from 9:00 AM–1:00 PM**. The prepared booking module treats a weekend as first or third according to the date’s calendar-week position, preserves Hunter’s Monday–Friday 12:51 PM–8:00 PM schedule, and filters weekend candidate times by session duration so no appointment extends past 1:00 PM. This source change requires an updated E.R.T SITE Apps Script web-app deployment before the production availability endpoint can expose those weekend dates.
+Hunter Ellis is available **Monday through Friday from 9:00 AM–1:00 PM**, plus the **first and third Saturdays and Sundays of each calendar month from 9:00 AM–1:00 PM**. The prepared booking module treats a weekend as first or third according to the date’s calendar-week position and filters every Hunter candidate time by session duration so no appointment extends past 1:00 PM. This corrected source change requires an updated E.R.T SITE Apps Script web-app deployment before the production availability endpoint can expose those hours.
 
 ## Current deployment access check
 
 The available browser did not have an authenticated Google Apps Script session during the weekend-schedule update. The legacy projects dashboard route returned an unavailable page, and the current Apps Script home route redirected to the public documentation with a visible **Sign in** action. The source and automated local tests are ready; publishing the web-app version requires the owner to sign in to the Google account that owns the **E.R.T SITE** project, open that existing project, and authorize the deployment workflow.
 
 The existing production endpoint was checked for **September 2026** before deployment. It currently returns every Saturday and Sunday as `closed`, including September 5–6 and September 19–20. This is expected until a new E.R.T SITE web-app version containing the weekend rule is deployed. After deployment, those four dates should return as open or partial when Hunter’s calendar has available time; September 12–13 and September 26–27 should remain closed.
+
+The Google account chooser confirms that `restorewithellis@gmail.com` is available in the browser but currently **signed out**. No Google account credentials or deployment permissions were entered or used.

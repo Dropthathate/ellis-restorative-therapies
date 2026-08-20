@@ -12,4 +12,4 @@ The actual ERT mark contains polished teal-blue lettering, steel/silver framing,
 
 ## Booking-link check
 
-The Hunter profile action opens `book.html?therapist=hunter`. The booking page correctly identifies **Hunter Ellis · CAMTC #103413 · Monday–Friday · 12:51 PM–8:00 PM** as the active therapist. The local preview cannot resolve the production-only `/proxy.php` availability relay, so it displays the expected local-preview availability fallback; the existing live booking workflow was not altered by this visual redesign.
+The Hunter profile action opens `book.html?therapist=hunter`. The booking page identifies **Hunter Ellis · CAMTC #103413 · Monday–Friday and first/third weekends · 9:00 AM–1:00 PM** as the active therapist. The local preview cannot resolve the production-only `/proxy.php` availability relay, so it displays the expected local-preview availability fallback; the existing live booking workflow is updated only after the matching Apps Script and Hostinger deployment steps are complete.

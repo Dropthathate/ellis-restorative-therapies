@@ -3,9 +3,8 @@
 
 const HUNTER_EMAIL = 'ellisrestorative@gmail.com';
 const HUNTER_CAMTC = 'CAMTC #103413';
-const HUNTER_WEEKDAY_SLOT_TIMES = ['12:51 PM', '3:21 PM', '5:51 PM'];
+const HUNTER_MORNING_SLOT_TIMES = ['9:00 AM', '10:30 AM', '12:00 PM'];
 const HUNTER_WEEKDAY_OPEN_DAYS = [1, 2, 3, 4, 5];
-const HUNTER_WEEKEND_SLOT_TIMES = ['9:00 AM', '10:30 AM', '12:00 PM'];
 const HUNTER_WEEKEND_CLOSE_MINUTES = 13 * 60;
 
 const ERT_THERAPISTS = {
@@ -162,10 +161,10 @@ function getHunterSlots(dateStr, duration, therapist) {
 function getHunterScheduleForDate(date) {
   const dayOfWeek = date.getDay();
   if (HUNTER_WEEKDAY_OPEN_DAYS.includes(dayOfWeek)) {
-    return { label: 'weekday', slotTimes: HUNTER_WEEKDAY_SLOT_TIMES };
+    return { label: 'weekday', slotTimes: HUNTER_MORNING_SLOT_TIMES, closeMinutes: HUNTER_WEEKEND_CLOSE_MINUTES };
   }
   if ((dayOfWeek === 0 || dayOfWeek === 6) && isHunterFirstOrThirdWeekend(date)) {
-    return { label: 'first-or-third-weekend', slotTimes: HUNTER_WEEKEND_SLOT_TIMES, closeMinutes: HUNTER_WEEKEND_CLOSE_MINUTES };
+    return { label: 'first-or-third-weekend', slotTimes: HUNTER_MORNING_SLOT_TIMES, closeMinutes: HUNTER_WEEKEND_CLOSE_MINUTES };
   }
   return null;
 }

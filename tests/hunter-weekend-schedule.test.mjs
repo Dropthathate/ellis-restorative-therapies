@@ -40,6 +40,8 @@ assert.deepEqual(slotsFor('2026-08-01', 60), ['9:00 AM', '10:30 AM', '12:00 PM']
 assert.deepEqual(slotsFor('2026-08-01', 90), ['9:00 AM', '10:30 AM']);
 assert.deepEqual(slotsFor('2026-08-01', 120), ['9:00 AM', '10:30 AM']);
 assert.deepEqual(slotsFor('2026-08-08', 60), []);
-assert.deepEqual(slotsFor('2026-08-17', 60), ['12:51 PM', '3:21 PM', '5:51 PM']);
+assert.deepEqual(slotsFor('2026-08-17', 60), ['9:00 AM', '10:30 AM', '12:00 PM']);
+assert.deepEqual(slotsFor('2026-08-17', 90), ['9:00 AM', '10:30 AM']);
+assert.deepEqual(slotsFor('2026-08-17', 120), ['9:00 AM', '10:30 AM']);
 
 console.log('Hunter first- and third-weekend availability assertions passed.');
