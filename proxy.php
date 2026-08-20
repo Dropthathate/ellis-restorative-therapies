@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 declare(strict_types=1);
 
 // Server-side relay for the ERT Google Apps Script. Booking data is submitted by POST
