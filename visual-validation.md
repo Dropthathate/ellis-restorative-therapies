@@ -21,3 +21,7 @@ The local homepage review confirmed that the large official ERT logo treatment i
 The supplied AMTA California Chapter member PNG was then copied byte-for-byte into the public-site source. A cache-busted local source review confirmed that the `<img>` element now loads `amta-california-chapter-member-logo.png` with the correct AMTA California Chapter member alt text; it replaced the interim text-only treatment without generating or altering an AMTA mark.
 
 After review of CAMTC’s published terms, the copied CAMTC image was removed. A final local review confirms a clearly legible **CAMTC** text-only certification card with Zachary and Hunter’s provided certificate numbers, alongside the supplied unaltered AMTA California Chapter member mark. The credential section remains visually balanced, avoids an implied CAMTC endorsement, and preserves the prominent detailed ERT mark.
+
+## Live-site baseline before Hostinger upload
+
+On August 20, 2026, `https://www.restorewithellis.com/` still rendered the older dark single-therapist homepage. It did not yet display the equal Zachary/Hunter profiles, Hunter’s confirmed schedule, the preparation panel, the supplied AMTA member mark, or the SOMASYNC AI / AALIYAH systems attribution. This is expected until the owner uploads and extracts the prepared public-site ZIP in the main Hostinger `public_html` folder.
