@@ -59,3 +59,9 @@ The available browser did not have an authenticated Google Apps Script session d
 The existing production endpoint was checked for **September 2026** before deployment. It currently returns every Saturday and Sunday as `closed`, including September 5–6 and September 19–20. This is expected until a new E.R.T SITE web-app version containing the weekend rule is deployed. After deployment, those four dates should return as open or partial when Hunter’s calendar has available time; September 12–13 and September 26–27 should remain closed.
 
 The Google account chooser confirms that `restorewithellis@gmail.com` is available in the browser but currently **signed out**. No Google account credentials or deployment permissions were entered or used.
+
+After the owner reported that the account was open in another window, the connected browser session was rechecked at the Apps Script dashboard. It still renders the public Google developer page with a visible **Sign in** action, so the authenticated other window is not currently shared with this automation session. No Apps Script project or deployment controls are available here.
+
+## Production verification — corrected Hunter morning schedule
+
+The owner deployed the corrected E.R.T SITE web-app version on August 20, 2026. A read-only verification of the live `/exec` endpoint returned Hunter availability as open for the first weekend of September (**September 5–6**) and third weekend (**September 19–20**), while second-weekend dates (**September 12–13**) and fourth-weekend dates (**September 26–27**) remained closed. The production slot request for Saturday, September 5 returned exactly `9:00 AM`, `10:30 AM`, and `12:00 PM`. No booking was submitted during this verification.

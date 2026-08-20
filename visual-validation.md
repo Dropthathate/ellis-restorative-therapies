@@ -13,3 +13,9 @@ The source-level review found no rendering blocker. The final Hostinger package 
 The Hostinger control-panel address was opened on 2026-08-20. The available browser session displayed only the Hostinger loading view and no authenticated workspace or file manager. No files were uploaded and no site settings were changed. Deployment therefore remains an owner-controlled action requiring an authenticated Hostinger session and explicit confirmation before replacing website files.
 
 A second access check after the user requested continuation likewise returned the Hostinger loading view rather than an available authenticated website workspace. No deployment action has been performed.
+
+## Trust, preparation, and systems-attribution review
+
+The local homepage review confirmed that the large official ERT logo treatment is visible as a distinct trust section; the navigation reaches the new **Before your session** section; its four preparation cards remain legible at desktop width; and the HSA/FSA panel is clearly scoped as a question-and-confirmation path rather than a statement of acceptance. The footer presents **Powered by SOMASYNC AI · AALIYAH** as systems attribution, separated from the therapists and care messaging. The CAMTC mark is displayed in its supplied, unmodified form. An official AMTA member-logo file still requires download from the relevant member account before it can replace the text-only AMTA credential treatment.
+
+The supplied AMTA California Chapter member PNG was then copied byte-for-byte into the public-site source. A cache-busted local source review confirmed that the `<img>` element now loads `amta-california-chapter-member-logo.png` with the correct AMTA California Chapter member alt text; it replaced the interim text-only treatment without generating or altering an AMTA mark.
