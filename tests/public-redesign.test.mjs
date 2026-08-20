@@ -1,9 +1,11 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 
 const index = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 const css = readFileSync(new URL('../public-redesign.css', import.meta.url), 'utf8');
 const booking = readFileSync(new URL('../book.html', import.meta.url), 'utf8');
+
+assert.equal(existsSync(new URL('../favicon.ico', import.meta.url)), true);
 
 assert.match(index, /Zachary Ellis/);
 assert.match(index, /Hunter Ellis/);
