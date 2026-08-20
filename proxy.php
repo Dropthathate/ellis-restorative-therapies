@@ -34,9 +34,6 @@ function callAppsScript(string $url, string $method, ?string $body = null): stri
     curl_setopt($request, CURLOPT_POST, true);
     curl_setopt($request, CURLOPT_POSTFIELDS, $body);
     curl_setopt($request, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-    if (defined('CURLOPT_POSTREDIR') && defined('CURL_REDIR_POST_ALL')) {
-      curl_setopt($request, CURLOPT_POSTREDIR, CURL_REDIR_POST_ALL);
-    }
   }
 
   $response = curl_exec($request);
