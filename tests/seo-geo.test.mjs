@@ -40,7 +40,13 @@ for (const { name, html } of informationalPages) {
   assert.match(html, /instagram\.com\/ellisrestorativetherapies/);
   assert.match(html, /facebook\.com\/p\/Ellis-Restorative-Therapies/);
   assert.doesNotMatch(html, /HSA\/FSA/);
+  assert.match(html, /ert-info-pages\.css/);
+  assert.match(html, /<body class="ert-info-page">/);
   console.log(`${name} local entity assertions passed.`);
 }
+
+assert.doesNotMatch(read('blog.html'), /Client Reviews|7 Google Reviews|★★★★★/);
+assert.match(read('ert-info-pages.css'), /#8e303b/);
+assert.match(read('ert-info-pages.css'), /#16717c/);
 
 console.log('SEO and GEO entity assertions passed.');
