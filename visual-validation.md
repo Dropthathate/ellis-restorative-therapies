@@ -25,3 +25,5 @@ After review of CAMTC’s published terms, the copied CAMTC image was removed. A
 ## Live-site baseline before Hostinger upload
 
 On August 20, 2026, `https://www.restorewithellis.com/` still rendered the older dark single-therapist homepage. It did not yet display the equal Zachary/Hunter profiles, Hunter’s confirmed schedule, the preparation panel, the supplied AMTA member mark, or the SOMASYNC AI / AALIYAH systems attribution. This is expected until the owner uploads and extracts the prepared public-site ZIP in the main Hostinger `public_html` folder.
+
+A second live check immediately afterward confirmed the same pre-upload state. The existing popup and legacy review section are still present on the live domain, so a successful Hostinger extraction can be verified by their absence alongside the new trust and preparation sections.
