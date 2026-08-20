@@ -481,6 +481,8 @@ const PRICES = { 60: '$100', 90: '$150', 120: '$200' };
 let viewYear, viewMonth, selectedDate = null, selectedTime = null, selectedTherapist = 'zachary', availability = {};
 
 function initCal() {
+  const requestedTherapist = new URLSearchParams(window.location.search).get('therapist');
+  if (requestedTherapist && THERAPISTS[requestedTherapist]) selectedTherapist = requestedTherapist;
   const today = new Date();
   viewYear = today.getFullYear();
   viewMonth = today.getMonth();
