@@ -3,8 +3,10 @@
 
 const HUNTER_EMAIL = 'ellisrestorative@gmail.com';
 const HUNTER_CAMTC = 'CAMTC #103413';
-const HUNTER_SLOT_TIMES = ['12:51 PM', '3:21 PM', '5:51 PM'];
-const HUNTER_OPEN_DAYS = [1, 2, 3, 4, 5];
+const HUNTER_WEEKDAY_SLOT_TIMES = ['12:51 PM', '3:21 PM', '5:51 PM'];
+const HUNTER_WEEKDAY_OPEN_DAYS = [1, 2, 3, 4, 5];
+const HUNTER_WEEKEND_SLOT_TIMES = ['9:00 AM', '10:30 AM', '12:00 PM'];
+const HUNTER_WEEKEND_CLOSE_MINUTES = 13 * 60;
 
 const ERT_THERAPISTS = {
   zachary: {
@@ -128,7 +130,8 @@ function getHunterAvailability(month, year, therapist) {
   for (let day = 1; day <= end.getDate(); day += 1) {
     const date = new Date(year, month, day, 12, 0, 0);
     const dateKey = bookingDateKey(date);
-    if (date < today || !HUNTER_OPEN_DAYS.includes(date.getDay())) {
+    const schedule = getHunterScheduleForDate(date);
+    if (date < today || !schedule) {
       result[dateKey] = 'closed';
       continue;
     }
@@ -139,8 +142,8 @@ function getHunterAvailability(month, year, therapist) {
       continue;
     }
 
-    const openCount = getOpenSlots(dateKey, 60, HUNTER_SLOT_TIMES, dayEvents).length;
-    result[dateKey] = openCount === 0 ? 'full' : openCount < HUNTER_SLOT_TIMES.length ? 'partial' : 'open';
+    const availableSlots = getOpenSlots(dateKey, 60, getHunterSlotTimes(dateKey, 60), dayEvents);
+    result[dateKey] = availableSlots.length === 0 ? 'full' : availableSlots.length < getHunterSlotTimes(dateKey, 60).length ? 'partial' : 'open';
   }
 
   return { availability: result };
@@ -153,7 +156,44 @@ function getHunterSlots(dateStr, duration, therapist) {
   const end = new Date(`${dateStr}T23:59:59`);
   const events = calendar.getEvents(start, end);
   if (events.some((event) => event.getTitle().toUpperCase().includes('CLOSED'))) return { slots: [] };
-  return { slots: getOpenSlots(dateStr, duration, HUNTER_SLOT_TIMES, events) };
+  return { slots: getOpenSlots(dateStr, duration, getHunterSlotTimes(dateStr, duration), events) };
+}
+
+function getHunterScheduleForDate(date) {
+  const dayOfWeek = date.getDay();
+  if (HUNTER_WEEKDAY_OPEN_DAYS.includes(dayOfWeek)) {
+    return { label: 'weekday', slotTimes: HUNTER_WEEKDAY_SLOT_TIMES };
+  }
+  if ((dayOfWeek === 0 || dayOfWeek === 6) && isHunterFirstOrThirdWeekend(date)) {
+    return { label: 'first-or-third-weekend', slotTimes: HUNTER_WEEKEND_SLOT_TIMES, closeMinutes: HUNTER_WEEKEND_CLOSE_MINUTES };
+  }
+  return null;
+}
+
+function getHunterSlotTimes(dateStr, duration) {
+  if (!isDateKey(dateStr)) return [];
+  const date = new Date(`${dateStr}T12:00:00`);
+  const schedule = getHunterScheduleForDate(date);
+  if (!schedule) return [];
+  if (!schedule.closeMinutes) return schedule.slotTimes;
+  return schedule.slotTimes.filter((slot) => hunterTimeToMinutes(slot) + duration <= schedule.closeMinutes);
+}
+
+function isHunterFirstOrThirdWeekend(date) {
+  const saturday = new Date(date.getFullYear(), date.getMonth(), date.getDate() - (date.getDay() === 0 ? 1 : 0), 12, 0, 0);
+  if (saturday.getMonth() !== date.getMonth()) return false;
+  const weekendNumber = Math.floor((saturday.getDate() - 1) / 7) + 1;
+  return weekendNumber === 1 || weekendNumber === 3;
+}
+
+function hunterTimeToMinutes(time) {
+  const match = String(time).match(/^(\d{1,2}):(\d{2})\s(AM|PM)$/);
+  if (!match) throw new Error('Invalid appointment time.');
+  let hour = Number(match[1]);
+  const minute = Number(match[2]);
+  if (match[3] === 'PM' && hour !== 12) hour += 12;
+  if (match[3] === 'AM' && hour === 12) hour = 0;
+  return hour * 60 + minute;
 }
 
 function getOpenSlots(dateStr, duration, slots, events) {
@@ -237,7 +277,7 @@ function isHunterBookingDate(dateStr) {
   const date = new Date(`${dateStr}T12:00:00`);
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  return date >= today && HUNTER_OPEN_DAYS.includes(date.getDay());
+  return date >= today && Boolean(getHunterScheduleForDate(date));
 }
 
 function bookingDateKey(date) {

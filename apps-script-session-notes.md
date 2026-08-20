@@ -45,3 +45,15 @@ The booking-sheet cleanup was completed through a narrowly scoped, one-time scri
 ## Production deployment caution
 
 The E.R.T SITE Apps Script project received a dedicated production deployment on August 19, 2026: `https://script.google.com/macros/s/AKfycbzvdC1HrHxC9hfYOIXY3uscbqsNdbnthgYfmNMK-IwA76m5uU7zp4mDdTieEveLFYeN/exec`. Hunter availability was verified on that exact endpoint before the public website relay was updated to use it.
+
+The public relay update was committed and pushed to the `Dropthathate/ellis-restorative-therapies` repository as commit `0418943`. A cache-bypassed check of `www.restorewithellis.com/book.html` still shows the older Zachary-only booking page, so the repository push has not yet reached the live static-site host. The new production Apps Script endpoint is verified, but the public booking page must be deployed from the pushed repository before clients can use therapist selection.
+
+## Confirmed Hunter weekend schedule — August 20, 2026
+
+Hunter Ellis is available on the **first and third Saturdays and Sundays of each calendar month from 9:00 AM–1:00 PM**. The prepared booking module treats a weekend as first or third according to the date’s calendar-week position, preserves Hunter’s Monday–Friday 12:51 PM–8:00 PM schedule, and filters weekend candidate times by session duration so no appointment extends past 1:00 PM. This source change requires an updated E.R.T SITE Apps Script web-app deployment before the production availability endpoint can expose those weekend dates.
+
+## Current deployment access check
+
+The available browser did not have an authenticated Google Apps Script session during the weekend-schedule update. The legacy projects dashboard route returned an unavailable page, and the current Apps Script home route redirected to the public documentation with a visible **Sign in** action. The source and automated local tests are ready; publishing the web-app version requires the owner to sign in to the Google account that owns the **E.R.T SITE** project, open that existing project, and authorize the deployment workflow.
+
+The existing production endpoint was checked for **September 2026** before deployment. It currently returns every Saturday and Sunday as `closed`, including September 5–6 and September 19–20. This is expected until a new E.R.T SITE web-app version containing the weekend rule is deployed. After deployment, those four dates should return as open or partial when Hunter’s calendar has available time; September 12–13 and September 26–27 should remain closed.
