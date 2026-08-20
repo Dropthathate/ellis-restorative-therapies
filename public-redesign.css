@@ -48,3 +48,4 @@ body { background:#c5d0ce; }.site-header { background:rgba(202,213,211,.96); bor
 .credential-card img { width:100%; height:82px; object-fit:contain; mix-blend-mode:multiply; }
 .credential-card-amta { grid-template-columns:1fr; }
 .credential-card-amta img { width:100%; height:82px; object-fit:contain; }
+.credential-text-mark { display:grid; place-items:center; width:100%; height:82px; border:1px solid rgba(22,92,101,.36); color:#1b626c; background:rgba(223,235,232,.45); font:700 28px/1 Manrope,sans-serif; letter-spacing:.12em; }
