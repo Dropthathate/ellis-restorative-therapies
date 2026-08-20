@@ -532,7 +532,7 @@ async function renderCal() {
   try {
     const response = await fetch(`${BOOKING_URL}?action=availability&month=${viewMonth}&year=${viewYear}&therapist=${selectedTherapist}`);
     const data = await response.json();
-    if (!data.success) throw new Error(data.error || 'Availability is temporarily unavailable.');
+    if (data.success === false) throw new Error(data.error || 'Availability is temporarily unavailable.');
     availability = data.availability || {};
   } catch (error) {
     document.getElementById('slots-wrap').innerHTML = '<span class="slots-empty">Availability is temporarily unavailable. Please call (209) 450-5296.</span>';
@@ -595,7 +595,7 @@ async function loadSlots(date) {
     const duration = document.getElementById('duration').value;
     const response = await fetch(`${BOOKING_URL}?action=slots&date=${date}&duration=${duration}&therapist=${selectedTherapist}`);
     const data = await response.json();
-    if (!data.success) throw new Error(data.error || 'Unable to load available times.');
+    if (data.success === false) throw new Error(data.error || 'Unable to load available times.');
     renderSlots(data.slots || []);
   } catch (error) {
     wrap.innerHTML = '<span class="slots-empty">Times are temporarily unavailable. Please call (209) 450-5296.</span>';
@@ -654,7 +654,7 @@ async function submitBooking() {
       }),
     });
     const data = await response.json();
-    if (!data.success) throw new Error(data.error || 'Booking request failed.');
+    if (data.success === false) throw new Error(data.error || 'Booking request failed.');
   } catch (error) {
     alert(`${error.message || 'Booking request failed.'} Please call (209) 450-5296.`);
     button.textContent = 'Confirm Booking';
