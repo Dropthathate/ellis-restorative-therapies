@@ -3,17 +3,24 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ellis Restorative Therapies | Therapeutic Bodywork in Modesto</title>
-  <meta name="description" content="Therapeutic bodywork in Modesto, California with Zachary Ellis and Hunter Ellis. Choose your therapist, view availability, and book your restorative session online." />
+  <title>Therapeutic & Neuromuscular Massage in Modesto, CA | Ellis Restorative Therapies</title>
+  <meta name="description" content="Therapeutic massage and neuromuscular massage in Modesto, CA. Meet Zachary and Hunter Ellis at 2209 Coffee Rd, Suite M, choose your therapist, and book online." />
   <meta name="robots" content="index, follow" />
   <meta name="author" content="Ellis Restorative Therapies" />
   <link rel="canonical" href="https://www.restorewithellis.com/" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Ellis Restorative Therapies | Restore. Realign. Rebuild." />
-  <meta property="og:description" content="Choose Zachary Ellis or Hunter Ellis and book therapeutic bodywork in Modesto, California." />
+  <meta property="og:title" content="Therapeutic & Neuromuscular Massage in Modesto, CA | Ellis Restorative Therapies" />
+  <meta property="og:description" content="Therapeutic and neuromuscular massage at 2209 Coffee Rd, Suite M in Modesto. Choose Zachary or Hunter Ellis and view live booking availability." />
   <meta property="og:url" content="https://www.restorewithellis.com/" />
   <meta property="og:image" content="https://www.restorewithellis.com/og-restorewithellis.jpg" />
   <meta property="og:site_name" content="Ellis Restorative Therapies" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Therapeutic & Neuromuscular Massage in Modesto, CA | Ellis Restorative Therapies" />
+  <meta name="twitter:description" content="Choose Zachary or Hunter Ellis for therapeutic and neuromuscular massage in Modesto, CA." />
+  <meta name="twitter:image" content="https://www.restorewithellis.com/og-restorewithellis.jpg" />
+  <meta name="geo.region" content="US-CA" />
+  <meta name="geo.placename" content="Modesto" />
   <link rel="icon" href="favicon.ico" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -22,21 +29,30 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "HealthAndBeautyBusiness",
-    "name": "Ellis Restorative Therapies",
-    "alternateName": "ERT",
-    "url": "https://www.restorewithellis.com/",
-    "telephone": "+12094505296",
-    "email": "restorewithellis@gmail.com",
-    "priceRange": "$100-$200",
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "2209 Coffee Rd, Suite M",
-      "addressLocality": "Modesto",
-      "addressRegion": "CA",
-      "postalCode": "95355",
-      "addressCountry": "US"
-    }
+    "@graph": [
+      {
+        "@type": ["HealthAndBeautyBusiness", "LocalBusiness"],
+        "@id": "https://www.restorewithellis.com/#business",
+        "name": "Ellis Restorative Therapies",
+        "alternateName": "ERT",
+        "description": "Therapeutic massage and neuromuscular massage in Modesto, California with Zachary Ellis and Hunter Ellis.",
+        "url": "https://www.restorewithellis.com/",
+        "logo": "https://www.restorewithellis.com/logo.png",
+        "image": ["https://www.restorewithellis.com/og-restorewithellis.jpg", "https://www.restorewithellis.com/logo.png"],
+        "telephone": "+12094505296",
+        "email": "restorewithellis@gmail.com",
+        "priceRange": "$100-$200",
+        "address": {"@type": "PostalAddress", "streetAddress": "2209 Coffee Rd, Suite M", "addressLocality": "Modesto", "addressRegion": "CA", "postalCode": "95355", "addressCountry": "US"},
+        "geo": {"@type": "GeoCoordinates", "latitude": 37.63910, "longitude": -120.99400},
+        "areaServed": {"@type": "City", "name": "Modesto"},
+        "sameAs": ["https://www.instagram.com/ellisrestorativetherapies/", "https://www.facebook.com/p/Ellis-Restorative-Therapies-61580974690488/"],
+        "hasOfferCatalog": {"@type": "OfferCatalog", "name": "Therapeutic Massage and Bodywork Sessions", "itemListElement": [
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Therapeutic Massage in Modesto"}, "price": "100", "priceCurrency": "USD"},
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Neuromuscular Massage in Modesto"}, "price": "100", "priceCurrency": "USD"}
+        ]}
+      },
+      {"@type": "WebSite", "@id": "https://www.restorewithellis.com/#website", "url": "https://www.restorewithellis.com/", "name": "Ellis Restorative Therapies", "publisher": {"@id": "https://www.restorewithellis.com/#business"}}
+    ]
   }
   </script>
 </head>
@@ -66,7 +82,7 @@
         <div class="hero-copy rise-in">
           <p class="eyebrow">Ellis Restorative Therapies · Modesto, California</p>
           <h1>Care that brings you <em>back to yourself.</em></h1>
-          <p class="hero-lede">Restorative bodywork, delivered with focused attention and a clear path forward. Choose the therapist who feels right for your care, then book live availability online.</p>
+          <p class="hero-lede">Therapeutic massage and neuromuscular massage in Modesto, California, delivered with focused attention and a clear path forward. Visit Zachary or Hunter Ellis at 2209 Coffee Rd, Suite M, then book live availability online.</p>
           <div class="hero-actions">
             <a class="button button-gold" href="#therapists">Choose your therapist <span>↓</span></a>
             <a class="button button-quiet" href="https://client.restorewithellis.com">Enter client portal <span>↗</span></a>
@@ -90,6 +106,17 @@
     <section class="intro-strip" aria-label="Booking introduction">
       <p>Start by choosing your therapist. Then view their live availability and select the session time that works for you.</p>
       <a href="book.html">Open booking <span>↗</span></a>
+    </section>
+
+    <section class="local-service-section" aria-labelledby="modesto-service-title">
+      <div class="local-service-inner">
+        <div><p class="eyebrow">Therapeutic massage in Modesto, CA</p><h2 id="modesto-service-title">Focused bodywork<br><em>on Coffee Road.</em></h2></div>
+        <div class="local-service-copy">
+          <p>Ellis Restorative Therapies is a private Modesto practice at <strong>2209 Coffee Rd, Suite M</strong>. Zachary and Hunter offer therapeutic massage and neuromuscular massage for clients who want a focused, restorative approach to bodywork.</p>
+          <p>Choose the therapist whose schedule and approach fit your needs, then view live availability before booking. Sessions are offered in 60, 90, and 120-minute options.</p>
+          <a class="text-link" href="services.html">Explore therapeutic massage services <span>→</span></a>
+        </div>
+      </div>
     </section>
 
     <section class="therapist-section section-wrap" id="therapists">
@@ -149,7 +176,7 @@
       <div><a href="index.html" class="brand-lockup"><span class="brand-mark brand-mark-logo"><img src="logo.png" alt="" /></span><span><strong>Ellis</strong><small>Restorative Therapies</small></span></a><p>Therapeutic bodywork in a private Modesto practice.</p></div>
       <div><p class="eyebrow">Visit</p><p>2209 Coffee Rd, Suite M<br>Modesto, CA 95355</p></div>
       <div><p class="eyebrow">Connect</p><a href="tel:2094505296">(209) 450-5296</a><a href="mailto:restorewithellis@gmail.com">restorewithellis@gmail.com</a></div>
-      <div><p class="eyebrow">Explore</p><a href="book.html">Book a session</a><a href="https://client.restorewithellis.com">Client portal</a></div>
+      <div><p class="eyebrow">Explore</p><a href="book.html">Book a session</a><a href="https://client.restorewithellis.com">Client portal</a><a href="https://www.instagram.com/ellisrestorativetherapies/" rel="me">Instagram</a><a href="https://www.facebook.com/p/Ellis-Restorative-Therapies-61580974690488/" rel="me">Facebook</a></div>
     </div>
     <div class="footer-bottom"><span>© 2026 Ellis Restorative Therapies</span><span>Restore. Realign. Rebuild.</span></div>
   </footer>

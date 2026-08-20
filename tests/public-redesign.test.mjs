@@ -4,6 +4,9 @@ import { existsSync, readFileSync } from 'node:fs';
 const index = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 const css = readFileSync(new URL('../public-redesign.css', import.meta.url), 'utf8');
 const booking = readFileSync(new URL('../book.html', import.meta.url), 'utf8');
+const robots = readFileSync(new URL('../robots.txt', import.meta.url), 'utf8');
+const sitemap = readFileSync(new URL('../sitemap.xml', import.meta.url), 'utf8');
+const llms = readFileSync(new URL('../llms.txt', import.meta.url), 'utf8');
 
 assert.equal(existsSync(new URL('../favicon.ico', import.meta.url)), true);
 
@@ -20,6 +23,11 @@ assert.match(index, /src="zachary\.png"/);
 assert.match(index, /src="hunter-ellis\.jpg"/);
 assert.doesNotMatch(index, /manus-storage|ellisdash-jvnvllzx\.manus\.space/);
 assert.doesNotMatch(index, /Google Reviewer|aggregateRating|HSA\/FSA/i);
+assert.match(index, /Therapeutic & Neuromuscular Massage in Modesto, CA/);
+assert.match(index, /2209 Coffee Rd, Suite M/);
+assert.match(index, /Neuromuscular Massage in Modesto/);
+assert.match(index, /ellisrestorativetherapies/);
+assert.match(index, /facebook\.com\/p\/Ellis-Restorative-Therapies/);
 assert.match(css, /\.therapist-grid/);
 assert.match(css, /\.therapist-card/);
 assert.match(css, /--ink:#cad5d3/);
@@ -27,5 +35,12 @@ assert.match(css, /--teal:#16717c/);
 assert.match(css, /--gold:#963641/);
 assert.match(booking, /new URLSearchParams\(window\.location\.search\)\.get\('therapist'\)/);
 assert.match(booking, /THERAPISTS\[requestedTherapist\]/);
+assert.match(booking, /Book Therapeutic Massage in Modesto, CA/);
+assert.match(booking, /https:\/\/www\.restorewithellis\.com\/book\.html/);
+assert.match(robots, /Sitemap: https:\/\/www\.restorewithellis\.com\/sitemap\.xml/);
+assert.match(sitemap, /https:\/\/www\.restorewithellis\.com\/services\.html/);
+assert.match(sitemap, /https:\/\/www\.restorewithellis\.com\/book\.html/);
+assert.match(llms, /neuromuscular massage/i);
+assert.match(llms, /2209 Coffee Rd, Suite M, Modesto, CA 95355/);
 
 console.log('Public redesign and therapist-link assertions passed.');
