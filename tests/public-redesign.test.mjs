@@ -15,6 +15,9 @@ assert.match(index, /https:\/\/client\.restorewithellis\.com/);
 assert.doesNotMatch(index, /Google Reviewer|aggregateRating|HSA\/FSA/i);
 assert.match(css, /\.therapist-grid/);
 assert.match(css, /\.therapist-card/);
+assert.match(css, /--ink:#f1f5f3/);
+assert.match(css, /--teal:#267d86/);
+assert.match(css, /--gold:#a8645f/);
 assert.match(booking, /new URLSearchParams\(window\.location\.search\)\.get\('therapist'\)/);
 assert.match(booking, /THERAPISTS\[requestedTherapist\]/);
 
