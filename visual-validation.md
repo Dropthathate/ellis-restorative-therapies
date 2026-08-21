@@ -31,3 +31,7 @@ A second live check immediately afterward confirmed the same pre-upload state. T
 ## Live Hunter booking verification — August 20, 2026
 
 The production booking page at `restorewithellis.com/book.html?therapist=hunter` now visibly labels Hunter as **Monday–Friday, 9:00 AM–1:00 PM; first and third weekends, 9:00 AM–1:00 PM**. A read-only September 2026 availability request confirmed that September 5–6 and 19–20 are open, while September 12–13 and 26–27 are closed. No booking was created during this verification.
+
+## Local hero enhancement validation — August 21, 2026
+
+The updated homepage source was reviewed in a browser at desktop width. The official ERT mark is substantially larger and positioned on the left in a physically mounted dark studio-style plate with teal and restrained deep-red glow. A subtle layered fiber field sits behind it without covering the headline, address context, or the two booking/client-portal calls to action. The motion is limited to a gentle pulse and is disabled by the existing reduced-motion override.
