@@ -27,3 +27,7 @@ After review of CAMTC’s published terms, the copied CAMTC image was removed. A
 On August 20, 2026, `https://www.restorewithellis.com/` still rendered the older dark single-therapist homepage. It did not yet display the equal Zachary/Hunter profiles, Hunter’s confirmed schedule, the preparation panel, the supplied AMTA member mark, or the SOMASYNC AI / AALIYAH systems attribution. This is expected until the owner uploads and extracts the prepared public-site ZIP in the main Hostinger `public_html` folder.
 
 A second live check immediately afterward confirmed the same pre-upload state. The existing popup and legacy review section are still present on the live domain, so a successful Hostinger extraction can be verified by their absence alongside the new trust and preparation sections.
+
+## Live Hunter booking verification — August 20, 2026
+
+The production booking page at `restorewithellis.com/book.html?therapist=hunter` now visibly labels Hunter as **Monday–Friday, 9:00 AM–1:00 PM; first and third weekends, 9:00 AM–1:00 PM**. A read-only September 2026 availability request confirmed that September 5–6 and 19–20 are open, while September 12–13 and 26–27 are closed. No booking was created during this verification.
