@@ -35,3 +35,5 @@ The production booking page at `restorewithellis.com/book.html?therapist=hunter`
 ## Local hero enhancement validation — August 21, 2026
 
 The updated homepage source was reviewed in a browser at desktop width. The official ERT mark is substantially larger and positioned on the left in a physically mounted dark studio-style plate with teal and restrained deep-red glow. A subtle layered fiber field sits behind it without covering the headline, address context, or the two booking/client-portal calls to action. The motion is limited to a gentle pulse and is disabled by the existing reduced-motion override.
+
+The live homepage was rechecked after the package refresh and still displayed the older single-therapist dark design. The new hero source is therefore validated and package-ready but not yet visible on `restorewithellis.com`; it requires extraction in the correct main-site Hostinger `public_html` document root.
