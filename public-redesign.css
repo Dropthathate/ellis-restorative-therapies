@@ -74,3 +74,16 @@ body { background:#c5d0ce; }.site-header { background:rgba(202,213,211,.96); bor
 @keyframes fiberDrift { from { opacity:.43; } to { opacity:.86; } }
 @media (max-width:860px) { .hero-grid-logo-left { grid-template-columns:1fr; gap:18px; }.hero-logo-stage { min-height:370px; padding:12px 0 44px; }.logo-mount { width:min(100%,390px); }.hero-copy { max-width:650px; }.hero-logo-caption { bottom:4px; } }
 @media (max-width:540px) { .hero-section { padding-top:76px; padding-bottom:72px; }.hero-logo-stage { min-height:315px; }.logo-mount { width:min(100%,310px); padding:22px; }.logo-mount-plate { padding:9px; }.hero-fiber-field { opacity:.76; }.hero-logo-caption { font-size:8px; } }
+
+/* Refined hierarchy: the official mark is a translucent background signature, never a foreground panel. */
+.hero-grid-logo-left { grid-template-columns:minmax(0,720px); justify-content:start; }
+.hero-copy { position:relative; z-index:2; }
+.hero-background-logo { position:absolute; z-index:0; top:48%; right:clamp(-170px,-9vw,-70px); width:clamp(450px,54vw,780px); aspect-ratio:1; display:grid; place-items:center; pointer-events:none; transform:translateY(-50%) rotate(-6deg); opacity:.15; mix-blend-mode:multiply; filter:saturate(1.16) contrast(1.08); }
+.hero-background-logo::before { content:""; position:absolute; inset:9%; border:1px solid rgba(9,83,94,.36); box-shadow:inset 0 0 34px rgba(19,113,123,.26),0 28px 70px rgba(18,66,75,.20); transform:perspective(900px) rotateY(-9deg); }
+.hero-background-logo img { position:relative; z-index:1; display:block; width:88%; height:88%; object-fit:contain; filter:drop-shadow(0 26px 20px rgba(17,58,66,.64)); }
+.background-logo-halo { position:absolute; width:72%; height:72%; border-radius:50%; background:radial-gradient(circle,rgba(25,154,163,.50),rgba(146,47,60,.18) 42%,transparent 71%); filter:blur(26px); opacity:.6; }
+.hero-logo-stage,.logo-mount,.hero-logo-caption { display:none; }
+@media (prefers-reduced-motion:no-preference) { .hero-background-logo { animation:backgroundMarkBreathe 9s ease-in-out infinite alternate; } }
+@keyframes backgroundMarkBreathe { from { opacity:.12; transform:translateY(-50%) rotate(-6deg) scale(1); } to { opacity:.18; transform:translateY(-50%) rotate(-6deg) scale(1.018); } }
+@media (max-width:860px) { .hero-grid-logo-left { grid-template-columns:1fr; }.hero-background-logo { top:43%; right:-155px; width:620px; opacity:.12; }.hero-copy { max-width:620px; } }
+@media (max-width:540px) { .hero-background-logo { top:39%; right:-188px; width:520px; opacity:.10; }.hero-copy { max-width:100%; } }

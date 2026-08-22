@@ -37,3 +37,11 @@ The production booking page at `restorewithellis.com/book.html?therapist=hunter`
 The updated homepage source was reviewed in a browser at desktop width. The official ERT mark is substantially larger and positioned on the left in a physically mounted dark studio-style plate with teal and restrained deep-red glow. A subtle layered fiber field sits behind it without covering the headline, address context, or the two booking/client-portal calls to action. The motion is limited to a gentle pulse and is disabled by the existing reduced-motion override.
 
 The live homepage was rechecked after the package refresh and still displayed the older single-therapist dark design. The new hero source is therefore validated and package-ready but not yet visible on `restorewithellis.com`; it requires extraction in the correct main-site Hostinger `public_html` document root.
+
+## Hostinger root clarification — August 21, 2026
+
+The owner-supplied File Manager capture shows a `public_html` containing `index.html`, `assets`, `default.php`, and a `restore-with-ellis-independent-client-portal` folder. That is the client-portal website root, which matches the working `client.restorewithellis.com` portal. It is not evidence that the main `restorewithellis.com` document root contains the refreshed public-site package; the live main domain continues to show the legacy homepage.
+
+## Corrected background-mark hero review — August 21, 2026
+
+The corrected homepage source was visually reviewed at desktop width. The official ERT mark now appears as a restrained, translucent dimensional background signature on the right rather than a foreground card. The headline, Modesto context, description, and both primary calls to action remain visually dominant and readable. The background fiber treatment remains visible but secondary; its motion is gated behind the reduced-motion preference.
