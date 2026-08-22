@@ -6,6 +6,8 @@ const HUNTER_CAMTC = 'CAMTC #103413';
 const HUNTER_MORNING_SLOT_TIMES = ['9:00 AM', '10:30 AM', '12:00 PM'];
 const HUNTER_WEEKDAY_OPEN_DAYS = [1, 2, 3, 4, 5];
 const HUNTER_WEEKEND_CLOSE_MINUTES = 13 * 60;
+const PORTAL_ACTIVITY_SHEET = 'PORTAL_ACTIVITY';
+const PORTAL_ACTIVITY_TOKEN_PROPERTY = 'PORTAL_ACTIVITY_TOKEN';
 
 const ERT_THERAPISTS = {
   zachary: {
@@ -60,6 +62,7 @@ function doGet(e) {
 function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents || '{}');
+    if (data.action === 'portal_question_alert') return jsonResponse(handlePortalQuestionAlert(data));
     if (data.action && data.action !== 'booking' && data.action !== 'book') {
       return jsonResponse({ success: false, error: 'Unknown request type.' });
     }
@@ -67,6 +70,35 @@ function doPost(e) {
   } catch (error) {
     return jsonResponse({ success: false, error: error.message });
   }
+}
+
+function handlePortalQuestionAlert(data) {
+  const expectedToken = PropertiesService.getScriptProperties().getProperty(PORTAL_ACTIVITY_TOKEN_PROPERTY);
+  if (!expectedToken || String(data.token || '') !== expectedToken) return { success: false, error: 'Unauthorized portal activity request.' };
+
+  const recipient = String(data.recipient || '');
+  const questionId = cleanBookingText(data.questionId, 64);
+  const targetEmail = recipient === 'Hunter Ellis' ? HUNTER_EMAIL : recipient === 'Zach' ? ADMIN_EMAIL : '';
+  if (!targetEmail || !questionId) return { success: false, error: 'Invalid portal activity request.' };
+
+  const spreadsheet = SpreadsheetApp.openById(SHEET_ID);
+  let activitySheet = spreadsheet.getSheetByName(PORTAL_ACTIVITY_SHEET);
+  if (!activitySheet) {
+    activitySheet = spreadsheet.insertSheet(PORTAL_ACTIVITY_SHEET);
+    activitySheet.appendRow(['Timestamp', 'Activity Type', 'Question ID', 'Routed Therapist', 'Status']);
+  }
+
+  const questionIds = activitySheet.getLastRow() > 1 ? activitySheet.getRange(2, 3, activitySheet.getLastRow() - 1, 1).getValues().flat() : [];
+  if (questionIds.includes(questionId)) return { success: true, duplicate: true };
+
+  MailApp.sendEmail({
+    to: targetEmail,
+    subject: `New client portal question — ${recipient}`,
+    body: `A client submitted a new Quick Question for ${recipient}.\n\nFor privacy, the message is not included in this email. Sign in to https://client.restorewithellis.com to view and acknowledge it.\n\nQuestion reference: ${questionId}`,
+    name: 'Ellis Restorative Therapies',
+  });
+  activitySheet.appendRow([new Date(), 'Quick Question', questionId, recipient, 'Alert sent']);
+  return { success: true };
 }
 
 function getAvailability(month, year, therapistKey) {
