@@ -65,3 +65,7 @@ After the owner reported that the account was open in another window, the connec
 ## Production verification — corrected Hunter morning schedule
 
 The owner deployed the corrected E.R.T SITE web-app version on August 20, 2026. A read-only verification of the live `/exec` endpoint returned Hunter availability as open for the first weekend of September (**September 5–6**) and third weekend (**September 19–20**), while second-weekend dates (**September 12–13**) and fourth-weekend dates (**September 26–27**) remained closed. The production slot request for Saturday, September 5 returned exactly `9:00 AM`, `10:30 AM`, and `12:00 PM`. No booking was submitted during this verification.
+
+## Follow-up controlled-booking cleanup check
+
+A later read-only production slot request for Saturday, September 5 returned `9:00 AM`, `10:30 AM`, and `12:00 PM`. This confirms the controlled test no longer blocks Hunter’s 9:00 AM calendar availability. The matching booking-sheet row still requires confirmation or removal by the account owner because the public availability endpoint cannot inspect spreadsheet records.
