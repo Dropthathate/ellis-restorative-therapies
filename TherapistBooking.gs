@@ -124,7 +124,7 @@ function handleBooking(data) {
   const time = cleanBookingText(data.time, 20);
   const duration = validateDuration(Number(data.duration));
   const promoCode = cleanBookingText(data.promoCode, 32).toUpperCase();
-  const price = calculateBookingPrice(therapist, duration, promoCode);
+  const price = calculateBookingPrice(therapist, duration, promoCode, date);
   const notes = cleanBookingText(data.notes, 1000);
 
   if (!name || !phone || !isValidBookingEmail(email) || !isDateKey(date) || !time) {
@@ -296,11 +296,11 @@ function validateDuration(duration) {
   return value;
 }
 
-function calculateBookingPrice(therapist, duration, promoCode) {
+function calculateBookingPrice(therapist, duration, promoCode, date) {
   const basePrice = Math.round((duration / 60) * 100);
   if (!promoCode) return `$${basePrice}`;
-  if (therapist.key !== 'hunter' || promoCode !== 'HUNTER30') {
-    throw new Error('That promotion code is only valid for Hunter Ellis appointments.');
+  if (therapist.key !== 'hunter' || promoCode !== 'HUNTER30' || !/^\d{4}-09-\d{2}$/.test(date)) {
+    throw new Error('That promotion code is only valid for Hunter Ellis appointments in September.');
   }
   return `$${Math.max(0, basePrice - 30)}`;
 }
