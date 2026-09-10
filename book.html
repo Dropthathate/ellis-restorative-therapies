@@ -298,7 +298,7 @@ select.field-input option { background: var(--deep); color: var(--white); }
         <div class="therapist-grid" role="group" aria-label="Choose your therapist">
           <button type="button" class="therapist-choice selected" data-therapist="zachary" onclick="selectTherapist('zachary')">
             <span class="therapist-choice-name">Zachary Ellis</span>
-            <span class="therapist-choice-meta">CAMTC #97101 · Monday–Thursday</span>
+            <span class="therapist-choice-meta">CAMTC #97101 · Mon–Thu 9 AM–9 PM</span>
           </button>
           <button type="button" class="therapist-choice" data-therapist="hunter" onclick="selectTherapist('hunter')">
             <span class="therapist-choice-name">Hunter Ellis</span>
@@ -314,6 +314,11 @@ select.field-input option { background: var(--deep); color: var(--white); }
           <option value="90">90 Minutes — $150 &nbsp;·&nbsp; Deep Restorative</option>
           <option value="120">120 Minutes — $200 &nbsp;·&nbsp; Complete Recovery</option>
         </select>
+      </div>
+      <div class="full" id="promo-field-wrap" hidden>
+        <label class="field-label" for="promo-code">Hunter promotion code</label>
+        <input id="promo-code" class="field-input" type="text" maxlength="32" placeholder="Enter your code" autocomplete="off" />
+        <p class="therapist-context" id="promo-note">Hunter promotion: $30 off the selected session.</p>
       </div>
     </div>
 
@@ -480,15 +485,17 @@ select.field-input option { background: var(--deep); color: var(--white); }
 const BOOKING_URL = '/proxy.php';
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 const THERAPISTS = {
-  zachary: { name: 'Zachary Ellis', camtc: 'CAMTC #97101', schedule: 'Monday–Thursday availability' },
+  zachary: { name: 'Zachary Ellis', camtc: 'CAMTC #97101', schedule: 'Monday–Thursday · 9:00 AM–9:00 PM' },
   hunter: { name: 'Hunter Ellis', camtc: 'CAMTC #103413', schedule: 'Monday–Friday and first and third weekends · 9:00 AM–1:00 PM' },
 };
-const PRICES = { 60: '$100', 90: '$150', 120: '$200' };
+const PRICES = { 60: 100, 90: 150, 120: 200 };
 
-let viewYear, viewMonth, selectedDate = null, selectedTime = null, selectedTherapist = 'zachary', availability = {};
+let viewYear, viewMonth, selectedDate = null, selectedTime = null, selectedTherapist = 'zachary', availability = {}, promoCode = '';
 
 function initCal() {
+  const params = new URLSearchParams(window.location.search);
   const requestedTherapist = new URLSearchParams(window.location.search).get('therapist');
+  promoCode = (params.get('promo') || '').trim().toUpperCase();
   if (requestedTherapist && THERAPISTS[requestedTherapist]) selectedTherapist = requestedTherapist;
   const today = new Date();
   viewYear = today.getFullYear();
@@ -498,6 +505,7 @@ function initCal() {
     if (selectedDate) loadSlots(selectedDate);
   });
   updateTherapistUI();
+  updatePromoUI();
   renderCal();
 }
 
@@ -507,6 +515,7 @@ function selectTherapist(key) {
   selectedTime = null;
   availability = {};
   document.getElementById('slots-wrap').innerHTML = '<span class="slots-empty">Select a date above to see available times.</span>';
+  updatePromoUI();
   updateTherapistUI();
   renderCal();
 }
@@ -518,6 +527,15 @@ function updateTherapistUI() {
   });
   document.getElementById('therapist-context').textContent =
     `${therapist.name} · ${therapist.camtc} · ${therapist.schedule}.`;
+}
+
+function updatePromoUI() {
+  const wrap = document.getElementById('promo-field-wrap');
+  const input = document.getElementById('promo-code');
+  const isHunter = selectedTherapist === 'hunter';
+  wrap.hidden = !isHunter;
+  if (isHunter && promoCode) input.value = promoCode;
+  if (!isHunter) input.value = '';
 }
 
 function prevMonth() {
@@ -642,6 +660,9 @@ async function submitBooking() {
   const phone = document.getElementById('phone').value.trim();
   const email = document.getElementById('email').value.trim();
   const duration = document.getElementById('duration').value;
+  const submittedPromo = selectedTherapist === 'hunter'
+    ? document.getElementById('promo-code').value.trim().toUpperCase()
+    : '';
   const consent = document.getElementById('consent-check').checked;
   const therapist = THERAPISTS[selectedTherapist];
 
@@ -659,7 +680,7 @@ async function submitBooking() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         action: 'booking', therapist: selectedTherapist, name, phone, email,
-        date: selectedDate, time: selectedTime, duration, price: PRICES[duration], notes: '',
+        date: selectedDate, time: selectedTime, duration, promoCode: submittedPromo, price: PRICES[duration], notes: '',
       }),
     });
     const data = await response.json();
@@ -671,7 +692,8 @@ async function submitBooking() {
     return;
   }
 
-  const labels = { 60: '60 Min · $100 — Neuromuscular Reset', 90: '90 Min · $150 — Deep Restorative', 120: '120 Min · $200 — Complete Recovery' };
+  const finalPrice = PRICES[duration] - (selectedTherapist === 'hunter' && submittedPromo === 'HUNTER30' ? 30 : 0);
+  const labels = { 60: `60 Min · $${finalPrice} — Neuromuscular Reset`, 90: `90 Min · $${finalPrice} — Deep Restorative`, 120: `120 Min · $${finalPrice} — Complete Recovery` };
   document.getElementById('confirm-message').textContent = `${therapist.name} will review and confirm your requested appointment shortly.`;
   document.getElementById('confirm-detail').innerHTML =
     `<span class="cd-label">Booking Request</span>

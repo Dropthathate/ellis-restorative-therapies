@@ -159,16 +159,11 @@ function legacyGetSlots(dateStr, duration) {
 
   const isSummer = (month >= 4 && month <= 6);
 
-  let all = isSummer
-    ? ["12:30 PM","1:30 PM","2:30 PM","3:30 PM","4:30 PM","5:30 PM","6:30 PM","7:00 PM"]
-    : ["10:00 AM","11:00 AM","12:00 PM","1:00 PM","2:00 PM","3:00 PM","4:00 PM","5:00 PM"];
+  let all = ["9:00 AM","10:00 AM","11:00 AM","12:00 PM","1:00 PM","2:00 PM","3:00 PM","4:00 PM","5:00 PM","6:00 PM","7:00 PM","8:00 PM"];
 
-  // RULE: no appointments before 1:00 PM Monday through Thursday
+  // Zachary is available Monday through Thursday, 9:00 AM–9:00 PM.
   const isMonToThu = (dow >= 1 && dow <= 4);
-  if (isMonToThu) {
-    const cutoff = timeToMinutes("1:00 PM");
-    all = all.filter(t => timeToMinutes(t) >= cutoff);
-  }
+  if (!isMonToThu) return { slots: [] };
 
   const cal = CalendarApp.getCalendarById(CALENDAR_ID);
   const events = cal.getEvents(new Date(dateStr), new Date(dateStr + "T23:59:59"));
@@ -192,7 +187,7 @@ function legacyGetSlots(dateStr, duration) {
       return (slotStart < eEnd && slotEnd > eStart);
     });
 
-    return !hasConflict;
+    return !hasConflict && timeToMinutes(slotTimeStr) + duration <= timeToMinutes("9:00 PM");
   });
 
   return { slots: availableSlots };

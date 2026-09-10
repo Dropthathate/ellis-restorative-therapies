@@ -46,6 +46,7 @@ function doGet(e) {
         date: e.parameter.date,
         time: e.parameter.time,
         duration: e.parameter.duration,
+        promoCode: e.parameter.promoCode,
         price: e.parameter.price,
         notes: e.parameter.notes,
       });
@@ -122,7 +123,8 @@ function handleBooking(data) {
   const date = cleanBookingText(data.date, 10);
   const time = cleanBookingText(data.time, 20);
   const duration = validateDuration(Number(data.duration));
-  const price = cleanBookingText(data.price, 20) || `$${Math.round((duration / 60) * 100)}`;
+  const promoCode = cleanBookingText(data.promoCode, 32).toUpperCase();
+  const price = calculateBookingPrice(therapist, duration, promoCode);
   const notes = cleanBookingText(data.notes, 1000);
 
   if (!name || !phone || !isValidBookingEmail(email) || !isDateKey(date) || !time) {
@@ -140,10 +142,10 @@ function handleBooking(data) {
   const sheet = SpreadsheetApp.openById(SHEET_ID).getSheetByName('BOOKINGS');
   if (!sheet) throw new Error('The BOOKINGS sheet is missing.');
   // Preserve columns A–H for the existing welcome, review, and reactivation automations.
-  sheet.appendRow([new Date(), name, phone, email, date, time, duration, event.getId(), therapist.name, price, notes]);
+  sheet.appendRow([new Date(), name, phone, email, date, time, duration, event.getId(), therapist.name, price, notes, promoCode]);
 
-  sendTherapistBookingNotice(therapist, { name, phone, email, date, time, duration, price, notes });
-  sendClientBookingConfirmation(therapist, { name, email, date, time, duration, price });
+  sendTherapistBookingNotice(therapist, { name, phone, email, date, time, duration, price, promoCode, notes });
+  sendClientBookingConfirmation(therapist, { name, email, date, time, duration, price, promoCode });
 
   return { success: true };
 }
@@ -250,6 +252,7 @@ function sendTherapistBookingNotice(therapist, booking) {
       `Client: ${booking.name}\nPhone: ${booking.phone}\nEmail: ${booking.email}\n` +
       `Date: ${booking.date}\nTime: ${booking.time}\n` +
       `Session: ${booking.duration} minutes (${booking.price})\n` +
+      `Promotion: ${booking.promoCode || 'None'}\n` +
       `Notes: ${booking.notes || 'None'}\n\n` +
       `The appointment has been added to ${therapist.name}'s calendar.`,
     name: 'Ellis Restorative Therapies',
@@ -268,7 +271,9 @@ function sendClientBookingConfirmation(therapist, booking) {
       `<div style="background:#f4f8f6;padding:18px;border-left:4px solid #4d9b92;margin:22px 0">` +
       `<p style="margin:0 0 8px"><strong>Date:</strong> ${escapeBookingHtml(booking.date)}</p>` +
       `<p style="margin:0 0 8px"><strong>Time:</strong> ${escapeBookingHtml(booking.time)}</p>` +
-      `<p style="margin:0"><strong>Session:</strong> ${booking.duration} minutes (${escapeBookingHtml(booking.price)})</p></div>` +
+      `<p style="margin:0"><strong>Session:</strong> ${booking.duration} minutes (${escapeBookingHtml(booking.price)})</p>` +
+      (booking.promoCode ? `<p style="margin:8px 0 0"><strong>Promotion:</strong> ${escapeBookingHtml(booking.promoCode)}</p>` : '') +
+      `</div>` +
       `<p>Questions or changes? Call or text (209) 450-5296.</p><p>Ellis Restorative Therapies</p></div></div>`,
   });
 }
@@ -289,6 +294,15 @@ function validateDuration(duration) {
   const value = Number(duration);
   if (![60, 90, 120].includes(value)) throw new Error('Please select a valid session length.');
   return value;
+}
+
+function calculateBookingPrice(therapist, duration, promoCode) {
+  const basePrice = Math.round((duration / 60) * 100);
+  if (!promoCode) return `$${basePrice}`;
+  if (therapist.key !== 'hunter' || promoCode !== 'HUNTER30') {
+    throw new Error('That promotion code is only valid for Hunter Ellis appointments.');
+  }
+  return `$${Math.max(0, basePrice - 30)}`;
 }
 
 function cleanBookingText(value, maxLength) {
