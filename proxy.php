@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     sendResponse(json_encode(['success' => false, 'error' => 'Invalid booking request.']), 400);
   }
 
-  $allowed = ['action', 'therapist', 'name', 'phone', 'email', 'date', 'time', 'duration', 'price', 'notes'];
+  $allowed = ['action', 'therapist', 'name', 'phone', 'email', 'date', 'time', 'duration', 'promoCode', 'price', 'notes'];
   $clean = [];
   foreach ($allowed as $key) {
     if (isset($payload[$key])) $clean[$key] = substr(trim((string) $payload[$key]), 0, 1000);
